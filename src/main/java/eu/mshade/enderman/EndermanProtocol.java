@@ -20,15 +20,15 @@ public class EndermanProtocol extends EnderFrameProtocol {
 
     public EndermanProtocol() {
 
-        this.getDispatcherDriver().register(PacketInKeepAlive.class, new PacketKeepAliveListener());
-        this.getDispatcherDriver().register(PacketInLogin.class, new PacketLoginListener());
-        this.getDispatcherDriver().register(PacketInEncryption.class, new PacketEncryptionListener());
-        this.getDispatcherDriver().register(PacketInClientSettings.class, new PacketClientSettingsListener());
-        this.getDispatcherDriver().register(PacketInPlayerPosition.class, new PacketPlayerPositionListener());
-        this.getDispatcherDriver().register(PacketInPlayerGround.class, new PacketPlayerGroundListener());
-        this.getDispatcherDriver().register(PacketInPlayerLook.class, new PacketPlayerLookListener());
-        this.getDispatcherDriver().register(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
-        this.getDispatcherDriver().register(PacketInChatMessage.class, new PacketChatMessageListener());
+        this.getEventBus().subscribe(PacketInKeepAlive.class, new PacketKeepAliveListener());
+        this.getEventBus().subscribe(PacketInLogin.class, new PacketLoginListener());
+        this.getEventBus().subscribe(PacketInEncryption.class, new PacketEncryptionListener());
+        this.getEventBus().subscribe(PacketInClientSettings.class, new PacketClientSettingsListener());
+        this.getEventBus().subscribe(PacketInPlayerPosition.class, new PacketPlayerPositionListener());
+        this.getEventBus().subscribe(PacketInPlayerGround.class, new PacketPlayerGroundListener());
+        this.getEventBus().subscribe(PacketInPlayerLook.class, new PacketPlayerLookListener());
+        this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
+        this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
@@ -44,14 +44,16 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x04, PacketInPlayerPosition.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x05, PacketInPlayerLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x06, PacketInPlayerPositionAndLook.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x08, PacketInPlayerBlockPlacement.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x15, PacketInClientSettings.class);
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x00, PacketOutKeepAlive.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x01, PacketOutJoinGame.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x02, PacketOutChatMessage.class);
-        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x07, PacketOutRespawn.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x05, PacketOutSpawnPosition.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x07, PacketOutRespawn.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x08, PacketOutPlayerPositionAndLook.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x0C, PacketOutSpawnPlayer.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x21, PacketOutChunkData.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x38, PacketOutPlayerInfo.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x39, PacketOutPlayerAbilities.class);
