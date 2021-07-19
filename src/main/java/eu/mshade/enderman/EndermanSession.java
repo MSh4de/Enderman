@@ -21,18 +21,15 @@ import eu.mshade.mwork.MOptional;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class EndermanSession implements EnderFrameSession {
 
     private static final Random random = new Random();
 
     private EnderFrameSessionHandler enderFrameSessionHandler;
-    private Queue<ChunkBuffer> chunkBuffers = new ConcurrentLinkedQueue<>();
     private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
     private GameProfile gameProfile;
     private GameMode gameMode;
@@ -41,6 +38,7 @@ public class EndermanSession implements EnderFrameSession {
     private Location location;
     private final byte[] verifyToken = new byte[4];
     private MOptional<String> displayName = MOptional.empty();
+    private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private int ping = 0;
 
     public EndermanSession(EnderFrameSessionHandler enderFrameSessionHandler) {
@@ -132,8 +130,8 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public Queue<ChunkBuffer> getChunkBuffers() {
-        return chunkBuffers;
+    public Collection<ChunkBuffer> getChunkBuffers() {
+        return observeChunks;
     }
 
     @Override
@@ -192,7 +190,7 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public void sendChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().add(this);
-        this.chunkBuffers.add(chunkBuffer);
+        observeChunks.add(chunkBuffer);
         List<SectionBuffer> sectionBuffers = new ArrayList<>();
         for (SectionBuffer sectionBuffer : chunkBuffer.getSectionBuffers()) {
             if (sectionBuffer != null && sectionBuffer.getRealBlock() != 0) {
@@ -225,8 +223,26 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().remove(this);
-        this.chunkBuffers.remove(chunkBuffer);
+        observeChunks.remove(chunkBuffer);
         getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EndermanSession that = (EndermanSession) o;
+        return Objects.equals(enderFrameSessionHandler, that.enderFrameSessionHandler) && protocolVersion == that.protocolVersion && Objects.equals(gameProfile, that.gameProfile) && Objects.equals(socketAddress, that.socketAddress);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(enderFrameSessionHandler, protocolVersion, gameProfile, socketAddress);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println("FLUSH");
+    }
 }
