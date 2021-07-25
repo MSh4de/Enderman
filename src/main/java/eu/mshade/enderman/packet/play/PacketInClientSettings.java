@@ -18,6 +18,7 @@ public class PacketInClientSettings extends PacketIn {
         this.chatMode = byteMessage.readByte();
         this.chatColors = byteMessage.readBoolean();
         this.displayedSkinParts = byteMessage.readUnsignedByte();
+        System.out.println(displayedSkinParts);
     }
 
     public String getLocale() {
