@@ -1,10 +1,10 @@
 package eu.mshade.enderman.metadata.entity;
 
 import eu.mshade.enderframe.metadata.MetadataEntry;
-import eu.mshade.enderframe.metadata.MetadataManager;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.metadata.MetadataType;
 import eu.mshade.enderframe.metadata.buffer.MetadataBuffer;
+import eu.mshade.enderframe.metadata.v2.MetadataManager;
 import eu.mshade.enderframe.protocol.ByteMessage;
 
 public class EntityMetadataBuffer extends MetadataBuffer {
