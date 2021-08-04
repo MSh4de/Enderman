@@ -4,6 +4,8 @@ import eu.mshade.enderframe.EnderFrameSession;
 import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.PlayerInfoBuilder;
+import eu.mshade.enderframe.entity.*;
+import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.mojang.chat.TextPosition;
@@ -23,7 +25,6 @@ import java.nio.ByteBuffer;
 import java.security.PublicKey;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 public class EndermanSession implements EnderFrameSession {
 
@@ -227,6 +228,23 @@ public class EndermanSession implements EnderFrameSession {
         getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
 
+    @Override
+    public void sendMetadata(Entity entity, MetadataMeaning...metadataMeanings) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityMetadata(entity, metadataMeanings));
+    }
+
+    @Override
+    public void spawnMob(Entity entity) {
+        EntityRepository repository = getEnderFrameSessionHandler().getEnderFrameProtocol().getEntityRepository();
+        int id = repository.getIdByEntityType(entity.getType());
+        getEnderFrameSessionHandler().sendPacket(new PacketOutSpawnMob(id, entity));
+    }
+
+    @Override
+    public void spawnPlayer(Player player) {
+        getEnderFrameSessionHandler()
+                .sendPacket(new PacketOutSpawnPlayer(player));
+    }
 
     @Override
     public boolean equals(Object o) {
