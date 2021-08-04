@@ -12,7 +12,7 @@ public class PacketClientSettingsListener implements EventListener<PacketInClien
     public void onEvent(PacketInClientSettings event, EventContainer eventContainer) {
         EnderFrame.get().getPacketEventBus().publish(
                 new PacketClientSettingsEvent(event.getLocale(), event.getViewDistance(), event.getChatMode(),
-                        event.isChatColors(), event.getDisplayedSkinParts()),
+                        event.isChatColors(), event.getSkinParts()),
                 eventContainer);
     }
 }
