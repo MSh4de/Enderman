@@ -1,5 +1,6 @@
 package eu.mshade.enderman.packet.play;
 
+import eu.mshade.enderframe.mojang.SkinParts;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketIn;
 
@@ -9,7 +10,7 @@ public class PacketInClientSettings extends PacketIn {
     private byte viewDistance;
     private byte chatMode;
     private boolean chatColors;
-    private short displayedSkinParts;
+    private SkinParts skinParts;
 
     @Override
     public void deserialize(ByteMessage byteMessage) {
@@ -17,8 +18,7 @@ public class PacketInClientSettings extends PacketIn {
         this.viewDistance = byteMessage.readByte();
         this.chatMode = byteMessage.readByte();
         this.chatColors = byteMessage.readBoolean();
-        this.displayedSkinParts = byteMessage.readUnsignedByte();
-        System.out.println(displayedSkinParts);
+        this.skinParts = SkinParts.fromByte((byte) byteMessage.readUnsignedByte());
     }
 
     public String getLocale() {
@@ -37,9 +37,7 @@ public class PacketInClientSettings extends PacketIn {
         return chatColors;
     }
 
-    public short getDisplayedSkinParts() {
-        return displayedSkinParts;
+    public SkinParts getSkinParts() {
+        return skinParts;
     }
-
-
 }
