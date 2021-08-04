@@ -3,6 +3,7 @@ package eu.mshade.enderman;
 import eu.mshade.enderframe.EnderFrameProtocol;
 import eu.mshade.enderframe.EnderFrameSession;
 import eu.mshade.enderframe.EnderFrameSessionHandler;
+import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.ProtocolVersion;
@@ -19,7 +20,6 @@ public class EndermanProtocol extends EnderFrameProtocol {
 
 
     public EndermanProtocol() {
-
         this.getEventBus().subscribe(PacketInKeepAlive.class, new PacketKeepAliveListener());
         this.getEventBus().subscribe(PacketInLogin.class, new PacketLoginListener());
         this.getEventBus().subscribe(PacketInEncryption.class, new PacketEncryptionListener());
@@ -67,6 +67,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x46, PacketOutSetCompression.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
 
+        this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
     }
 
     @Override
