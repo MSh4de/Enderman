@@ -55,7 +55,11 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x08, PacketOutPlayerPositionAndLook.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x0C, PacketOutSpawnPlayer.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x0F,  PacketOutSpawnMob.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x13,  PacketOutDestroyEntities.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x14,  PacketOutSpawnEntity.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x15,  PacketOutEntityRelativeMove.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x16,  PacketOutEntityLook.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x17,  PacketOutEntityLookRelativeMove.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x18,  PacketOutEntityTeleport.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x19, PacketOutEntityHeadLook.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x1C,  PacketOutEntityMetadata.class);
