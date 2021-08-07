@@ -247,6 +247,11 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
+    public void removeEntities(Entity...entities) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutDestroyEntities(entities));
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
