@@ -16,6 +16,6 @@ public class PacketOutEntityHeadLook extends PacketOut {
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(id);
-        byteMessage.writeByte((byte)rotation);
+        byteMessage.writeByte(rotation);
     }
 }
