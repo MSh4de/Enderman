@@ -14,19 +14,15 @@ public class PacketOutSpawnPlayer extends PacketOut {
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        try {
-            byteMessage.writeVarInt(player.getEntityId());
-            byteMessage.writeUUID(player.getUUID());
-            byteMessage.writeInt((int) player.getLocation().getX() *32);
-            byteMessage.writeInt((int) player.getLocation().getY() *32);
-            byteMessage.writeInt((int) player.getLocation().getZ() *32);
-            byteMessage.writeByte((int) player.getLocation().getYaw());
-            byteMessage.writeByte((int) player.getLocation().getPitch());
-            byteMessage.writeShort(0);
-            byteMessage.writeByte(0x7F);
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+        byteMessage.writeVarInt(player.getEntityId());
+        byteMessage.writeUUID(player.getUUID());
+        byteMessage.writeInt((int) player.getLocation().getX() * 32);
+        byteMessage.writeInt((int) player.getLocation().getY() * 32);
+        byteMessage.writeInt((int) player.getLocation().getZ() * 32);
+        byteMessage.writeByte((byte) player.getLocation().getYaw());
+        byteMessage.writeByte((byte) player.getLocation().getPitch());
+        byteMessage.writeShort(0);
+        byteMessage.writeByte(0x7F);
     }
 
 }
