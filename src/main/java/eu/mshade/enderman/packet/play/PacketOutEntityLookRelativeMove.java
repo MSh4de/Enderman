@@ -6,11 +6,11 @@ import eu.mshade.enderframe.protocol.PacketOut;
 public class PacketOutEntityLookRelativeMove extends PacketOut  {
 
     private final int id;
-    private final double x,y,z;
-    private final byte yaw,pitch;
+    private final byte x,y,z;
+    private final int yaw,pitch;
     private final boolean onGround;
 
-    public PacketOutEntityLookRelativeMove(int id, double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
+    public PacketOutEntityLookRelativeMove(int id, byte x, byte y, byte z, int yaw, int pitch, boolean onGround) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -23,9 +23,9 @@ public class PacketOutEntityLookRelativeMove extends PacketOut  {
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(id);
-        byteMessage.writeByte((int) x);
-        byteMessage.writeByte((int) y);
-        byteMessage.writeByte((int) z);
+        byteMessage.writeByte(x);
+        byteMessage.writeByte(y);
+        byteMessage.writeByte(z);
         byteMessage.writeByte(yaw);
         byteMessage.writeByte(pitch);
         byteMessage.writeBoolean(onGround);
