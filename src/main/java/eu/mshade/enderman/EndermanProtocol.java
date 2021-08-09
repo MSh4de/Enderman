@@ -29,6 +29,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getEventBus().subscribe(PacketInPlayerLook.class, new PacketPlayerLookListener());
         this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
         this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
+        this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
@@ -45,6 +46,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x05, PacketInPlayerLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x06, PacketInPlayerPositionAndLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x08, PacketInPlayerBlockPlacement.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0B, PacketInEntityAction.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x15, PacketInClientSettings.class);
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x00, PacketOutKeepAlive.class);
