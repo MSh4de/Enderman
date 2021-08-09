@@ -51,6 +51,16 @@ public class EndermanSession implements EnderFrameSession {
 
 
     @Override
+    public Player getPlayer() {
+        return null;
+    }
+
+    @Override
+    public void setPlayer(Player player) {
+
+    }
+
+    @Override
     public MOptional<String> getDisplayName() {
         return displayName;
     }
