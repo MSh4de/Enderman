@@ -5,17 +5,19 @@ import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
 
 public class PacketOutEntityTeleport extends PacketOut {
+    private final int id;
     private final Entity entity;
     private final boolean onGround;
 
-    public PacketOutEntityTeleport(Entity entity, boolean onGround) {
+    public PacketOutEntityTeleport(int id, Entity entity, boolean onGround) {
+        this.id = id;
         this.entity = entity;
         this.onGround = onGround;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(entity.getEntityId());
+        byteMessage.writeVarInt(id);
         byteMessage.writeInt((int) (entity.getLocation().getX() *32));
         byteMessage.writeInt((int) (entity.getLocation().getY() *32));
         byteMessage.writeInt((int) (entity.getLocation().getZ() *32));
