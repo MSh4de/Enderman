@@ -15,13 +15,13 @@ public class EntityPropertiesMetadataRewriter extends MetadataRewriter {
 
         if (entity.isFire()) b = (byte) (b | 0x01);
 
-        if (entity.isCrounched()) b = (byte) (b | 0x02);
+        if (entity.isSneaking()) b = (byte) (b | 0x02);
 
-        if (entity.isSprinting()) b = (byte) (b | 0x04);
+        if (entity.isSprinting()) b = (byte) (b | 0x08);
 
-        if (entity.isEating()) b = (byte) (b | 0x08);
+        if (entity.isEating()) b = (byte) (b | 0x10);
 
-        if (entity.isInvisible()) b = (byte) (b | 0x10);
+        if (entity.isInvisible()) b = (byte) (b | 0x20);
 
         metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata(b));
     }
