@@ -244,14 +244,14 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void spawnMob(Entity entity) {
+    public void sendMob(Entity entity) {
         EntityRepository repository = getEnderFrameSessionHandler().getEnderFrameProtocol().getEntityRepository();
         int id = repository.getIdByEntityType(entity.getType());
         getEnderFrameSessionHandler().sendPacket(new PacketOutSpawnMob(id, entity));
     }
 
     @Override
-    public void spawnPlayer(Player player) {
+    public void sendPlayer(Player player) {
         getEnderFrameSessionHandler()
                 .sendPacket(new PacketOutSpawnPlayer(player));
     }
