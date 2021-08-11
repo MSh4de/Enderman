@@ -235,6 +235,8 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().remove(this);
+        chunkBuffer.getEntities().forEach(chunkBuffer::removeEntity);
+        
         observeChunks.remove(chunkBuffer);
         getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
