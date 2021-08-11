@@ -5,6 +5,7 @@ import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.entity.*;
+import eu.mshade.enderframe.event.entity.PacketMoveType;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
@@ -254,6 +255,66 @@ public class EndermanSession implements EnderFrameSession {
     public void sendPlayer(Player player) {
         getEnderFrameSessionHandler()
                 .sendPacket(new PacketOutSpawnPlayer(player));
+    }
+
+    @Override
+    public void moveTo(Player player, PacketMoveType packetMoveType, Location now, Location before, boolean ground) {
+        boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32)) || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32)) || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
+
+        if (packetMoveType == PacketMoveType.LOOK || packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
+            player.getViewers().forEach(target -> {
+                target.getEnderFrameSessionHandler().getEnderFrameSession().sendLook(player.getEntityId(), now.getYaw(), now.getPitch(), ground);
+                target.getEnderFrameSessionHandler().getEnderFrameSession().sendHeadLook(player.getEntityId(), now.getYaw());
+            });
+        }
+        if (!teleport) {
+            if (packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
+                player.getViewers().forEach(target -> {
+                    target.getEnderFrameSessionHandler().getEnderFrameSession().sendMoveAndLook(player.getEntityId(), now, before, ground);
+                });
+            } else if (packetMoveType.equals(PacketMoveType.POSITION)) {
+                player.getViewers().forEach(target -> target.getEnderFrameSessionHandler().getEnderFrameSession().sendMove(player.getEntityId(), now, before, ground));
+            }
+        } else {
+            player.getViewers().forEach(target ->{
+                target.getEnderFrameSessionHandler().getEnderFrameSession().sendTeleport(player, ground);
+            });
+        }
+    }
+
+    private boolean hasOverflow(int value) {
+        return value > 3 || value < -3;
+    }
+
+    private int floor(double d0) {
+        int i = (int) d0;
+
+        return d0 < (double) i ? i - 1 : i;
+    }
+
+    @Override
+    public void sendTeleport(Entity entity, boolean onGround) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityTeleport(entity,onGround));
+    }
+
+    @Override
+    public void sendMove(int entityId, Location now, Location before, boolean onGround) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityRelativeMove(entityId, now, before, onGround));
+    }
+
+    @Override
+    public void sendMoveAndLook(int entityId, Location now, Location before, boolean onGround) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityLookRelativeMove(entityId, now, before, onGround));
+    }
+
+    @Override
+    public void sendLook(int entityId, float yaw, float pitch, boolean onGround) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityLook(entityId, yaw, pitch, onGround));
+    }
+
+    @Override
+    public void sendHeadLook(int entityId, float headYaw) {
+        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityHeadLook(entityId, headYaw));
     }
 
     @Override
