@@ -19,8 +19,8 @@ public class PacketOutSpawnPlayer extends PacketOut {
         byteMessage.writeInt((int) player.getLocation().getX() * 32);
         byteMessage.writeInt((int) player.getLocation().getY() * 32);
         byteMessage.writeInt((int) player.getLocation().getZ() * 32);
-        byteMessage.writeByte((byte) player.getLocation().getYaw());
-        byteMessage.writeByte((byte) player.getLocation().getPitch());
+        byteMessage.writeByte((byte) (player.getLocation().getYaw() % 360 / 360 * 256));
+        byteMessage.writeByte((byte) (player.getLocation().getPitch() % 360 / 360 * 256));
         byteMessage.writeShort(0);
         byteMessage.writeByte(0x7F);
     }

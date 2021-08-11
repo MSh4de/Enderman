@@ -2,6 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.world.Location;
 
 public class PacketOutEntityLookRelativeMove extends PacketOut  {
 
@@ -10,13 +11,13 @@ public class PacketOutEntityLookRelativeMove extends PacketOut  {
     private final int yaw,pitch;
     private final boolean onGround;
 
-    public PacketOutEntityLookRelativeMove(int id, byte x, byte y, byte z, int yaw, int pitch, boolean onGround) {
+    public PacketOutEntityLookRelativeMove(int id, Location now, Location before, boolean onGround) {
         this.id = id;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
+        this.x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
+        this.y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
+        this.z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
+        this.yaw = (int) (now.getYaw() % 360 / 360 * 256);
+        this.pitch = (int) (now.getPitch() % 360 / 360 * 256);
         this.onGround = onGround;
     }
 
@@ -29,5 +30,11 @@ public class PacketOutEntityLookRelativeMove extends PacketOut  {
         byteMessage.writeByte(yaw);
         byteMessage.writeByte(pitch);
         byteMessage.writeBoolean(onGround);
+    }
+
+    public int floor(double d0) {
+        int i = (int) d0;
+
+        return d0 < (double) i ? i - 1 : i;
     }
 }
