@@ -41,6 +41,7 @@ public class EndermanSession implements EnderFrameSession {
     private final byte[] verifyToken = new byte[4];
     private MOptional<String> displayName = MOptional.empty();
     private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
+    private Player player;
     private int ping = 0;
 
     public EndermanSession(EnderFrameSessionHandler enderFrameSessionHandler) {
@@ -53,12 +54,13 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public Player getPlayer() {
-        return null;
+        return this.player;
     }
 
     @Override
     public void setPlayer(Player player) {
-
+        if(this.player != null || player != null)
+            this.player = player;
     }
 
     @Override
@@ -236,7 +238,7 @@ public class EndermanSession implements EnderFrameSession {
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().remove(this);
         chunkBuffer.getEntities().forEach(chunkBuffer::removeEntity);
-        
+
         observeChunks.remove(chunkBuffer);
         getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
