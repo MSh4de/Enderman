@@ -4,8 +4,8 @@ import eu.mshade.enderframe.entity.ArmorStand;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.metadata.MetadataType;
 import eu.mshade.enderframe.metadata.type.ByteMetadata;
-import eu.mshade.enderframe.metadata.v2.MetadataManager;
-import eu.mshade.enderframe.metadata.v2.MetadataRewriter;
+import eu.mshade.enderframe.metadata.MetadataManager;
+import eu.mshade.enderframe.metadata.MetadataRewriter;
 import eu.mshade.enderframe.protocol.ByteMessage;
 
 public class ArmorStandPropertiesMetadataRewriter extends MetadataRewriter {
@@ -20,9 +20,9 @@ public class ArmorStandPropertiesMetadataRewriter extends MetadataRewriter {
 
         if (armorStand.hasArms()) b = (byte) (b | 0x04);
 
-        if (armorStand.removeBasePlate()) b = (byte) (b | 0x08);
+        if (armorStand.isRemovedBasePlate()) b = (byte) (b | 0x08);
 
-        if (armorStand.marker()) b = (byte) (b | 0x10);
+        if (armorStand.isMarker()) b = (byte) (b | 0x10);
 
         metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage,new ByteMetadata(b));
     }

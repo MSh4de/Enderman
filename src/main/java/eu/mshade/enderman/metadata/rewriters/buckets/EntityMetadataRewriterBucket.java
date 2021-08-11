@@ -1,9 +1,8 @@
 package eu.mshade.enderman.metadata.rewriters.buckets;
 
 import eu.mshade.enderframe.metadata.MetadataMeaning;
-import eu.mshade.enderframe.metadata.v2.MetadataRewriterBucket;
+import eu.mshade.enderframe.metadata.MetadataRewriterBucket;
 import eu.mshade.enderman.metadata.rewriters.*;
-import eu.mshade.enderman.metadata.v2.rewriters.*;
 
 public class EntityMetadataRewriterBucket extends MetadataRewriterBucket {
 

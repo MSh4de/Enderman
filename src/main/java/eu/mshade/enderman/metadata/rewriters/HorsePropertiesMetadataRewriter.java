@@ -4,8 +4,8 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.Horse;
 import eu.mshade.enderframe.metadata.MetadataType;
 import eu.mshade.enderframe.metadata.type.IntegerMetadata;
-import eu.mshade.enderframe.metadata.v2.MetadataManager;
-import eu.mshade.enderframe.metadata.v2.MetadataRewriter;
+import eu.mshade.enderframe.metadata.MetadataManager;
+import eu.mshade.enderframe.metadata.MetadataRewriter;
 import eu.mshade.enderframe.protocol.ByteMessage;
 
 public class HorsePropertiesMetadataRewriter extends MetadataRewriter {
@@ -17,9 +17,9 @@ public class HorsePropertiesMetadataRewriter extends MetadataRewriter {
 
         if (horse.isTame()) b = (byte) (b | 0x02);
 
-        if (horse.hasSaddle()) b = (byte) (b | 0x04);
+        if (horse.isHasSaddle()) b = (byte) (b | 0x04);
 
-        if (horse.hasChest()) b = (byte) (b | 0x08);
+        if (horse.isHasChest()) b = (byte) (b | 0x08);
 
         if (horse.isBred()) b = (byte) (b | 0x10);
 
@@ -27,7 +27,7 @@ public class HorsePropertiesMetadataRewriter extends MetadataRewriter {
 
         if (horse.isRearing()) b = (byte) (b | 0x40);
 
-        if (horse.mouthOpen()) b = (byte) (b | 0x80);
+        if (horse.isMouthOpen()) b = (byte) (b | 0x80);
 
         metadataManager.getMetadataTypeBuffer(MetadataType.INTEGER).write(byteMessage, new IntegerMetadata(b));
     }
