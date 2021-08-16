@@ -12,7 +12,7 @@ public class RabbitTypeMetadataRewriter extends MetadataRewriter {
 
     @Override
     public void write(MetadataManager metadataManager, ByteMessage byteMessage, Entity entity) {
-        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage,new ByteMetadata(((Rabbit)entity).getRabbityType()));
+        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage,new ByteMetadata(((Rabbit)entity).getRabbitType()));
     }
 
     @Override
