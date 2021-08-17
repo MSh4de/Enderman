@@ -16,7 +16,7 @@ public class TameablePropertiesRewriter extends MetadataRewriter {
         Tameable tameable = (Tameable)entity;
 
         b = tameable.isSitting() ? (byte) (b | 0x01) : b;
-        b = tameable.isTame() ? (byte) (b | 0x04) : b;
+        b = tameable.isTamed() ? (byte) (b | 0x04) : b;
 
         metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata(b));
     }
