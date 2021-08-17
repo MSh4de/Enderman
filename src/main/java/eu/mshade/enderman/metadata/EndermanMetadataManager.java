@@ -2,20 +2,15 @@ package eu.mshade.enderman.metadata;
 
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityType;
-import eu.mshade.enderframe.metadata.MetadataMeaning;
-import eu.mshade.enderframe.metadata.MetadataType;
-import eu.mshade.enderframe.metadata.MetadataTypeRepository;
+import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.buffer.MetadataBuffer;
 import eu.mshade.enderframe.metadata.buffer.type.ByteMetadataTypeBuffer;
 import eu.mshade.enderframe.metadata.buffer.type.FloatMetadataTypeBuffer;
 import eu.mshade.enderframe.metadata.buffer.type.IntegerMetadataTypeBuffer;
 import eu.mshade.enderframe.metadata.buffer.type.ShortMetadataTypeBuffer;
-import eu.mshade.enderframe.metadata.v2.MetadataManager;
-import eu.mshade.enderframe.metadata.v2.MetadataRewriter;
-import eu.mshade.enderframe.metadata.v2.MetadataRewriterBucket;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderman.metadata.entity.*;
-import eu.mshade.enderman.metadata.v2.rewriters.buckets.*;
+import eu.mshade.enderman.metadata.rewriters.buckets.*;
 
 public class EndermanMetadataManager extends MetadataManager {
 
