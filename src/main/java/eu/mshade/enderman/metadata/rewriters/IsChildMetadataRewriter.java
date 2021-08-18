@@ -12,7 +12,7 @@ public class IsChildMetadataRewriter extends MetadataRewriter {
 
     @Override
     public void write(MetadataManager metadataManager, ByteMessage byteMessage, Entity entity) {
-        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata((byte) (((Zombie)entity).isChild() ? 1 : 0)));
+        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata((byte) (((Zombie)entity).isAdult() ? 1 : 0)));
     }
 
     @Override

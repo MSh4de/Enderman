@@ -12,7 +12,7 @@ public class HasSaddleMetadataRewriter extends MetadataRewriter {
 
     @Override
     public void write(MetadataManager metadataManager, ByteMessage byteMessage, Entity entity) {
-        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata((byte) (((Pig)entity).isHasSaddle() ? 1 : 0)));
+        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata((byte) (((Pig)entity).hasSaddle() ? 1 : 0)));
     }
 
     @Override

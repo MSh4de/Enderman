@@ -33,16 +33,11 @@ public class EndermanSession implements EnderFrameSession {
 
     private EnderFrameSessionHandler enderFrameSessionHandler;
     private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
-    private GameProfile gameProfile;
-    private GameMode gameMode;
     private SocketAddress socketAddress;
     private final String sessionId;
-    private Location location;
     private final byte[] verifyToken = new byte[4];
-    private MOptional<String> displayName = MOptional.empty();
     private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private Player player;
-    private int ping = 0;
 
     public EndermanSession(EnderFrameSessionHandler enderFrameSessionHandler) {
         this.sessionId = Long.toString(random.nextLong(), 16).trim();
@@ -64,56 +59,6 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public MOptional<String> getDisplayName() {
-        return displayName;
-    }
-
-    @Override
-    public void setDisplayName(MOptional<String> displayName) {
-        this.displayName = displayName;
-    }
-
-    @Override
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    @Override
-    public GameMode getGameMode() {
-        return gameMode;
-    }
-
-    @Override
-    public GameProfile getGameProfile() {
-        return gameProfile;
-    }
-
-    @Override
-    public void setGameProfile(GameProfile gameProfile) {
-        this.gameProfile = gameProfile;
-    }
-
-    @Override
-    public SocketAddress getSocketAddress() {
-        return socketAddress;
-    }
-
-    @Override
-    public EnderFrameSessionHandler getEnderFrameSessionHandler() {
-        return enderFrameSessionHandler;
-    }
-
-    @Override
-    public ProtocolVersion getProtocolVersion() {
-        return protocolVersion;
-    }
-
-    @Override
-    public void setProtocolVersion(ProtocolVersion protocolVersion) {
-        this.protocolVersion = protocolVersion;
-    }
-
-    @Override
     public String getSessionId() {
         return sessionId;
     }
@@ -121,26 +66,6 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public byte[] getVerifyToken() {
         return verifyToken;
-    }
-
-    @Override
-    public int getPing() {
-        return ping;
-    }
-
-    @Override
-    public void setPing(int ping) {
-        this.ping = ping;
-    }
-
-    @Override
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    @Override
-    public Location getLocation() {
-        return location;
     }
 
     @Override
@@ -155,30 +80,30 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendPlayerInfo(PlayerInfoBuilder playerInfoBuilder) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutPlayerInfo(playerInfoBuilder));
+        enderFrameSessionHandler.sendPacket(new PacketOutPlayerInfo(playerInfoBuilder));
     }
 
     @Override
     public void sendEncryption(PublicKey publicKey) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEncryption(sessionId, publicKey, verifyToken));
+        enderFrameSessionHandler.sendPacket(new PacketOutEncryption(sessionId, publicKey, verifyToken));
     }
 
     @Override
     public void sendCompression(int threshold) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutSetCompression(threshold));
-        getEnderFrameSessionHandler().enableCompression(threshold);
+        enderFrameSessionHandler.sendPacket(new PacketOutSetCompression(threshold));
+        enderFrameSessionHandler.enableCompression(threshold);
     }
 
     @Override
     public void sendLoginSuccess() {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutLoginSuccess(getGameProfile()));
-        getEnderFrameSessionHandler().toggleProtocolStatus(ProtocolStatus.PLAY);
+        enderFrameSessionHandler.sendPacket(new PacketOutLoginSuccess(player.getGameProfile()));
+        enderFrameSessionHandler.toggleProtocolStatus(ProtocolStatus.PLAY);
     }
 
     @Override
     public void sendJoinGame(GameMode gameMode, Dimension dimension, Difficulty difficulty, int maxPlayers, LevelType levelType, boolean reducedDebugInfo) {
-        setGameMode(gameMode);
-        getEnderFrameSessionHandler().sendPacket(new PacketOutJoinGame(gameMode, dimension, difficulty, maxPlayers, levelType.getName(), reducedDebugInfo));
+        player.setGameMode(gameMode);
+        enderFrameSessionHandler.sendPacket(new PacketOutJoinGame(gameMode, dimension, difficulty, maxPlayers, levelType.getName(), reducedDebugInfo));
     }
 
     @Override
@@ -188,22 +113,22 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendPosition(double x, double y, double z, float yaw, float pitch) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutPlayerPositionAndLook(x, y, z, yaw, pitch));
+        enderFrameSessionHandler.sendPacket(new PacketOutPlayerPositionAndLook(x, y, z, yaw, pitch));
     }
 
     @Override
     public void sendMessage(TextComponent textComponent, TextPosition position) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutChatMessage(textComponent, position));
+        enderFrameSessionHandler.sendPacket(new PacketOutChatMessage(textComponent, position));
     }
 
     @Override
     public void sendDisconnect(String message) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutDisconnect(TextComponent.of(message)));
+        enderFrameSessionHandler.sendPacket(new PacketOutDisconnect(TextComponent.of(message)));
     }
 
     @Override
     public void sendChunk(ChunkBuffer chunkBuffer) {
-        chunkBuffer.getViewers().add(this);
+        chunkBuffer.getViewers().add(player);
         observeChunks.add(chunkBuffer);
         List<SectionBuffer> sectionBuffers = new ArrayList<>();
         for (SectionBuffer sectionBuffer : chunkBuffer.getSectionBuffers()) {
@@ -231,33 +156,33 @@ public class EndermanSession implements EnderFrameSession {
 
         byteBuffer.put(chunkBuffer.getBiomes());
 
-        getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, chunkBuffer.getBitMask(), byteBuffer.array()));
+        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, chunkBuffer.getBitMask(), byteBuffer.array()));
     }
 
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
-        chunkBuffer.getViewers().remove(this);
+        chunkBuffer.getViewers().remove(player);
         chunkBuffer.getEntities().forEach(chunkBuffer::removeEntity);
 
         observeChunks.remove(chunkBuffer);
-        getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
+        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
 
     @Override
     public void sendMetadata(Entity entity, MetadataMeaning...metadataMeanings) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityMetadata(entity, metadataMeanings));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityMetadata(entity, metadataMeanings));
     }
 
     @Override
     public void sendMob(Entity entity) {
-        EntityRepository repository = getEnderFrameSessionHandler().getEnderFrameProtocol().getEntityRepository();
+        EntityRepository repository = enderFrameSessionHandler.getEnderFrameProtocol().getEntityRepository();
         int id = repository.getIdByEntityType(entity.getType());
-        getEnderFrameSessionHandler().sendPacket(new PacketOutSpawnMob(id, entity));
+        enderFrameSessionHandler.sendPacket(new PacketOutSpawnMob(id, entity));
     }
 
     @Override
     public void sendPlayer(Player player) {
-        getEnderFrameSessionHandler()
+        enderFrameSessionHandler
                 .sendPacket(new PacketOutSpawnPlayer(player));
     }
 
@@ -298,32 +223,32 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendTeleport(Entity entity, boolean onGround) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityTeleport(entity,onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity,onGround));
     }
 
     @Override
     public void sendMove(int entityId, Location now, Location before, boolean onGround) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityRelativeMove(entityId, now, before, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entityId, now, before, onGround));
     }
 
     @Override
     public void sendMoveAndLook(int entityId, Location now, Location before, boolean onGround) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityLookRelativeMove(entityId, now, before, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entityId, now, before, onGround));
     }
 
     @Override
     public void sendLook(int entityId, float yaw, float pitch, boolean onGround) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityLook(entityId, yaw, pitch, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entityId, yaw, pitch, onGround));
     }
 
     @Override
     public void sendHeadLook(int entityId, float headYaw) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutEntityHeadLook(entityId, headYaw));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entityId, headYaw));
     }
 
     @Override
     public void removeEntities(Entity...entities) {
-        getEnderFrameSessionHandler().sendPacket(new PacketOutDestroyEntities(entities));
+        enderFrameSessionHandler.sendPacket(new PacketOutDestroyEntities(entities));
     }
 
     @Override
@@ -331,12 +256,12 @@ public class EndermanSession implements EnderFrameSession {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EndermanSession that = (EndermanSession) o;
-        return Objects.equals(enderFrameSessionHandler, that.enderFrameSessionHandler) && protocolVersion == that.protocolVersion && Objects.equals(gameProfile, that.gameProfile) && Objects.equals(socketAddress, that.socketAddress);
+        return Objects.equals(enderFrameSessionHandler, that.enderFrameSessionHandler) && protocolVersion == that.protocolVersion && Objects.equals(socketAddress, that.socketAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(enderFrameSessionHandler, protocolVersion, gameProfile, socketAddress);
+        return Objects.hash(enderFrameSessionHandler, protocolVersion, socketAddress);
     }
 
     @Override
