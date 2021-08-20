@@ -3,7 +3,7 @@ package eu.mshade.enderman.listener;
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.event.entity.PacketClientSettingsEvent;
 import eu.mshade.enderman.packet.play.PacketInClientSettings;
-import eu.mshade.mwork.event.ParameterContainer;
+import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
 
 public class PacketClientSettingsListener implements EventListener<PacketInClientSettings> {

@@ -12,7 +12,7 @@ public class SizeMetadataRewriter extends MetadataRewriter {
 
     @Override
     public void write(MetadataManager metadataManager, ByteMessage byteMessage, Entity entity) {
-        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata(((Slime)entity).getSize()));
+        metadataManager.getMetadataTypeBuffer(MetadataType.BYTE).write(byteMessage, new ByteMetadata(((Slime)entity).size()));
     }
 
     @Override

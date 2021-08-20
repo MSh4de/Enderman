@@ -4,7 +4,9 @@ import eu.mshade.enderframe.EnderFrameSession;
 import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.PlayerInfoBuilder;
-import eu.mshade.enderframe.entity.*;
+import eu.mshade.enderframe.entity.Entity;
+import eu.mshade.enderframe.entity.EntityRepository;
+import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.event.entity.PacketMoveType;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
@@ -19,7 +21,6 @@ import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
-import eu.mshade.mwork.MOptional;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -30,12 +31,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class EndermanSession implements EnderFrameSession {
 
     private static final Random random = new Random();
-
-    private EnderFrameSessionHandler enderFrameSessionHandler;
-    private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
-    private SocketAddress socketAddress;
     private final String sessionId;
     private final byte[] verifyToken = new byte[4];
+    private EnderFrameSessionHandler enderFrameSessionHandler;
+    private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
+    private GameProfile gameProfile;
+    private SocketAddress socketAddress;
+    private Location location;
     private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private Player player;
 
@@ -54,9 +56,40 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void setPlayer(Player player) {
-        if(this.player != null || player != null)
+        if (this.player != null || player != null)
             this.player = player;
     }
+
+    @Override
+    public GameProfile getGameProfile() {
+        return gameProfile;
+    }
+
+    @Override
+    public void setGameProfile(GameProfile gameProfile) {
+        this.gameProfile = gameProfile;
+    }
+
+    @Override
+    public SocketAddress getSocketAddress() {
+        return socketAddress;
+    }
+
+    @Override
+    public void setSocketAddress(SocketAddress socketAddress) {
+        this.socketAddress = socketAddress;
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
 
     @Override
     public String getSessionId() {
@@ -96,7 +129,7 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendLoginSuccess() {
-        enderFrameSessionHandler.sendPacket(new PacketOutLoginSuccess(player.getGameProfile()));
+        enderFrameSessionHandler.sendPacket(new PacketOutLoginSuccess(this.getGameProfile()));
         enderFrameSessionHandler.toggleProtocolStatus(ProtocolStatus.PLAY);
     }
 
@@ -136,7 +169,7 @@ public class EndermanSession implements EnderFrameSession {
                 sectionBuffers.add(sectionBuffer);
             }
         }
-        int capacity = sectionBuffers.size()*(4096*4)+256;
+        int capacity = sectionBuffers.size() * (4096 * 4) + 256;
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
         for (SectionBuffer sectionBuffer : sectionBuffers) {
@@ -169,7 +202,7 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void sendMetadata(Entity entity, MetadataMeaning...metadataMeanings) {
+    public void sendMetadata(Entity entity, MetadataMeaning... metadataMeanings) {
         enderFrameSessionHandler.sendPacket(new PacketOutEntityMetadata(entity, metadataMeanings));
     }
 
@@ -187,27 +220,21 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void moveTo(Player player, PacketMoveType packetMoveType, Location now, Location before, boolean ground) {
+    public void moveTo(Entity entity, PacketMoveType packetMoveType, Location now, Location before, boolean ground) {
         boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32)) || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32)) || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
         if (packetMoveType == PacketMoveType.LOOK || packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-            player.getViewers().forEach(target -> {
-                target.getEnderFrameSessionHandler().getEnderFrameSession().sendLook(player.getEntityId(), now.getYaw(), now.getPitch(), ground);
-                target.getEnderFrameSessionHandler().getEnderFrameSession().sendHeadLook(player.getEntityId(), now.getYaw());
-            });
+            this.sendLook(entity.getEntityId(), now.getYaw(), now.getPitch(), ground);
+            this.sendHeadLook(entity.getEntityId(), now.getYaw());
         }
         if (!teleport) {
             if (packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-                player.getViewers().forEach(target -> {
-                    target.getEnderFrameSessionHandler().getEnderFrameSession().sendMoveAndLook(player.getEntityId(), now, before, ground);
-                });
+                this.sendMoveAndLook(entity.getEntityId(), now, before, ground);
             } else if (packetMoveType.equals(PacketMoveType.POSITION)) {
-                player.getViewers().forEach(target -> target.getEnderFrameSessionHandler().getEnderFrameSession().sendMove(player.getEntityId(), now, before, ground));
+                this.sendMove(entity.getEntityId(), now, before, ground);
             }
         } else {
-            player.getViewers().forEach(target ->{
-                target.getEnderFrameSessionHandler().getEnderFrameSession().sendTeleport(player, ground);
-            });
+            this.sendTeleport(entity, ground);
         }
     }
 
@@ -223,7 +250,7 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendTeleport(Entity entity, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity,onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, onGround));
     }
 
     @Override
@@ -247,7 +274,7 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void removeEntities(Entity...entities) {
+    public void removeEntities(Entity... entities) {
         enderFrameSessionHandler.sendPacket(new PacketOutDestroyEntities(entities));
     }
 
