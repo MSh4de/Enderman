@@ -10,24 +10,26 @@ public class PacketOutSpawnPlayer extends PacketOut {
 
     private int id;
     private UUID uuid;
-    private Position position;
+    private int x, y, z;
 
-    public PacketOutSpawnPlayer(int id, UUID uuid, Position position) {
+    public PacketOutSpawnPlayer(int id, UUID uuid, int x, int y, int z) {
         this.id = id;
         this.uuid = uuid;
-        this.position = position;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(id);
         byteMessage.writeUUID(uuid);
-        byteMessage.writeInt((int) position.getX());
-        byteMessage.writeInt((int) position.getZ());
-        byteMessage.writeInt((int) position.getY());
-        byteMessage.writeByte((int) position.getYaw());
-        byteMessage.writeByte((int) position.getPitch());
+        byteMessage.writeInt( x*32);
+        byteMessage.writeInt( y*32);
+        byteMessage.writeInt( z*32);
+        byteMessage.writeByte(0);
+        byteMessage.writeByte(0);
         byteMessage.writeShort(0);
-        byteMessage.writeByte(0xff);
+        byteMessage.writeByte(127);
     }
 }
