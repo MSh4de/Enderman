@@ -26,7 +26,7 @@ public class PacketOutJoinGame extends PacketOut {
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeInt(3);
+        byteMessage.writeInt(0);
         byteMessage.writeByte(gameMode.getId());
         byteMessage.writeByte(dimension.getId());
         byteMessage.writeByte(difficulty.getId());

@@ -1,33 +1,28 @@
 package eu.mshade.enderman.packet.play;
 
+import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
-import eu.mshade.enderframe.world.Position;
-
-import java.util.UUID;
 
 public class PacketOutSpawnPlayer extends PacketOut {
 
-    private int id;
-    private UUID uuid;
-    private Position position;
+    private final Player player;
 
-    public PacketOutSpawnPlayer(int id, UUID uuid, Position position) {
-        this.id = id;
-        this.uuid = uuid;
-        this.position = position;
+    public PacketOutSpawnPlayer(Player player) {
+        this.player = player;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(id);
-        byteMessage.writeUUID(uuid);
-        byteMessage.writeInt((int) position.getX());
-        byteMessage.writeInt((int) position.getZ());
-        byteMessage.writeInt((int) position.getY());
-        byteMessage.writeByte((int) position.getYaw());
-        byteMessage.writeByte((int) position.getPitch());
+        byteMessage.writeVarInt(player.getEntityId());
+        byteMessage.writeUUID(player.getUUID());
+        byteMessage.writeInt((int) player.getLocation().getX() * 32);
+        byteMessage.writeInt((int) player.getLocation().getY() * 32);
+        byteMessage.writeInt((int) player.getLocation().getZ() * 32);
+        byteMessage.writeByte((byte) (player.getLocation().getYaw() % 360 / 360 * 256));
+        byteMessage.writeByte((byte) (player.getLocation().getPitch() % 360 / 360 * 256));
         byteMessage.writeShort(0);
-        byteMessage.writeByte(0xff);
+        byteMessage.writeByte(0x7F);
     }
+
 }

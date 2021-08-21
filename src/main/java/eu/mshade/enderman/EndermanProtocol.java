@@ -3,6 +3,7 @@ package eu.mshade.enderman;
 import eu.mshade.enderframe.EnderFrameProtocol;
 import eu.mshade.enderframe.EnderFrameSession;
 import eu.mshade.enderframe.EnderFrameSessionHandler;
+import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.ProtocolVersion;
@@ -19,7 +20,6 @@ public class EndermanProtocol extends EnderFrameProtocol {
 
 
     public EndermanProtocol() {
-
         this.getEventBus().subscribe(PacketInKeepAlive.class, new PacketKeepAliveListener());
         this.getEventBus().subscribe(PacketInLogin.class, new PacketLoginListener());
         this.getEventBus().subscribe(PacketInEncryption.class, new PacketEncryptionListener());
@@ -29,6 +29,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getEventBus().subscribe(PacketInPlayerLook.class, new PacketPlayerLookListener());
         this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
         this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
+        this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
@@ -45,6 +46,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x05, PacketInPlayerLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x06, PacketInPlayerPositionAndLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x08, PacketInPlayerBlockPlacement.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0B, PacketInEntityAction.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x15, PacketInClientSettings.class);
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x00, PacketOutKeepAlive.class);
@@ -54,6 +56,16 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x07, PacketOutRespawn.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x08, PacketOutPlayerPositionAndLook.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x0C, PacketOutSpawnPlayer.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x0F,  PacketOutSpawnMob.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x13,  PacketOutDestroyEntities.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x14,  PacketOutSpawnEntity.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x15,  PacketOutEntityRelativeMove.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x16,  PacketOutEntityLook.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x17,  PacketOutEntityLookRelativeMove.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x18,  PacketOutEntityTeleport.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x19, PacketOutEntityHeadLook.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x1C,  PacketOutEntityMetadata.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x20,  PacketOutEntityProperties.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x21, PacketOutChunkData.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x38, PacketOutPlayerInfo.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x39, PacketOutPlayerAbilities.class);
@@ -61,6 +73,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x46, PacketOutSetCompression.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
 
+        this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
     }
 
     @Override
