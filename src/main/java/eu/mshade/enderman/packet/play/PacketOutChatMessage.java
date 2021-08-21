@@ -17,7 +17,7 @@ public class PacketOutChatMessage extends PacketOut {
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeTextComponent(textComponent);
+        byteMessage.writeValueAsString(textComponent);
         byteMessage.writeByte(position.getId());
     }
 }

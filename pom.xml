@@ -47,6 +47,7 @@
             <groupId>eu.mshade</groupId>
             <artifactId>mwork</artifactId>
             <version>0.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

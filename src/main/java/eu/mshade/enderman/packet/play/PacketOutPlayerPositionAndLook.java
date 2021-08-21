@@ -7,7 +7,6 @@ public class PacketOutPlayerPositionAndLook extends PacketOut {
 
     private double x,y,z;
     private float yaw, pitch;
-    private byte flags;
 
     public PacketOutPlayerPositionAndLook(double x, double y, double z, float yaw, float pitch) {
         this.x = x;
