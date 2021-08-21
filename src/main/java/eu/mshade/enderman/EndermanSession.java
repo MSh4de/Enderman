@@ -109,25 +109,7 @@ public class EndermanSession implements EnderFrameSession {
         return verifyToken;
     }
 
-    @Override
-    public int getPing() {
-        return ping;
-    }
 
-    @Override
-    public void setPing(int ping) {
-        this.ping = ping;
-    }
-
-    @Override
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    @Override
-    public Location getLocation() {
-        return location;
-    }
 
     @Override
     public Collection<ChunkBuffer> getChunkBuffers() {
