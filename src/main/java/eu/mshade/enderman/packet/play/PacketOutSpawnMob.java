@@ -1,11 +1,11 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
+
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
 
 public class PacketOutSpawnMob extends PacketOut {
-
     private final int id;
     private final Entity entity;
 
@@ -13,7 +13,6 @@ public class PacketOutSpawnMob extends PacketOut {
         this.id = id;
         this.entity = entity;
     }
-
 
     @Override
     public void serialize(ByteMessage byteMessage) {

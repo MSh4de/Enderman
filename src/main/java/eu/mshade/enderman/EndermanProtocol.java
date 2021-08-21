@@ -57,6 +57,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x08, PacketOutPlayerPositionAndLook.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x0C, PacketOutSpawnPlayer.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x0F,  PacketOutSpawnMob.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x12, PacketOutEntityVelocity.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x13,  PacketOutDestroyEntities.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x14,  PacketOutSpawnEntity.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x15,  PacketOutEntityRelativeMove.class);
@@ -72,6 +73,7 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x40, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x46, PacketOutSetCompression.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetSlot.class);
 
         this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
     }

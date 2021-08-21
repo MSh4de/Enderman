@@ -29,7 +29,6 @@ public class PacketOutEntityRelativeMove extends PacketOut {
 
     public int floor(double d0) {
         int i = (int) d0;
-
         return d0 < (double) i ? i - 1 : i;
     }
 }

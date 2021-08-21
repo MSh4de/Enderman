@@ -102,7 +102,7 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public Collection<ChunkBuffer> getChunkBuffers() {
+    public Queue<ChunkBuffer> getChunkBuffers() {
         return observeChunks;
     }
 
