@@ -27,7 +27,7 @@ public class PacketInPlayerBlockPlacement extends PacketIn {
         int cursorX = byteMessage.readByte();
         int cursorY = byteMessage.readByte();
         int cursorZ = byteMessage.readByte();
-
+        
         System.out.println(face);
         System.out.println(type);
         System.out.println(amount);
