@@ -15,7 +15,7 @@ public class HorsePropertiesMetadataRewriter extends MetadataRewriter {
         byte b = 0;
         Horse horse = (Horse) entity;
 
-        if (horse.isTame()) b = (byte) (b | 0x02);
+        if (horse.isTamed()) b = (byte) (b | 0x02);
 
         if (horse.isHasSaddle()) b = (byte) (b | 0x04);
 
