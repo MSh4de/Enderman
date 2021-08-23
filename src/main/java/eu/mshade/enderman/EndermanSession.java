@@ -206,16 +206,13 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void sendMob(Entity entity) {
-        EntityRepository repository = enderFrameSessionHandler.getEnderFrameProtocol().getEntityRepository();
-        int id = repository.getIdByEntityType(entity.getType());
-        enderFrameSessionHandler.sendPacket(new PacketOutSpawnMob(id, entity));
-    }
-
-    @Override
-    public void sendPlayer(Player player) {
-        enderFrameSessionHandler
-                .sendPacket(new PacketOutSpawnPlayer(player));
+    public <T extends Entity> void sendEntity(T entity) {
+        if(entity instanceof Player) {
+            enderFrameSessionHandler.sendPacket(new PacketOutSpawnPlayer((Player)entity));
+        } else {
+            EntityRepository repository = enderFrameSessionHandler.getEnderFrameProtocol().getEntityRepository();
+            enderFrameSessionHandler.sendPacket(new PacketOutSpawnMob(repository.getIdByEntityType(entity.getType()), entity));
+        }
     }
 
     @Override
