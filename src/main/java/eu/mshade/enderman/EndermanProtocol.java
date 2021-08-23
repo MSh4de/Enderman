@@ -75,7 +75,9 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetSlot.class);
 
+
         this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
+        this.getEntityRepository().registerEntityTypeId(55, EntityType.SLIME);
     }
 
     @Override
