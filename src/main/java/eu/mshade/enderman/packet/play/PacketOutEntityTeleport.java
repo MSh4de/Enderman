@@ -24,10 +24,4 @@ public class PacketOutEntityTeleport extends PacketOut {
         byteMessage.writeBoolean(onGround);
     }
 
-    private long d(double d0) {
-        long i = (long) d0;
-
-        return d0 < (double) i ? i - 1L : i;
-    }
-
 }
