@@ -19,9 +19,15 @@ public class PacketOutEntityTeleport extends PacketOut {
         byteMessage.writeInt((int) (entity.getLocation().getX() *32));
         byteMessage.writeInt((int) (entity.getLocation().getY() *32));
         byteMessage.writeInt((int) (entity.getLocation().getZ() *32));
-        byteMessage.writeByte((int) (entity.getLocation().getYaw() % 360 / 360 * 256));
-        byteMessage.writeByte((int) (entity.getLocation().getPitch() % 360 / 360 * 256));
+        byteMessage.writeByte((int) (entity.getLocation().getYaw() * 256.0F / 360.0F));
+        byteMessage.writeByte((int) (entity.getLocation().getPitch() * 256.0F / 360.0F));
         byteMessage.writeBoolean(onGround);
+    }
+
+    private long d(double d0) {
+        long i = (long) d0;
+
+        return d0 < (double) i ? i - 1L : i;
     }
 
 }
