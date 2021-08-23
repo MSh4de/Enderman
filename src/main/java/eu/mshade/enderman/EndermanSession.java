@@ -216,18 +216,21 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void moveTo(Entity entity, PacketMoveType packetMoveType, Location now, Location before, boolean ground) {
+    public void moveTo(Entity entity, PacketMoveType packetMoveType, boolean ground) {
+        Location now = entity.getLocation();
+        Location before = entity.getBeforeLocation();
+
         boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32)) || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32)) || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
         if (packetMoveType == PacketMoveType.LOOK || packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-            this.sendLook(entity.getEntityId(), now.getYaw(), now.getPitch(), ground);
-            this.sendHeadLook(entity.getEntityId(), now.getYaw());
+            this.sendLook(entity, ground);
+            this.sendHeadLook(entity);
         }
         if (!teleport) {
             if (packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-                this.sendMoveAndLook(entity.getEntityId(), now, before, ground);
+                this.sendMoveAndLook(entity, ground);
             } else if (packetMoveType.equals(PacketMoveType.POSITION)) {
-                this.sendMove(entity.getEntityId(), now, before, ground);
+                this.sendMove(entity, ground);
             }
         } else {
             this.sendTeleport(entity, ground);
@@ -250,23 +253,23 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void sendMove(int entityId, Location now, Location before, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entityId, now, before, onGround));
+    public void sendMove(Entity entity, boolean onGround) {
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity.getEntityId(), entity.getLocation(), entity.getBeforeLocation(), onGround));
     }
 
     @Override
-    public void sendMoveAndLook(int entityId, Location now, Location before, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entityId, now, before, onGround));
+    public void sendMoveAndLook(Entity entity, boolean onGround) {
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity.getEntityId(), entity.getLocation(), entity.getBeforeLocation(), onGround));
     }
 
     @Override
-    public void sendLook(int entityId, float yaw, float pitch, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entityId, yaw, pitch, onGround));
+    public void sendLook(Entity entity, boolean onGround) {
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity.getEntityId(), entity.getLocation().getYaw(), entity.getLocation().getPitch(), onGround));
     }
 
     @Override
-    public void sendHeadLook(int entityId, float headYaw) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entityId, headYaw));
+    public void sendHeadLook(Entity entity) {
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entity.getEntityId(), entity.getLocation().getYaw()));
     }
 
     @Override
