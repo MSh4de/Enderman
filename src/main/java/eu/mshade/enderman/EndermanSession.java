@@ -249,22 +249,48 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendTeleport(Entity entity, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, onGround));
+        int x = (int) (entity.getLocation().getX() *32);
+        int y = (int) (entity.getLocation().getY() *32);
+        int z = (int) (entity.getLocation().getZ() *32);
+        int yaw = (int) (entity.getLocation().getYaw() * 256.0F / 360.0F);
+        int pitch = (int) (entity.getLocation().getPitch() * 256.0F / 360.0F);
+
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, onGround));
     }
 
     @Override
     public void sendMove(Entity entity, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity.getEntityId(), entity.getLocation(), entity.getBeforeLocation(), onGround));
+        Location now = entity.getLocation();
+        Location before = entity.getBeforeLocation();
+
+        byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
+        byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
+        byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
+
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity.getEntityId(), x, y, z, onGround));
     }
 
     @Override
     public void sendMoveAndLook(Entity entity, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity.getEntityId(), entity.getLocation(), entity.getBeforeLocation(), onGround));
+        Location now = entity.getLocation();
+        Location before = entity.getBeforeLocation();
+
+        byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
+        byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
+        byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
+
+        int yaw = (int) (now.getYaw() % 360 / 360 * 256);
+        int pitch = (int) (now.getPitch() % 360 / 360 * 256);
+
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity.getEntityId(), x, y, z, yaw, pitch, onGround));
     }
 
     @Override
     public void sendLook(Entity entity, boolean onGround) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity.getEntityId(), entity.getLocation().getYaw(), entity.getLocation().getPitch(), onGround));
+        float yaw = entity.getLocation().getYaw();
+        float pitch = entity.getLocation().getPitch();
+
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity.getEntityId(), (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), onGround));
     }
 
     @Override
