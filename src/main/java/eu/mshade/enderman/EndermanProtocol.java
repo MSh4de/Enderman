@@ -75,9 +75,35 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetSlot.class);
 
-
+        this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
+        this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
+        this.getEntityRepository().registerEntityTypeId(52, EntityType.SPIDER);
+        this.getEntityRepository().registerEntityTypeId(53, EntityType.GIANT);
         this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
         this.getEntityRepository().registerEntityTypeId(55, EntityType.SLIME);
+        this.getEntityRepository().registerEntityTypeId(56, EntityType.GHAST);
+        this.getEntityRepository().registerEntityTypeId(57, EntityType.PIG_ZOMBIE);
+        this.getEntityRepository().registerEntityTypeId(58, EntityType.ENDERMAN);
+        this.getEntityRepository().registerEntityTypeId(59, EntityType.CAVE_SPIDER);
+        this.getEntityRepository().registerEntityTypeId(60, EntityType.SILVERFISH);
+        this.getEntityRepository().registerEntityTypeId(61, EntityType.BLAZE);
+        this.getEntityRepository().registerEntityTypeId(62, EntityType.MAGMA_CUBE);
+        this.getEntityRepository().registerEntityTypeId(63, EntityType.ENDER_DRAGON);
+        this.getEntityRepository().registerEntityTypeId(64, EntityType.WITHER);
+        this.getEntityRepository().registerEntityTypeId(65, EntityType.BAT);
+        this.getEntityRepository().registerEntityTypeId(66, EntityType.WITCH);
+        this.getEntityRepository().registerEntityTypeId(90, EntityType.PIG);
+        this.getEntityRepository().registerEntityTypeId(91, EntityType.SHEEP);
+        this.getEntityRepository().registerEntityTypeId(92, EntityType.COW);
+        this.getEntityRepository().registerEntityTypeId(93, EntityType.CHICKEN);
+        this.getEntityRepository().registerEntityTypeId(94, EntityType.SQUID);
+        this.getEntityRepository().registerEntityTypeId(95, EntityType.WOLF);
+        this.getEntityRepository().registerEntityTypeId(96, EntityType.MOOSHROOM);
+        this.getEntityRepository().registerEntityTypeId(97, EntityType.SNOW_GOLEM);
+        this.getEntityRepository().registerEntityTypeId(98, EntityType.OCELOT);
+        this.getEntityRepository().registerEntityTypeId(99, EntityType.IRON_GOLEM);
+        this.getEntityRepository().registerEntityTypeId(100, EntityType.HORSE);
+        this.getEntityRepository().registerEntityTypeId(120, EntityType.VILLAGER);
     }
 
     @Override
