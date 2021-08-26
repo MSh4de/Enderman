@@ -5,6 +5,7 @@ import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.entity.Entity;
+import eu.mshade.enderframe.entity.EntityIdManager;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.event.entity.PacketMoveType;
@@ -35,6 +36,7 @@ public class EndermanSession implements EnderFrameSession {
     private final byte[] verifyToken = new byte[4];
     private EnderFrameSessionHandler enderFrameSessionHandler;
     private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
+    private final int entityId;
     private GameProfile gameProfile;
     private SocketAddress socketAddress;
     private Location location;
@@ -46,6 +48,7 @@ public class EndermanSession implements EnderFrameSession {
         this.enderFrameSessionHandler = enderFrameSessionHandler;
         this.socketAddress = enderFrameSessionHandler.getChannel().remoteAddress();
         random.nextBytes(verifyToken);
+        this.entityId = EntityIdManager.get().getFreeId();
     }
 
 
@@ -58,6 +61,12 @@ public class EndermanSession implements EnderFrameSession {
     public void setPlayer(Player player) {
         if (this.player != null || player != null)
             this.player = player;
+
+    }
+
+    @Override
+    public int getEntityId() {
+        return entityId;
     }
 
     @Override
@@ -136,7 +145,7 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public void sendJoinGame(GameMode gameMode, Dimension dimension, Difficulty difficulty, int maxPlayers, LevelType levelType, boolean reducedDebugInfo) {
         player.setGameMode(gameMode);
-        enderFrameSessionHandler.sendPacket(new PacketOutJoinGame(gameMode, dimension, difficulty, maxPlayers, levelType.getName(), reducedDebugInfo));
+        enderFrameSessionHandler.sendPacket(new PacketOutJoinGame(this.getEntityId(), gameMode, dimension, difficulty, maxPlayers, levelType.getName(), reducedDebugInfo));
     }
 
     @Override
@@ -254,7 +263,6 @@ public class EndermanSession implements EnderFrameSession {
         int z = (int) (entity.getLocation().getZ() *32);
         int yaw = (int) (entity.getLocation().getYaw() * 256.0F / 360.0F);
         int pitch = (int) (entity.getLocation().getPitch() * 256.0F / 360.0F);
-
         enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, onGround));
     }
 
@@ -266,7 +274,7 @@ public class EndermanSession implements EnderFrameSession {
         byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
         byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
-
+        System.out.println("t : "+x);
         enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity.getEntityId(), x, y, z, onGround));
     }
 

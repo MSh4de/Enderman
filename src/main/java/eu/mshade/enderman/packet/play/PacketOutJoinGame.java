@@ -8,6 +8,7 @@ import eu.mshade.enderframe.world.Dimension;
 
 public class PacketOutJoinGame extends PacketOut {
 
+    private final int entityId;
     private final GameMode gameMode;
     private final Dimension dimension;
     private final Difficulty difficulty;
@@ -15,7 +16,8 @@ public class PacketOutJoinGame extends PacketOut {
     private final String levelType;
     private final boolean reducedDebugInfo;
 
-    public PacketOutJoinGame(GameMode gameMode, Dimension dimension, Difficulty difficulty, int maxPlayers, String levelType, boolean reducedDebugInfo) {
+    public PacketOutJoinGame(int entityId, GameMode gameMode, Dimension dimension, Difficulty difficulty, int maxPlayers, String levelType, boolean reducedDebugInfo) {
+        this.entityId = entityId;
         this.gameMode = gameMode;
         this.dimension = dimension;
         this.difficulty = difficulty;
@@ -26,7 +28,7 @@ public class PacketOutJoinGame extends PacketOut {
 
     @Override
     public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeInt(0);
+        byteMessage.writeInt(entityId);
         byteMessage.writeByte(gameMode.getId());
         byteMessage.writeByte(dimension.getId());
         byteMessage.writeByte(difficulty.getId());
