@@ -34,13 +34,13 @@ public class EndermanSession implements EnderFrameSession {
     private static final Random random = new Random();
     private final String sessionId;
     private final byte[] verifyToken = new byte[4];
-    private EnderFrameSessionHandler enderFrameSessionHandler;
-    private ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
+    private final EnderFrameSessionHandler enderFrameSessionHandler;
+    private final ProtocolVersion protocolVersion = ProtocolVersion.UNKNOWN;
     private final int entityId;
     private GameProfile gameProfile;
     private SocketAddress socketAddress;
     private Location location;
-    private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
+    private final Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private Player player;
 
     public EndermanSession(EnderFrameSessionHandler enderFrameSessionHandler) {
@@ -274,8 +274,8 @@ public class EndermanSession implements EnderFrameSession {
         byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
         byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
-        System.out.println("t : "+x);
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity.getEntityId(), x, y, z, onGround));
+
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity, x, y, z, onGround));
     }
 
     @Override
@@ -290,7 +290,7 @@ public class EndermanSession implements EnderFrameSession {
         int yaw = (int) (now.getYaw() % 360 / 360 * 256);
         int pitch = (int) (now.getPitch() % 360 / 360 * 256);
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity.getEntityId(), x, y, z, yaw, pitch, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch, onGround));
     }
 
     @Override
@@ -298,12 +298,12 @@ public class EndermanSession implements EnderFrameSession {
         float yaw = entity.getLocation().getYaw();
         float pitch = entity.getLocation().getPitch();
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity.getEntityId(), (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), onGround));
     }
 
     @Override
     public void sendHeadLook(Entity entity) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entity.getEntityId(), entity.getLocation().getYaw()));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entity, entity.getLocation().getYaw()));
     }
 
     @Override
