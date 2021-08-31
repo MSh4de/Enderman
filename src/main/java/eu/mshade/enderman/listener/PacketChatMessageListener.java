@@ -1,7 +1,7 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.event.entity.PacketChatMessageEvent;
+import eu.mshade.enderframe.packetevent.PacketChatMessageEvent;
 import eu.mshade.enderman.packet.play.PacketInChatMessage;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;

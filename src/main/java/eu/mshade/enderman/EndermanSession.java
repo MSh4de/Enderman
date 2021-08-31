@@ -1,14 +1,11 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.EnderFrameSession;
-import eu.mshade.enderframe.EnderFrameSessionHandler;
-import eu.mshade.enderframe.GameMode;
-import eu.mshade.enderframe.PlayerInfoBuilder;
+import eu.mshade.enderframe.*;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityIdManager;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
-import eu.mshade.enderframe.event.entity.PacketMoveType;
+import eu.mshade.enderframe.packetevent.PacketMoveType;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
@@ -204,9 +201,8 @@ public class EndermanSession implements EnderFrameSession {
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().remove(player);
-
+        player.getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
         observeChunks.remove(chunkBuffer);
-        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
     }
 
     @Override
