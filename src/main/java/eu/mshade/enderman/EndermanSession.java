@@ -1,11 +1,13 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.*;
+import eu.mshade.enderframe.EnderFrameSession;
+import eu.mshade.enderframe.EnderFrameSessionHandler;
+import eu.mshade.enderframe.GameMode;
+import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityIdManager;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
-import eu.mshade.enderframe.packetevent.PacketMoveType;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
@@ -221,24 +223,25 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void moveTo(Entity entity, PacketMoveType packetMoveType, boolean ground) {
+    public void moveTo(Entity entity) {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
 
-        boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32)) || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32)) || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
+        boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32))
+                || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32))
+                || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
-        if (packetMoveType == PacketMoveType.LOOK || packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-            this.sendLook(entity, ground);
+        if(now.compareHeadRotation(before)) {
+            this.sendLook(entity);
             this.sendHeadLook(entity);
         }
+
         if (!teleport) {
-            if (packetMoveType == PacketMoveType.POSITION_AND_LOOK) {
-                this.sendMoveAndLook(entity, ground);
-            } else if (packetMoveType.equals(PacketMoveType.POSITION)) {
-                this.sendMove(entity, ground);
-            }
+            if(now.compareHeadRotation(before) && now.compareBodyLocation(before))
+                this.sendMoveAndLook(entity);
+            else this.sendMove(entity);
         } else {
-            this.sendTeleport(entity, ground);
+            this.sendTeleport(entity);
         }
     }
 
@@ -253,17 +256,17 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public void sendTeleport(Entity entity, boolean onGround) {
+    public void sendTeleport(Entity entity) {
         int x = (int) (entity.getLocation().getX() *32);
         int y = (int) (entity.getLocation().getY() *32);
         int z = (int) (entity.getLocation().getZ() *32);
         int yaw = (int) (entity.getLocation().getYaw() * 256.0F / 360.0F);
         int pitch = (int) (entity.getLocation().getPitch() * 256.0F / 360.0F);
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, true));
     }
 
     @Override
-    public void sendMove(Entity entity, boolean onGround) {
+    public void sendMove(Entity entity) {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
 
@@ -271,11 +274,11 @@ public class EndermanSession implements EnderFrameSession {
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
         byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity, x, y, z, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity, x, y, z, true));
     }
 
     @Override
-    public void sendMoveAndLook(Entity entity, boolean onGround) {
+    public void sendMoveAndLook(Entity entity) {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
 
@@ -286,15 +289,15 @@ public class EndermanSession implements EnderFrameSession {
         int yaw = (int) (now.getYaw() % 360 / 360 * 256);
         int pitch = (int) (now.getPitch() % 360 / 360 * 256);
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch, onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch, true));
     }
 
     @Override
-    public void sendLook(Entity entity, boolean onGround) {
+    public void sendLook(Entity entity) {
         float yaw = entity.getLocation().getYaw();
         float pitch = entity.getLocation().getPitch();
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), onGround));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), true));
     }
 
     @Override
