@@ -1,7 +1,7 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.event.entity.PacketKeepAliveEvent;
+import eu.mshade.enderframe.packetevent.PacketKeepAliveEvent;
 import eu.mshade.enderman.packet.play.PacketInKeepAlive;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;

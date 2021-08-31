@@ -1,7 +1,7 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.event.entity.PacketClientSettingsEvent;
+import eu.mshade.enderframe.packetevent.PacketClientSettingsEvent;
 import eu.mshade.enderman.packet.play.PacketInClientSettings;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
