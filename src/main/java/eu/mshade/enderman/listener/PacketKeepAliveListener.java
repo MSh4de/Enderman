@@ -1,6 +1,7 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
+import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.packetevent.PacketKeepAliveEvent;
 import eu.mshade.enderman.packet.play.PacketInKeepAlive;
 import eu.mshade.mwork.ParameterContainer;
@@ -10,6 +11,7 @@ public class PacketKeepAliveListener implements EventListener<PacketInKeepAlive>
 
     @Override
     public void onEvent(PacketInKeepAlive event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketKeepAliveEvent(event.getThreshold()), eventContainer);
+        EnderFrame.get().getPacketEventBus().publish(new PacketKeepAliveEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+                event.getThreshold()), eventContainer);
     }
 }
