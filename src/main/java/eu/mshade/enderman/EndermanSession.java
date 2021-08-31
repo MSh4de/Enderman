@@ -37,7 +37,7 @@ public class EndermanSession implements EnderFrameSession {
     private GameProfile gameProfile;
     private SocketAddress socketAddress;
     private Location location;
-    private Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
+    private final Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private Player player;
 
     public EndermanSession(EnderFrameSessionHandler enderFrameSessionHandler) {
@@ -195,14 +195,19 @@ public class EndermanSession implements EnderFrameSession {
 
         byteBuffer.put(chunkBuffer.getBiomes());
 
-        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, chunkBuffer.getBitMask(), byteBuffer.array()));
+        sendChunkData(chunkBuffer, true, chunkBuffer.getBitMask(), byteBuffer.array());
     }
 
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         chunkBuffer.getViewers().remove(player);
-        player.getEnderFrameSessionHandler().sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
+        sendChunkData(chunkBuffer, false, 0, new byte[0]);
         observeChunks.remove(chunkBuffer);
+    }
+
+    @Override
+    public void sendChunkData(ChunkBuffer chunkBuffer, boolean continuous, int bitMask, byte[] bytes) {
+        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), continuous, bitMask, bytes));
     }
 
     @Override
