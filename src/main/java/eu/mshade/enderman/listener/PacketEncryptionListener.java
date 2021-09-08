@@ -11,7 +11,7 @@ public class PacketEncryptionListener implements EventListener<PacketInEncryptio
 
     @Override
     public void onEvent(PacketInEncryption event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketEncryptionEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+        EnderFrame.get().getPacketEventBus().publish(new PacketEncryptionEvent(eventContainer.getContainer(EnderFrameSessionHandler.class),
                 event.getSharedSecret(), event.getVerifyToken()), eventContainer);
     }
 }

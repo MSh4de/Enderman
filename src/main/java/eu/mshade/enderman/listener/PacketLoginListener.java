@@ -11,7 +11,7 @@ public class PacketLoginListener implements EventListener<PacketInLogin> {
 
     @Override
     public void onEvent(PacketInLogin event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketLoginEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+        EnderFrame.get().getPacketEventBus().publish(new PacketLoginEvent(eventContainer.getContainer(EnderFrameSessionHandler.class),
                 event.getName()), eventContainer);
     }
 
