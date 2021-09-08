@@ -1,13 +1,12 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.EnderFrameSession;
-import eu.mshade.enderframe.EnderFrameSessionHandler;
-import eu.mshade.enderframe.GameMode;
-import eu.mshade.enderframe.PlayerInfoBuilder;
+import eu.mshade.enderframe.*;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityIdManager;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
+import eu.mshade.enderframe.event.ChunkSeeEvent;
+import eu.mshade.enderframe.event.ChunkUnseeEvent;
 import eu.mshade.enderframe.metadata.MetadataMeaning;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
@@ -169,42 +168,54 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendChunk(ChunkBuffer chunkBuffer) {
-        chunkBuffer.getViewers().add(player);
-        observeChunks.add(chunkBuffer);
-        List<SectionBuffer> sectionBuffers = new ArrayList<>();
-        for (SectionBuffer sectionBuffer : chunkBuffer.getSectionBuffers()) {
-            if (sectionBuffer != null && sectionBuffer.getRealBlock() != 0) {
-                sectionBuffers.add(sectionBuffer);
+        ChunkSeeEvent chunkSeeEvent = new ChunkSeeEvent(chunkBuffer, player);
+
+        EnderFrame.get().getEnderFrameEventBus().publish(chunkSeeEvent);
+
+        if (chunkSeeEvent.isCancelled()) {
+            chunkBuffer.getViewers().add(player);
+            observeChunks.add(chunkBuffer);
+            List<SectionBuffer> sectionBuffers = new ArrayList<>();
+            for (SectionBuffer sectionBuffer : chunkBuffer.getSectionBuffers()) {
+                if (sectionBuffer != null && sectionBuffer.getRealBlock() != 0) {
+                    sectionBuffers.add(sectionBuffer);
+                }
             }
-        }
-        int capacity = sectionBuffers.size() * (4096 * 4) + 256;
+            int capacity = sectionBuffers.size() * (4096 * 4) + 256;
 
-        ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
-        for (SectionBuffer sectionBuffer : sectionBuffers) {
-            for (int i = 0; i < 4096; i++) {
-                byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] << 4 | sectionBuffer.getData().get(i)));
-                byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] >> 4));
+            ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
+            for (SectionBuffer sectionBuffer : sectionBuffers) {
+                for (int i = 0; i < 4096; i++) {
+                    byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] << 4 | sectionBuffer.getData().get(i)));
+                    byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] >> 4));
+                }
             }
+
+            for (SectionBuffer sectionBuffer : sectionBuffers) {
+                byteBuffer.put(sectionBuffer.getBlockLight().getRawData());
+            }
+
+            for (SectionBuffer sectionBuffer : sectionBuffers) {
+                byteBuffer.put(sectionBuffer.getSkyLight().getRawData());
+            }
+
+            byteBuffer.put(chunkBuffer.getBiomes());
+
+            sendChunkData(chunkBuffer, true, chunkBuffer.getBitMask(), byteBuffer.array());
         }
-
-        for (SectionBuffer sectionBuffer : sectionBuffers) {
-            byteBuffer.put(sectionBuffer.getBlockLight().getRawData());
-        }
-
-        for (SectionBuffer sectionBuffer : sectionBuffers) {
-            byteBuffer.put(sectionBuffer.getSkyLight().getRawData());
-        }
-
-        byteBuffer.put(chunkBuffer.getBiomes());
-
-        sendChunkData(chunkBuffer, true, chunkBuffer.getBitMask(), byteBuffer.array());
     }
 
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
-        chunkBuffer.getViewers().remove(player);
-        sendChunkData(chunkBuffer, false, 0, new byte[0]);
-        observeChunks.remove(chunkBuffer);
+        ChunkUnseeEvent chunkUnseeEvent = new ChunkUnseeEvent(chunkBuffer, player);
+
+        EnderFrame.get().getEnderFrameEventBus().publish(chunkUnseeEvent);
+
+        if(!chunkUnseeEvent.isCancelled()) {
+            chunkBuffer.getViewers().remove(player);
+            sendChunkData(chunkBuffer, false, 0, new byte[0]);
+            observeChunks.remove(chunkBuffer);
+        }
     }
 
     @Override
