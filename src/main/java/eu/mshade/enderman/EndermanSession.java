@@ -172,7 +172,7 @@ public class EndermanSession implements EnderFrameSession {
 
         EnderFrame.get().getEnderFrameEventBus().publish(chunkSeeEvent);
 
-        if (chunkSeeEvent.isCancelled()) {
+        if (!chunkSeeEvent.isCancelled()) {
             chunkBuffer.getViewers().add(player);
             observeChunks.add(chunkBuffer);
             List<SectionBuffer> sectionBuffers = new ArrayList<>();
