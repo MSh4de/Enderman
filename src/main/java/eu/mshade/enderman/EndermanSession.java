@@ -88,17 +88,6 @@ public class EndermanSession implements EnderFrameSession {
     }
 
     @Override
-    public Location getLocation() {
-        return location;
-    }
-
-    @Override
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-
-    @Override
     public String getSessionId() {
         return sessionId;
     }
@@ -201,27 +190,21 @@ public class EndermanSession implements EnderFrameSession {
 
             byteBuffer.put(chunkBuffer.getBiomes());
 
-            sendChunkData(chunkBuffer, true, chunkBuffer.getBitMask(), byteBuffer.array());
+            enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, chunkBuffer.getBitMask(), byteBuffer.array()));
         }
     }
 
     @Override
     public void sendUnloadChunk(ChunkBuffer chunkBuffer) {
         ChunkUnseeEvent chunkUnseeEvent = new ChunkUnseeEvent(chunkBuffer, player);
-
         EnderFrame.get().getEnderFrameEventBus().publish(chunkUnseeEvent);
-
         if(!chunkUnseeEvent.isCancelled()) {
             chunkBuffer.getViewers().remove(player);
-            sendChunkData(chunkBuffer, false, 0, new byte[0]);
             observeChunks.remove(chunkBuffer);
+            enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), true, 0, new byte[0]));
         }
     }
 
-    @Override
-    public void sendChunkData(ChunkBuffer chunkBuffer, boolean continuous, int bitMask, byte[] bytes) {
-        enderFrameSessionHandler.sendPacket(new PacketOutChunkData(chunkBuffer.getX(), chunkBuffer.getZ(), continuous, bitMask, bytes));
-    }
 
     @Override
     public void sendMetadata(Entity entity, MetadataMeaning... metadataMeanings) {
@@ -302,8 +285,8 @@ public class EndermanSession implements EnderFrameSession {
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
         byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
-        int yaw = (int) (now.getYaw() % 360 / 360 * 256);
-        int pitch = (int) (now.getPitch() % 360 / 360 * 256);
+        int yaw = (int) (now.getYaw() * 256 / 360);
+        int pitch = (int) (now.getPitch() * 256 / 360);
 
         enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch, true));
     }
