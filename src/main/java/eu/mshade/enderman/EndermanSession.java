@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import java.security.PublicKey;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EndermanSession implements EnderFrameSession {
 
@@ -37,7 +38,6 @@ public class EndermanSession implements EnderFrameSession {
     private final int entityId;
     private GameProfile gameProfile;
     private SocketAddress socketAddress;
-    private Location location;
     private final Queue<ChunkBuffer> observeChunks = new ConcurrentLinkedQueue<>();
     private Player player;
 
@@ -131,7 +131,6 @@ public class EndermanSession implements EnderFrameSession {
 
     @Override
     public void sendJoinGame(GameMode gameMode, Dimension dimension, Difficulty difficulty, int maxPlayers, LevelType levelType, boolean reducedDebugInfo) {
-        player.setGameMode(gameMode);
         enderFrameSessionHandler.sendPacket(new PacketOutJoinGame(this.getEntityId(), gameMode, dimension, difficulty, maxPlayers, levelType.getName(), reducedDebugInfo));
     }
 
@@ -205,7 +204,6 @@ public class EndermanSession implements EnderFrameSession {
         }
     }
 
-
     @Override
     public void sendMetadata(Entity entity, MetadataMeaning... metadataMeanings) {
         enderFrameSessionHandler.sendPacket(new PacketOutEntityMetadata(entity, metadataMeanings));
@@ -219,6 +217,7 @@ public class EndermanSession implements EnderFrameSession {
             EntityRepository repository = enderFrameSessionHandler.getEnderFrameProtocol().getEntityRepository();
             enderFrameSessionHandler.sendPacket(new PacketOutSpawnMob(repository.getIdByEntityType(entity.getType()), entity));
         }
+        this.sendTeleport(entity);
     }
 
     @Override
@@ -226,13 +225,15 @@ public class EndermanSession implements EnderFrameSession {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
 
+
         boolean teleport = hasOverflow(floor(now.getX() * 32) - floor(before.getX() * 32))
                 || hasOverflow(floor(now.getY() * 32) - floor(before.getY() * 32))
                 || hasOverflow(floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
+        this.sendHeadLook(entity);
+
         if(now.compareHeadRotation(before)) {
             this.sendLook(entity);
-            this.sendHeadLook(entity);
         }
 
         if (!teleport) {
@@ -261,13 +262,14 @@ public class EndermanSession implements EnderFrameSession {
         int z = (int) (entity.getLocation().getZ() *32);
         int yaw = (int) (entity.getLocation().getYaw() * 256.0F / 360.0F);
         int pitch = (int) (entity.getLocation().getPitch() * 256.0F / 360.0F);
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, true));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityTeleport(entity, x, y, z, yaw, pitch, false));
     }
 
     @Override
     public void sendMove(Entity entity) {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
+
 
         byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
@@ -280,6 +282,7 @@ public class EndermanSession implements EnderFrameSession {
     public void sendMoveAndLook(Entity entity) {
         Location now = entity.getLocation();
         Location before = entity.getBeforeLocation();
+
 
         byte x = (byte) (floor(now.getX() * 32) - floor(before.getX() * 32));
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
@@ -296,7 +299,7 @@ public class EndermanSession implements EnderFrameSession {
         float yaw = entity.getLocation().getYaw();
         float pitch = entity.getLocation().getPitch();
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw % 360 / 360 * 256), (byte) (pitch % 360 / 360 * 256), true));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw * 256 / 360), (byte) (pitch * 256 / 360), true));
     }
 
     @Override
