@@ -275,7 +275,7 @@ public class EndermanSession implements EnderFrameSession {
         byte y = (byte) (floor(now.getY() * 32) - floor(before.getY() * 32));
         byte z = (byte) (floor(now.getZ() * 32) - floor(before.getZ() * 32));
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity, x, y, z, true));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityRelativeMove(entity, x, y, z));
     }
 
     @Override
@@ -291,20 +291,17 @@ public class EndermanSession implements EnderFrameSession {
         int yaw = (int) (now.getYaw() * 256 / 360);
         int pitch = (int) (now.getPitch() * 256 / 360);
 
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch, true));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch));
     }
 
     @Override
     public void sendLook(Entity entity) {
-        float yaw = entity.getLocation().getYaw();
-        float pitch = entity.getLocation().getPitch();
-
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity, (byte) (yaw * 256 / 360), (byte) (pitch * 256 / 360), true));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityLook(entity));
     }
 
     @Override
     public void sendHeadLook(Entity entity) {
-        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entity, entity.getLocation().getYaw()));
+        enderFrameSessionHandler.sendPacket(new PacketOutEntityHeadLook(entity));
     }
 
     @Override
