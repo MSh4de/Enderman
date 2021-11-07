@@ -7,21 +7,16 @@ import eu.mshade.enderframe.protocol.PacketOut;
 public class PacketOutEntityLook extends PacketOut {
 
     private final Entity entity;
-    private final byte yaw,pitch;
-    private final boolean isOnGround;
 
-    public PacketOutEntityLook(Entity entity, byte yaw, byte pitch, boolean isOnGround) {
+    public PacketOutEntityLook(Entity entity) {
         this.entity = entity;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.isOnGround = isOnGround;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(entity.getEntityId());
-        byteMessage.writeByte(yaw);
-        byteMessage.writeByte(pitch);
-        byteMessage.writeBoolean(isOnGround);
+        byteMessage.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
+        byteMessage.writeByte((byte) (entity.getLocation().getPitch() * 256 / 360));
+        byteMessage.writeBoolean(false);
     }
 }
