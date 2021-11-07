@@ -10,16 +10,14 @@ public class PacketOutEntityLookRelativeMove extends PacketOut  {
     private final Entity entity;
     private final byte x,y,z;
     private final int yaw,pitch;
-    private final boolean onGround;
 
-    public PacketOutEntityLookRelativeMove(Entity entity, byte x, byte y, byte z, int yaw, int pitch, boolean onGround) {
+    public PacketOutEntityLookRelativeMove(Entity entity, byte x, byte y, byte z, int yaw, int pitch) {
         this.entity = entity;
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
-        this.onGround = onGround;
     }
 
     @Override
@@ -30,6 +28,6 @@ public class PacketOutEntityLookRelativeMove extends PacketOut  {
         byteMessage.writeByte(z);
         byteMessage.writeByte(yaw);
         byteMessage.writeByte(pitch);
-        byteMessage.writeBoolean(onGround);
+        byteMessage.writeBoolean(false);
     }
 }

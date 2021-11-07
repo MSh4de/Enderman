@@ -8,11 +8,9 @@ public class PacketOutEntityRelativeMove extends PacketOut {
 
     private final Entity entity;
     private final byte x, y, z;
-    private final boolean onGround;
 
-    public PacketOutEntityRelativeMove(Entity entity, byte x, byte y, byte z, boolean onGround) {
+    public PacketOutEntityRelativeMove(Entity entity, byte x, byte y, byte z) {
         this.entity = entity;
-        this.onGround = onGround;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -25,6 +23,6 @@ public class PacketOutEntityRelativeMove extends PacketOut {
         byteMessage.writeByte(x);
         byteMessage.writeByte(y);
         byteMessage.writeByte(z);
-        byteMessage.writeBoolean(onGround);
+        byteMessage.writeBoolean(false);
     }
 }
