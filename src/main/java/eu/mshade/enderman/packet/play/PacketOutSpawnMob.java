@@ -21,9 +21,9 @@ public class PacketOutSpawnMob extends PacketOut {
         byteMessage.writeInt(entity.getLocation().getBlockX() * 32);
         byteMessage.writeInt(entity.getLocation().getBlockY() * 32);
         byteMessage.writeInt(entity.getLocation().getBlockZ() * 32);
-        byteMessage.writeByte((byte) (entity.getLocation().getYaw() / 360 * 256));
-        byteMessage.writeByte((byte) (entity.getLocation().getPitch() / 360 * 256));
-        byteMessage.writeByte((byte) (entity.getLocation().getPitch() / 360 * 256));
+        byteMessage.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
+        byteMessage.writeByte((byte) (entity.getLocation().getPitch() * 256 / 360));
+        byteMessage.writeByte((byte) 0);
         byteMessage.writeShort((int) entity.getVelocity().getX());
         byteMessage.writeShort((int) entity.getVelocity().getY());
         byteMessage.writeShort((int) entity.getVelocity().getZ());
