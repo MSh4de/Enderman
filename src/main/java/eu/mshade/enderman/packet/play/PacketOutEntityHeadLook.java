@@ -7,16 +7,14 @@ import eu.mshade.enderframe.protocol.PacketOut;
 public class PacketOutEntityHeadLook extends PacketOut {
 
     private final Entity entity;
-    private final float rotation;
 
-    public PacketOutEntityHeadLook(Entity entity, float rotation) {
+    public PacketOutEntityHeadLook(Entity entity) {
         this.entity = entity;
-        this.rotation = rotation;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(entity.getEntityId());
-        byteMessage.writeByte((int) rotation);
+        byteMessage.writeByte((byte) (entity.getLocation().getYaw()  * 256 / 360));
     }
 }
