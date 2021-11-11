@@ -5,19 +5,19 @@ import eu.mshade.enderframe.item.ItemStackManager;
 import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.item.entities.LeatherArmorItemStack;
 import eu.mshade.enderframe.mojang.Color;
-import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 
-public class LeatherClothItemStackRewriter extends CommonItemStackRewriter {
+public class LeatherArmorItemStackRewriter extends CommonItemStackRewriter {
 
     @Override
     public CompoundBinaryTag write(ItemStackManager itemStackManager, ItemStack itemStack) {
-        LeatherArmorItemStack leatherArmorItemStack = (LeatherArmorItemStack) itemStack;
         CompoundBinaryTag compoundBinaryTag = super.write(itemStackManager, itemStack);
-        CompoundBinaryTag displayBinaryTag = new CompoundBinaryTag();
-        displayBinaryTag.putInt("color", leatherArmorItemStack.getColor().asRGB());
-        displayBinaryTag.putString("Name", leatherArmorItemStack.getDisplayName().getText());
-        compoundBinaryTag.putBinaryTag("display", displayBinaryTag);
+        if(itemStack instanceof LeatherArmorItemStack) {
+            LeatherArmorItemStack leatherArmorItemStack = (LeatherArmorItemStack) itemStack;
+            CompoundBinaryTag displayBinaryTag = compoundBinaryTag.computeIfAbsent("display", s -> new CompoundBinaryTag());
+            displayBinaryTag.putInt("color", leatherArmorItemStack.getColor().asRGB());
+            return compoundBinaryTag;
+        }
         return compoundBinaryTag;
     }
 
@@ -26,7 +26,6 @@ public class LeatherClothItemStackRewriter extends CommonItemStackRewriter {
         LeatherArmorItemStack leatherArmorItemStack = new LeatherArmorItemStack(material, count, durability);
         CompoundBinaryTag displayBinaryTag = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("display");
         leatherArmorItemStack.setColor(Color.fromRGB(displayBinaryTag.getInt("color")));
-        leatherArmorItemStack.setDisplayName(TextComponent.of(displayBinaryTag.getString("Name")));
         return leatherArmorItemStack;
     }
 }
