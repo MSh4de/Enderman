@@ -2,8 +2,9 @@ package eu.mshade.enderman.itemstack;
 
 import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.mojang.NamespacedKey;
+import eu.mshade.enderman.itemstack.rewriters.BannerItemStackRewriter;
 import eu.mshade.enderman.itemstack.rewriters.CommonItemStackRewriter;
-import eu.mshade.enderman.itemstack.rewriters.LeatherClothItemStackRewriter;
+import eu.mshade.enderman.itemstack.rewriters.LeatherArmorItemStackRewriter;
 
 public class EndermanItemStackManager extends ItemStackManager<MaterialData, Integer> {
 
@@ -47,9 +48,12 @@ public class EndermanItemStackManager extends ItemStackManager<MaterialData, Int
         registerMaterialWithWrap(Material.STONE, new MaterialData(1,0));
         registerMaterialWithWrap(Material.LEATHER_HELMET, new MaterialData(298,0));
         registerMaterialWithWrap(Material.LEATHER_CHESTPLATE, new MaterialData(299,0));
-        registerMaterialWithWrap(Material.LEATHER_LEGGINGS, new MaterialData(301,0));
-        registerMaterialWithWrap(Material.LEATHER_BOOTS, new MaterialData(302,0));
-        registerItemStackRewriter(new LeatherClothItemStackRewriter(), Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
+        registerMaterialWithWrap(Material.LEATHER_LEGGINGS, new MaterialData(300,0));
+        registerMaterialWithWrap(Material.LEATHER_BOOTS, new MaterialData(301,0));
+        //registerMaterialWithWrap(Material.BLACK_BANNER, new MaterialData(425,0));
+        registerMaterialWithWrap(Material.MAGENTA_BANNER, new MaterialData(425,0));
+        registerItemStackRewriter(new LeatherArmorItemStackRewriter(), Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
+        registerItemStackRewriter(new BannerItemStackRewriter(), Material.MAGENTA_BANNER);
 
     }
 
