@@ -37,6 +37,12 @@ public class CommonItemStackRewriter implements ItemStackRewriter {
             compoundBinaryTag.putBinaryTag("ench", ench);
         }
 
+        if(itemStack.hasDisplayName()) {
+            CompoundBinaryTag displayCompound = new CompoundBinaryTag();
+            displayCompound.putString("Name",itemStack.getDisplayName().getText());
+            compoundBinaryTag.putBinaryTag("display", displayCompound);
+        }
+
 
         return compoundBinaryTag;
     }
