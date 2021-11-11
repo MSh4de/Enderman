@@ -2,6 +2,8 @@ package eu.mshade.enderman.itemstack;
 
 import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.mojang.NamespacedKey;
+import eu.mshade.enderman.itemstack.rewriters.CommonItemStackRewriter;
+import eu.mshade.enderman.itemstack.rewriters.LeatherClothItemStackRewriter;
 
 public class EndermanItemStackManager extends ItemStackManager<MaterialData, Integer> {
 
@@ -42,7 +44,12 @@ public class EndermanItemStackManager extends ItemStackManager<MaterialData, Int
         registerEnchantmentWithWrap(Enchantment.LUCK_OF_THE_SEA, 61);
         registerEnchantmentWithWrap(Enchantment.LURE, 62);
 
-        registerMaterialWithWrap();
+        registerMaterialWithWrap(Material.STONE, new MaterialData(1,0));
+        registerMaterialWithWrap(Material.LEATHER_HELMET, new MaterialData(298,0));
+        registerMaterialWithWrap(Material.LEATHER_CHESTPLATE, new MaterialData(299,0));
+        registerMaterialWithWrap(Material.LEATHER_LEGGINGS, new MaterialData(301,0));
+        registerMaterialWithWrap(Material.LEATHER_BOOTS, new MaterialData(302,0));
+        registerItemStackRewriter(new LeatherClothItemStackRewriter(), Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS);
 
     }
 
