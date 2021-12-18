@@ -15,13 +15,6 @@ import eu.mshade.enderman.metadata.rewriters.buckets.*;
 public class EndermanMetadataManager extends MetadataManager {
 
     public EndermanMetadataManager() {
-        registerMetadataIndexes();
-        registerEntitiesBuffer();
-        registerMetadataTypesBuffer();
-        registerMetadataRewritersBucket();
-    }
-
-    private void registerMetadataIndexes() {
         MetadataTypeRepository metadataTypeRepository = getMetadataTypeRepository();
         metadataTypeRepository.registerMetadataIndex(MetadataType.BYTE, 0);
         metadataTypeRepository.registerMetadataIndex(MetadataType.SHORT, 1);
@@ -31,17 +24,13 @@ public class EndermanMetadataManager extends MetadataManager {
         metadataTypeRepository.registerMetadataIndex(MetadataType.SLOT, 5);
         metadataTypeRepository.registerMetadataIndex(MetadataType.BLOCK_POSITION, 6);
         metadataTypeRepository.registerMetadataIndex(MetadataType.ROTATION, 7);
-    }
 
-    private void registerEntitiesBuffer() {
         registerEntityBuffer(EntityType.PLAYER, new PlayerMetadataBuffer());
         registerEntityBuffer(EntityType.ZOMBIE, new ZombieMetadataBuffer());
         registerEntityBuffer(EntityType.END_CRYSTAL, new EnderCrystalMetadataBuffer());
         registerEntityBuffer(EntityType.BOAT, new BoatMetadataBuffer());
         registerEntityBuffer(EntityType.SPIDER, new SpiderMetadataBuffer());
-    }
 
-    private void registerMetadataTypesBuffer() {
         registerMetadataTypeBuffer(MetadataType.BYTE, new ByteMetadataTypeBuffer());
         registerMetadataTypeBuffer(MetadataType.SHORT, new ShortMetadataTypeBuffer());
         registerMetadataTypeBuffer(MetadataType.INTEGER, new IntegerMetadataTypeBuffer());
@@ -50,9 +39,7 @@ public class EndermanMetadataManager extends MetadataManager {
         //registerMetadataTypeBuffer(MetadataType.SLOT, new ());
         registerMetadataTypeBuffer(MetadataType.BLOCK_POSITION, new BlockPositionMetadataTypeBuffer());
         registerMetadataTypeBuffer(MetadataType.ROTATION, new RotationMetadataTypeBuffer());
-    }
 
-    private void registerMetadataRewritersBucket() {
         registerMetadataRewriterBucket(EntityType.ARMOR_STAND, new ArmorStandMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.ARROW, new ArrowMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.BAT, new BatMetadataRewriterBucket());
@@ -86,6 +73,7 @@ public class EndermanMetadataManager extends MetadataManager {
         registerMetadataRewriterBucket(EntityType.WOLF, new WolfMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.ZOMBIE, new ZombieMetadataRewriterBucket());
     }
+
 
 
     @Override
