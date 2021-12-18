@@ -12,7 +12,7 @@ public class PacketClientSettingsListener implements EventListener<PacketInClien
     @Override
     public void onEvent(PacketInClientSettings event, ParameterContainer eventContainer) {
         EnderFrameSessionHandler enderFrameSessionHandler = eventContainer.getContainer(EnderFrameSessionHandler.class);
-        EnderFrame.get().getPacketEventBus().publish(
+        EnderFrame.get().getPacketEventBus().publishAsync(
                 new PacketClientSettingsEvent(enderFrameSessionHandler.getEnderFrameSession().getPlayer(), event.getLocale(), event.getViewDistance(), event.getChatMode(),
                         event.isChatColors(), event.getSkinParts()),
                 eventContainer);

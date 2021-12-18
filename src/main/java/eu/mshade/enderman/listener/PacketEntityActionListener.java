@@ -10,7 +10,7 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketEntityActionListener implements EventListener<PacketInEntityAction> {
     @Override
     public void onEvent(PacketInEntityAction event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketEntityActionEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketEntityActionEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
                 event.getActionType(), event.getActionParameter()), eventContainer);
     }
 }

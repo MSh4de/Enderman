@@ -11,7 +11,7 @@ public class PacketKeepAliveListener implements EventListener<PacketInKeepAlive>
 
     @Override
     public void onEvent(PacketInKeepAlive event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketKeepAliveEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketKeepAliveEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
                 event.getThreshold()), eventContainer);
     }
 }

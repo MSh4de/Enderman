@@ -11,7 +11,7 @@ public class PacketChatMessageListener implements EventListener<PacketInChatMess
 
     @Override
     public void onEvent(PacketInChatMessage event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketChatMessageEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketChatMessageEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
                 event.getMessage()), eventContainer);
     }
 

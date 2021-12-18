@@ -1,6 +1,7 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
+import eu.mshade.enderframe.packetevent.DefaultPacketMoveEvent;
 import eu.mshade.enderframe.packetevent.PacketMoveEvent;
 import eu.mshade.enderframe.packetevent.PacketMoveType;
 import eu.mshade.enderframe.world.Position;
@@ -12,11 +13,7 @@ public class PacketPlayerPositionListener implements EventListener<PacketInPlaye
 
     @Override
     public void onEvent(PacketInPlayerPosition event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(
-                new PacketMoveEvent(
-                        new Position(event.getX(), event.getY(), event.getZ(), event.isOnGround()),
-                        PacketMoveType.POSITION),
-                eventContainer);
+        EnderFrame.get().getPacketEventBus().publishAsync(new DefaultPacketMoveEvent(event.getX(), event.getY(), event.getZ(), event.isOnGround()), eventContainer);
     }
 
 }
