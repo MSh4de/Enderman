@@ -1,9 +1,10 @@
-package eu.mshade.enderman.itemstack;
+package eu.mshade.enderman.itemstack.rewriters;
 
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackManager;
 import eu.mshade.enderframe.item.ItemStackRewriter;
 import eu.mshade.enderframe.item.Material;
+import eu.mshade.enderframe.mojang.NamespacedKey;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
@@ -36,12 +37,30 @@ public class CommonItemStackRewriter implements ItemStackRewriter {
             compoundBinaryTag.putBinaryTag("ench", ench);
         }
 
+        if(itemStack.hasDisplayName()) {
+            CompoundBinaryTag displayCompound = new CompoundBinaryTag();
+            displayCompound.putString("Name",itemStack.getDisplayName().getText());
+            compoundBinaryTag.putBinaryTag("display", displayCompound);
+        }
+
 
         return compoundBinaryTag;
     }
 
     @Override
-    public ItemStack read(ItemStackManager itemStackManager, CompoundBinaryTag compoundBinaryTag) {
-        return null;
+    public ItemStack read(ItemStackManager itemStackManager, Material material, int count, int durability, CompoundBinaryTag compoundBinaryTag) {
+        ItemStack itemStack = new ItemStack(material, count, durability);
+        itemStack.setUnbreakable(compoundBinaryTag.getByte("Unbreakable") == 1);
+
+        ListBinaryTag canDestroy = (ListBinaryTag) compoundBinaryTag.getBinaryTag("CanDestroy");
+
+        canDestroy.forEach(adventureBlock -> itemStack.addAdventureBlocks(itemStackManager.getMaterialFromNamespacedKey(NamespacedKey.fromString(((StringBinaryTag)adventureBlock).getValue()))));
+
+        ListBinaryTag enc = (ListBinaryTag) compoundBinaryTag.getBinaryTag("ench");
+        enc.forEach(enchantment-> {
+            CompoundBinaryTag enchant = (CompoundBinaryTag) enchantment;
+            itemStack.addEnchantment(itemStackManager.getEnchantmentFromWrap(enchant.getShort("id")), enchant.getShort("lvl"));
+        });
+        return itemStack;
     }
 }
