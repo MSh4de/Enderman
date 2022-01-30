@@ -44,7 +44,7 @@ public class EndermanItemStackManager extends ItemStackManager<MaterialData, Int
 
         registerEnchantmentWithWrap(Enchantment.LUCK_OF_THE_SEA, 61);
         registerEnchantmentWithWrap(Enchantment.LURE, 62);
-        
+
         registerMaterialWithWrap(Material.STONE, new MaterialData(1,0));
         registerMaterialWithWrap(Material.LEATHER_HELMET, new MaterialData(298,0));
         registerMaterialWithWrap(Material.LEATHER_CHESTPLATE, new MaterialData(299,0));
