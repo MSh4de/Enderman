@@ -77,13 +77,13 @@ public class EndermanMetadataManager extends MetadataManager {
 
 
     @Override
-    public void write(ByteMessage byteMessage, Entity entity, MetadataMeaning metadataMeaning) {
-        MetadataBuffer entityBuffer = this.getEntityBuffer(entity.getType());
-        MetadataRewriterBucket bucket = getMetadataRewriterBucket(entity.getType());
-        MetadataRewriter rewriter = bucket.getMetadataRewriter(metadataMeaning);
+    public void write(ByteMessage byteMessage, Entity entity, EntityMetadataType entityMetadataType) {
+        MetadataBuffer entityBuffer = this.getEntityBuffer(entity.getEntityType());
+        MetadataRewriterBucket bucket = getMetadataRewriterBucket(entity.getEntityType());
+        MetadataRewriter rewriter = bucket.getMetadataRewriter(entityMetadataType);
         MetadataType metadataType = rewriter.getMetadataType();
 
-        int i = (getMetadataTypeRepository().getMetadataIndex(metadataType)) << 5 | entityBuffer.getMetadataRepository().getMetadataIndex(metadataMeaning);
+        int i = (getMetadataTypeRepository().getMetadataIndex(metadataType)) << 5 | entityBuffer.getMetadataRepository().getMetadataIndex(entityMetadataType);
         byteMessage.writeByte(i);
         rewriter.write(this, byteMessage, entity);
     }
