@@ -1,24 +1,24 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.metadata.MetadataMeaning;
+import eu.mshade.enderframe.metadata.EntityMetadataType;
 import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
 
 public class PacketOutEntityMetadata extends PacketOut {
 
     private final Entity entity;
-    private final MetadataMeaning[] metadataMeanings;
+    private final EntityMetadataType[] entityMetadataTypes;
 
-    public PacketOutEntityMetadata(Entity entity, MetadataMeaning... metadataMeanings) {
+    public PacketOutEntityMetadata(Entity entity, EntityMetadataType... entityMetadataTypes) {
         this.entity = entity;
-        this.metadataMeanings = metadataMeanings;
+        this.entityMetadataTypes = entityMetadataTypes;
     }
 
     @Override
     public void serialize(ByteMessage byteMessage) {
         byteMessage.writeVarInt(entity.getEntityId());
-        for (MetadataMeaning metadataMeaning : metadataMeanings) byteMessage.writeMetadata(entity, metadataMeaning);
+        for (EntityMetadataType entityMetadataType : entityMetadataTypes) byteMessage.writeEntityMetadata(entity, entityMetadataType);
         byteMessage.writeByte(127);
     }
 }
