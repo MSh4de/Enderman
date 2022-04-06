@@ -1,45 +1,36 @@
 package eu.mshade.enderman.metadata;
 
-import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.metadata.*;
-import eu.mshade.enderframe.metadata.buffer.MetadataBuffer;
-import eu.mshade.enderframe.metadata.buffer.type.ByteMetadataTypeBuffer;
-import eu.mshade.enderframe.metadata.buffer.type.FloatMetadataTypeBuffer;
-import eu.mshade.enderframe.metadata.buffer.type.IntegerMetadataTypeBuffer;
-import eu.mshade.enderframe.metadata.buffer.type.ShortMetadataTypeBuffer;
-import eu.mshade.enderframe.protocol.ByteMessage;
-import eu.mshade.enderman.metadata.entity.*;
-import eu.mshade.enderman.metadata.rewriters.buckets.*;
+import eu.mshade.enderman.metadata.entity.ArmorStandMetadataBucket;
+import eu.mshade.enderman.metadata.entity.PlayerMetadataBucket;
 
-public class EndermanMetadataManager extends MetadataManager {
+public class EndermanEntityMetadataManager extends EntityMetadataManager {
 
-    public EndermanMetadataManager() {
-        MetadataTypeRepository metadataTypeRepository = getMetadataTypeRepository();
-        metadataTypeRepository.registerMetadataIndex(MetadataType.BYTE, 0);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.SHORT, 1);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.INTEGER, 2);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.FLOAT, 3);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.STRING, 4);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.SLOT, 5);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.BLOCK_POSITION, 6);
-        metadataTypeRepository.registerMetadataIndex(MetadataType.ROTATION, 7);
+    public EndermanEntityMetadataManager() {
+        this.registerMetadataIndex(0, MetadataType.BYTE, (byteMessage, metadata) -> byteMessage.writeByte((byte) metadata.get()));
+        this.registerMetadataIndex(1, MetadataType.SHORT, (byteMessage, metadata) -> byteMessage.writeShort((short) metadata.get()));
+        this.registerMetadataIndex(2, MetadataType.INTEGER, (byteMessage, metadata) -> byteMessage.writeInt((int) metadata.get()));
+        this.registerMetadataIndex(3, MetadataType.FLOAT, (byteMessage, metadata) -> byteMessage.writeFloat((float) metadata.get()));
+        this.registerMetadataIndex(4, MetadataType.STRING, (byteMessage, metadata) -> byteMessage.writeString((CharSequence) metadata.get()));
+        //this.registerMetadataIndex(5, MetadataType.SLOT, (byteMessage, metadata) -> byteMessage.writeByte((int) metadata.get()));
+        this.registerMetadataIndex(6, MetadataType.BLOCK_POSITION, new BlockPositionMetadataTypeBuffer());
+        this.registerMetadataIndex(7, MetadataType.ROTATION, new RotationMetadataTypeBuffer());
 
+        this.registerEntityMetadataBucket(EntityType.PLAYER, new PlayerMetadataBucket());
+        this.registerEntityMetadataBucket(EntityType.ARMOR_STAND, new ArmorStandMetadataBucket());
+
+        /*
         registerEntityBuffer(EntityType.PLAYER, new PlayerMetadataBuffer());
         registerEntityBuffer(EntityType.ZOMBIE, new ZombieMetadataBuffer());
         registerEntityBuffer(EntityType.END_CRYSTAL, new EnderCrystalMetadataBuffer());
         registerEntityBuffer(EntityType.BOAT, new BoatMetadataBuffer());
         registerEntityBuffer(EntityType.SPIDER, new SpiderMetadataBuffer());
 
-        registerMetadataTypeBuffer(MetadataType.BYTE, new ByteMetadataTypeBuffer());
-        registerMetadataTypeBuffer(MetadataType.SHORT, new ShortMetadataTypeBuffer());
-        registerMetadataTypeBuffer(MetadataType.INTEGER, new IntegerMetadataTypeBuffer());
-        registerMetadataTypeBuffer(MetadataType.FLOAT, new FloatMetadataTypeBuffer());
-        registerMetadataTypeBuffer(MetadataType.STRING, new StringMetadataTypeBuffer());
-        //registerMetadataTypeBuffer(MetadataType.SLOT, new ());
-        registerMetadataTypeBuffer(MetadataType.BLOCK_POSITION, new BlockPositionMetadataTypeBuffer());
-        registerMetadataTypeBuffer(MetadataType.ROTATION, new RotationMetadataTypeBuffer());
+         */
 
+
+        /*
         registerMetadataRewriterBucket(EntityType.ARMOR_STAND, new ArmorStandMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.ARROW, new ArrowMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.BAT, new BatMetadataRewriterBucket());
@@ -72,19 +63,7 @@ public class EndermanMetadataManager extends MetadataManager {
         registerMetadataRewriterBucket(EntityType.WITHER, new WitherMetadataRewriterBucket(0));
         registerMetadataRewriterBucket(EntityType.WOLF, new WolfMetadataRewriterBucket());
         registerMetadataRewriterBucket(EntityType.ZOMBIE, new ZombieMetadataRewriterBucket());
-    }
 
-
-
-    @Override
-    public void write(ByteMessage byteMessage, Entity entity, EntityMetadataType entityMetadataType) {
-        MetadataBuffer entityBuffer = this.getEntityBuffer(entity.getEntityType());
-        MetadataRewriterBucket bucket = getMetadataRewriterBucket(entity.getEntityType());
-        MetadataRewriter rewriter = bucket.getMetadataRewriter(entityMetadataType);
-        MetadataType metadataType = rewriter.getMetadataType();
-
-        int i = (getMetadataTypeRepository().getMetadataIndex(metadataType)) << 5 | entityBuffer.getMetadataRepository().getMetadataIndex(entityMetadataType);
-        byteMessage.writeByte(i);
-        rewriter.write(this, byteMessage, entity);
+         */
     }
 }
