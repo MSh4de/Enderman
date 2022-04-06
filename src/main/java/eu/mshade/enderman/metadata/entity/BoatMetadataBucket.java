@@ -1,8 +1,8 @@
 package eu.mshade.enderman.metadata.entity;
 
-public class BoatEntityMetadataBucket extends EntityEntityMetadataBucket {
+public class BoatMetadataBucket extends DefaultEntityMetadataBucket {
 
-    public BoatEntityMetadataBucket() {
+    public BoatMetadataBucket() {
         /*
         this.getMetadataRepository().registerMetadataIndex(17, MetadataType.INTEGER, EntityMetadataType.TIME_SINCE_LAST_HIT);
         this.getMetadataRepository().registerMetadataIndex(18, MetadataType.INTEGER, EntityMetadataType.FORWARD_DIRECTION);
