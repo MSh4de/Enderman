@@ -3,9 +3,9 @@ package eu.mshade.enderman.metadata.entity;
 import eu.mshade.enderframe.metadata.EntityMetadataType;
 import eu.mshade.enderframe.metadata.type.ByteMetadata;
 
-public class ZombieEntityMetadataBucket extends LivingEntityEntityMetadataBucket {
+public class ZombieMetadataBucket extends LivingEntityMetadataBucket {
 
-    public ZombieEntityMetadataBucket() {
+    public ZombieMetadataBucket() {
         this.registerEntityMetadata(12, entity -> new ByteMetadata(entity.<Boolean>getEntityMetadata(EntityMetadataType.CHILD).get()), EntityMetadataType.CHILD);
         this.registerEntityMetadata(13, entity -> new ByteMetadata(entity.<Boolean>getEntityMetadata(EntityMetadataType.VILLAGER).get()), EntityMetadataType.VILLAGER);
         this.registerEntityMetadata(14, entity -> new ByteMetadata(entity.<Boolean>getEntityMetadata(EntityMetadataType.CONVERTING).get()), EntityMetadataType.CONVERTING);
