@@ -1,8 +1,8 @@
 package eu.mshade.enderman.metadata.entity;
 
-public class SpiderEntityMetadataBucket extends LivingEntityEntityMetadataBucket {
+public class SpiderMetadataBucket extends LivingEntityMetadataBucket {
 
-    public SpiderEntityMetadataBucket() {
+    public SpiderMetadataBucket() {
         /*
         this.getMetadataRepository().registerMetadataIndex(16, MetadataType.BYTE, EntityMetadataType.CLIMBING);
 
