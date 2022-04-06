@@ -6,9 +6,9 @@ import eu.mshade.enderframe.metadata.type.FloatMetadata;
 import eu.mshade.enderframe.metadata.type.IntegerMetadata;
 import eu.mshade.enderframe.mojang.SkinPart;
 
-public class PlayerEntityMetadataBucket extends LivingEntityEntityMetadataBucket {
+public class PlayerMetadataBucket extends LivingEntityMetadataBucket {
 
-    public PlayerEntityMetadataBucket() {
+    public PlayerMetadataBucket() {
         this.registerEntityMetadata(10, entity -> new ByteMetadata(entity.<SkinPart>getEntityMetadata(EntityMetadataType.SKIN_PART).get().toByte()));
         this.registerEntityMetadata(17, entity -> new FloatMetadata(entity.<Float>getEntityMetadata(EntityMetadataType.ADDITIONAL_HEARTS).get()));
         this.registerEntityMetadata(18, entity -> new IntegerMetadata(entity.<Integer>getEntityMetadata(EntityMetadataType.SCORE).get()));
