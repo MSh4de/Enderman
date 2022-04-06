@@ -5,9 +5,9 @@ import eu.mshade.enderframe.metadata.type.ByteMetadata;
 import eu.mshade.enderframe.metadata.type.FloatMetadata;
 import eu.mshade.enderframe.metadata.type.IntegerMetadata;
 
-public class LivingEntityEntityMetadataBucket extends EntityEntityMetadataBucket {
+public class LivingEntityMetadataBucket extends DefaultEntityMetadataBucket {
 
-    public LivingEntityEntityMetadataBucket() {
+    public LivingEntityMetadataBucket() {
         this.registerEntityMetadata(6, entity -> new FloatMetadata(entity.<Float>getEntityMetadata(EntityMetadataType.HEALTH).get()), EntityMetadataType.HEALTH);
         this.registerEntityMetadata(7, entity -> new IntegerMetadata(entity.<Integer>getEntityMetadata(EntityMetadataType.POTION_EFFECT_COLOR).get()), EntityMetadataType.POTION_EFFECT_COLOR);
         this.registerEntityMetadata(8, entity -> new ByteMetadata(entity.<Boolean>getEntityMetadata(EntityMetadataType.POTION_EFFECT_AMBIENT).get()), EntityMetadataType.POTION_EFFECT_AMBIENT);
