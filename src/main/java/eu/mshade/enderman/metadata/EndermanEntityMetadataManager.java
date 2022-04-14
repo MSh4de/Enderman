@@ -2,17 +2,22 @@ package eu.mshade.enderman.metadata;
 
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.metadata.*;
+import eu.mshade.enderframe.protocol.MinecraftProtocolVersion;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.ProtocolBundle;
 import eu.mshade.enderman.metadata.entity.ArmorStandMetadataBucket;
 import eu.mshade.enderman.metadata.entity.PlayerMetadataBucket;
 
 public class EndermanEntityMetadataManager extends EntityMetadataManager {
 
-    public EndermanEntityMetadataManager() {
-        this.registerMetadataIndex(0, MetadataType.BYTE, (byteMessage, metadata) -> byteMessage.writeByte((byte) metadata.get()));
-        this.registerMetadataIndex(1, MetadataType.SHORT, (byteMessage, metadata) -> byteMessage.writeShort((short) metadata.get()));
-        this.registerMetadataIndex(2, MetadataType.INTEGER, (byteMessage, metadata) -> byteMessage.writeInt((int) metadata.get()));
-        this.registerMetadataIndex(3, MetadataType.FLOAT, (byteMessage, metadata) -> byteMessage.writeFloat((float) metadata.get()));
-        this.registerMetadataIndex(4, MetadataType.STRING, (byteMessage, metadata) -> byteMessage.writeString((CharSequence) metadata.get()));
+    public EndermanEntityMetadataManager(ProtocolBuffer protocolBuffer) {
+        this.registerMetadataIndex(0, MetadataType.BYTE, (byteBuf, metadata) -> byteBuf.writeByte((byte) metadata.get()));
+        this.registerMetadataIndex(1, MetadataType.SHORT, (byteBuf, metadata) -> byteBuf.writeShort((short) metadata.get()));
+        this.registerMetadataIndex(2, MetadataType.INTEGER, (byteBuf, metadata) -> byteBuf.writeInt((int) metadata.get()));
+        this.registerMetadataIndex(3, MetadataType.FLOAT, (byteBuf, metadata) -> byteBuf.writeFloat((float) metadata.get()));
+        this.registerMetadataIndex(4, MetadataType.STRING, (byteBuf, metadata) -> {
+            protocolBuffer.writeString(byteBuf, (CharSequence) metadata.get());
+        });
         //this.registerMetadataIndex(5, MetadataType.SLOT, (byteMessage, metadata) -> byteMessage.writeByte((int) metadata.get()));
         this.registerMetadataIndex(6, MetadataType.BLOCK_POSITION, new BlockPositionMetadataTypeBuffer());
         this.registerMetadataIndex(7, MetadataType.ROTATION, new RotationMetadataTypeBuffer());
