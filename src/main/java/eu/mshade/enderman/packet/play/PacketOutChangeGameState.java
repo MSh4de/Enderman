@@ -3,16 +3,15 @@ package eu.mshade.enderman.packet.play;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutSpawnEntity implements PacketOut {
-    private final int aInt;
+/**
+ * permit to pick block
+ */
+public class PacketOutChangeGameState implements PacketOut {
 
-    public PacketOutSpawnEntity(int aInt) {
-        this.aInt = aInt;
-    }
 
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(aInt);
+        protocolBuffer.writeByte(3);
+        protocolBuffer.writeFloat(1);
     }
-
 }

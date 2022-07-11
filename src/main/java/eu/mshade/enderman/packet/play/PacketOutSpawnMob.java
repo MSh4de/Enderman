@@ -1,11 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
-
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutSpawnMob extends PacketOut {
+public class PacketOutSpawnMob implements PacketOut {
     private final int id;
     private final Entity entity;
 
@@ -15,19 +14,19 @@ public class PacketOutSpawnMob extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(entity.getEntityId());
-        byteMessage.writeByte(id);
-        byteMessage.writeInt(entity.getLocation().getBlockX() * 32);
-        byteMessage.writeInt(entity.getLocation().getBlockY() * 32);
-        byteMessage.writeInt(entity.getLocation().getBlockZ() * 32);
-        byteMessage.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
-        byteMessage.writeByte((byte) (entity.getLocation().getPitch() * 256 / 360));
-        byteMessage.writeByte((byte) 0);
-        byteMessage.writeShort((int) entity.getVelocity().getX());
-        byteMessage.writeShort((int) entity.getVelocity().getY());
-        byteMessage.writeShort((int) entity.getVelocity().getZ());
-        byteMessage.writeByte(0x7F);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(entity.getEntityId());
+        protocolBuffer.writeByte(id);
+        protocolBuffer.writeInt(entity.getLocation().getBlockX() * 32);
+        protocolBuffer.writeInt(entity.getLocation().getBlockY() * 32);
+        protocolBuffer.writeInt(entity.getLocation().getBlockZ() * 32);
+        protocolBuffer.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
+        protocolBuffer.writeByte((byte) (entity.getLocation().getPitch() * 256 / 360));
+        protocolBuffer.writeByte((byte) 0);
+        protocolBuffer.writeShort((int) entity.getVelocity().getX());
+        protocolBuffer.writeShort((int) entity.getVelocity().getY());
+        protocolBuffer.writeShort((int) entity.getVelocity().getZ());
+        protocolBuffer.writeByte(0x7F);
     }
 
 }

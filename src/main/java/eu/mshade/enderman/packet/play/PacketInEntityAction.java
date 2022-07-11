@@ -1,20 +1,19 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.metadata.ActionType;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketIn;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketInEntityAction extends PacketIn {
+public class PacketInEntityAction implements PacketIn {
 
     private int id, actionParameter;
     private ActionType actionType;
 
-
     @Override
-    public void deserialize(ByteMessage byteMessage) {
-        id = byteMessage.readVarInt();
-        actionType = ActionType.getActionTypeByIndex(byteMessage.readVarInt());
-        actionParameter = byteMessage.readVarInt();
+    public void deserialize(ProtocolBuffer protocolBuffer) {
+        id = protocolBuffer.readVarInt();
+        actionType = ActionType.getActionTypeByIndex(protocolBuffer.readVarInt());
+        actionParameter = protocolBuffer.readVarInt();
     }
 
     public int getId() {

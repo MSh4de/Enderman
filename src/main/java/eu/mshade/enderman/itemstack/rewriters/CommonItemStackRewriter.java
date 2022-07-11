@@ -1,16 +1,11 @@
 package eu.mshade.enderman.itemstack.rewriters;
 
-import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackManager;
-import eu.mshade.enderframe.item.ItemStackRewriter;
-import eu.mshade.enderframe.item.Material;
+import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.mojang.NamespacedKey;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
 import eu.mshade.mwork.binarytag.entity.StringBinaryTag;
-
-import java.util.List;
 
 public class CommonItemStackRewriter implements ItemStackRewriter {
 
@@ -48,7 +43,7 @@ public class CommonItemStackRewriter implements ItemStackRewriter {
     }
 
     @Override
-    public ItemStack read(ItemStackManager itemStackManager, Material material, int count, int durability, CompoundBinaryTag compoundBinaryTag) {
+    public ItemStack read(ItemStackManager itemStackManager, MaterialKey material, int count, int durability, CompoundBinaryTag compoundBinaryTag) {
         ItemStack itemStack = new ItemStack(material, count, durability);
         itemStack.setUnbreakable(compoundBinaryTag.getByte("Unbreakable") == 1);
 

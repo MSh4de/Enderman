@@ -1,10 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutSetSlot extends PacketOut {
+public class PacketOutSetSlot implements PacketOut {
     private final int slot;
     //Inventory
     private final ItemStack itemStack;
@@ -15,15 +15,15 @@ public class PacketOutSetSlot extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeByte(0);
-        byteMessage.writeShort(slot);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeByte(0);
+        protocolBuffer.writeShort(slot);
 
-        byteMessage.writeItemStack(itemStack);
+        protocolBuffer.writeItemStack(itemStack);
 
-//        byteMessage.writeShort(298);
-//        byteMessage.writeByte(1);
-//        byteMessage.writeShort(0);
+//        protocolBuffer.writeShort(298);
+//        protocolBuffer.writeByte(1);
+//        protocolBuffer.writeShort(0);
 //        CompoundBinaryTag compoundBinaryTag = new CompoundBinaryTag();
 //
 //        CompoundBinaryTag displayBinaryTag = new CompoundBinaryTag();
@@ -31,7 +31,7 @@ public class PacketOutSetSlot extends PacketOut {
 //        displayBinaryTag.putString("Name", "Newz est gay");
 //        compoundBinaryTag.putBinaryTag("display", displayBinaryTag);
 //
-//        byteMessage.writeCompoundTag(compoundBinaryTag);
+//        protocolBuffer.writeCompoundTag(compoundBinaryTag);
 
     }
 }

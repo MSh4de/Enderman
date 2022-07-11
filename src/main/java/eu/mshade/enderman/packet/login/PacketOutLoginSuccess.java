@@ -1,10 +1,10 @@
 package eu.mshade.enderman.packet.login;
 
 import eu.mshade.enderframe.mojang.GameProfile;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutLoginSuccess extends PacketOut {
+public class PacketOutLoginSuccess implements PacketOut {
 
     private GameProfile gameProfile;
 
@@ -13,8 +13,8 @@ public class PacketOutLoginSuccess extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeString(gameProfile.getId().toString());
-        byteMessage.writeString(gameProfile.getName());
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeString(gameProfile.getId().toString());
+        protocolBuffer.writeString(gameProfile.getName());
     }
 }

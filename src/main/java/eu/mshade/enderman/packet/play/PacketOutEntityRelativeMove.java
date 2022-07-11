@@ -1,10 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutEntityRelativeMove extends PacketOut {
+public class PacketOutEntityRelativeMove implements PacketOut {
 
     private final Entity entity;
     private final byte x, y, z;
@@ -18,11 +18,11 @@ public class PacketOutEntityRelativeMove extends PacketOut {
 
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(entity.getEntityId());
-        byteMessage.writeByte(x);
-        byteMessage.writeByte(y);
-        byteMessage.writeByte(z);
-        byteMessage.writeBoolean(false);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(entity.getEntityId());
+        protocolBuffer.writeByte(x);
+        protocolBuffer.writeByte(y);
+        protocolBuffer.writeByte(z);
+        protocolBuffer.writeBoolean(false);
     }
 }

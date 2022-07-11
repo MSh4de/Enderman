@@ -1,7 +1,6 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.packetevent.PacketChatMessageEvent;
 import eu.mshade.enderman.packet.play.PacketInChatMessage;
 import eu.mshade.mwork.ParameterContainer;
@@ -11,8 +10,7 @@ public class PacketChatMessageListener implements EventListener<PacketInChatMess
 
     @Override
     public void onEvent(PacketInChatMessage event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new PacketChatMessageEvent(eventContainer.getContainer(EnderFrameSessionHandler.class).getEnderFrameSession().getPlayer(),
-                event.getMessage()), eventContainer);
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketChatMessageEvent(event.getMessage()), eventContainer);
     }
 
 }

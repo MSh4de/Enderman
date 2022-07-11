@@ -1,12 +1,12 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.GameMode;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 import eu.mshade.enderframe.world.Difficulty;
 import eu.mshade.enderframe.world.Dimension;
 
-public class PacketOutJoinGame extends PacketOut {
+public class PacketOutJoinGame implements PacketOut {
 
     private final int entityId;
     private final GameMode gameMode;
@@ -27,14 +27,14 @@ public class PacketOutJoinGame extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeInt(entityId);
-        byteMessage.writeByte(gameMode.getId());
-        byteMessage.writeByte(dimension.getId());
-        byteMessage.writeByte(difficulty.getId());
-        byteMessage.writeByte(maxPlayers);
-        byteMessage.writeString(levelType);
-        byteMessage.writeBoolean(reducedDebugInfo);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeInt(entityId);
+        protocolBuffer.writeByte(gameMode.getId());
+        protocolBuffer.writeByte(dimension.getId());
+        protocolBuffer.writeByte(difficulty.getId());
+        protocolBuffer.writeByte(maxPlayers);
+        protocolBuffer.writeString(levelType);
+        protocolBuffer.writeBoolean(reducedDebugInfo);
     }
 
 }

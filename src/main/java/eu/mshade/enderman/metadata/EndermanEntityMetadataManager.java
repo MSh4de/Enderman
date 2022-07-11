@@ -1,29 +1,28 @@
 package eu.mshade.enderman.metadata;
 
 import eu.mshade.enderframe.entity.EntityType;
-import eu.mshade.enderframe.metadata.*;
-import eu.mshade.enderframe.protocol.MinecraftProtocolVersion;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.ProtocolBundle;
+import eu.mshade.enderframe.item.ItemStack;
+import eu.mshade.enderframe.metadata.entity.EntityMetadataManager;
+import eu.mshade.enderframe.metadata.MetadataType;
 import eu.mshade.enderman.metadata.entity.ArmorStandMetadataBucket;
 import eu.mshade.enderman.metadata.entity.PlayerMetadataBucket;
+import eu.mshade.enderman.metadata.entity.ZombieMetadataBucket;
 
 public class EndermanEntityMetadataManager extends EntityMetadataManager {
 
-    public EndermanEntityMetadataManager(ProtocolBuffer protocolBuffer) {
-        this.registerMetadataIndex(0, MetadataType.BYTE, (byteBuf, metadata) -> byteBuf.writeByte((byte) metadata.get()));
-        this.registerMetadataIndex(1, MetadataType.SHORT, (byteBuf, metadata) -> byteBuf.writeShort((short) metadata.get()));
-        this.registerMetadataIndex(2, MetadataType.INTEGER, (byteBuf, metadata) -> byteBuf.writeInt((int) metadata.get()));
-        this.registerMetadataIndex(3, MetadataType.FLOAT, (byteBuf, metadata) -> byteBuf.writeFloat((float) metadata.get()));
-        this.registerMetadataIndex(4, MetadataType.STRING, (byteBuf, metadata) -> {
-            protocolBuffer.writeString(byteBuf, (CharSequence) metadata.get());
-        });
-        //this.registerMetadataIndex(5, MetadataType.SLOT, (byteMessage, metadata) -> byteMessage.writeByte((int) metadata.get()));
+    public EndermanEntityMetadataManager() {
+        this.registerMetadataIndex(0, MetadataType.BYTE, (protocolBuffer, metadata) -> protocolBuffer.writeByte((byte) metadata.get()));
+        this.registerMetadataIndex(1, MetadataType.SHORT, (protocolBuffer, metadata) -> protocolBuffer.writeShort((short) metadata.get()));
+        this.registerMetadataIndex(2, MetadataType.INTEGER, (protocolBuffer, metadata) -> protocolBuffer.writeInt((int) metadata.get()));
+        this.registerMetadataIndex(3, MetadataType.FLOAT, (protocolBuffer, metadata) -> protocolBuffer.writeFloat((float) metadata.get()));
+        this.registerMetadataIndex(4, MetadataType.STRING, (protocolBuffer, metadata) -> protocolBuffer.writeString((String) metadata.get()));
+        this.registerMetadataIndex(5, MetadataType.SLOT, (protocolBuffer, metadata) -> protocolBuffer.writeItemStack((ItemStack) metadata.get()));
         this.registerMetadataIndex(6, MetadataType.BLOCK_POSITION, new BlockPositionMetadataTypeBuffer());
         this.registerMetadataIndex(7, MetadataType.ROTATION, new RotationMetadataTypeBuffer());
 
         this.registerEntityMetadataBucket(EntityType.PLAYER, new PlayerMetadataBucket());
         this.registerEntityMetadataBucket(EntityType.ARMOR_STAND, new ArmorStandMetadataBucket());
+        this.registerEntityMetadataBucket(EntityType.ZOMBIE, new ZombieMetadataBucket());
 
         /*
         registerEntityBuffer(EntityType.PLAYER, new PlayerMetadataBuffer());

@@ -1,11 +1,11 @@
 package eu.mshade.enderman.packet.login;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
 import java.security.PublicKey;
 
-public class PacketOutEncryption extends PacketOut {
+public class PacketOutEncryption implements PacketOut {
 
     private String hashedServerId;
     private PublicKey publicKey;
@@ -18,10 +18,9 @@ public class PacketOutEncryption extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeString(this.hashedServerId);
-        byteMessage.writeByteArray(this.publicKey.getEncoded());
-        byteMessage.writeByteArray(this.verifyToken);
-
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeString(this.hashedServerId);
+        protocolBuffer.writeByteArray(this.publicKey.getEncoded());
+        protocolBuffer.writeByteArray(this.verifyToken);
     }
 }

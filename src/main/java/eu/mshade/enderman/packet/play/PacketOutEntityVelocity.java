@@ -1,10 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 import eu.mshade.enderframe.world.Vector;
 
-public class PacketOutEntityVelocity extends PacketOut {
+public class PacketOutEntityVelocity implements PacketOut {
 
     private int eid;
     private Vector vector;
@@ -15,10 +15,10 @@ public class PacketOutEntityVelocity extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(eid);
-        byteMessage.writeShort(((short) (vector.getX() * 8000)));
-        byteMessage.writeShort(((short) (vector.getY() * 8000)));
-        byteMessage.writeShort(((short) (vector.getZ() * 8000)));
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(eid);
+        protocolBuffer.writeShort(((short) (vector.getX() * 8000)));
+        protocolBuffer.writeShort(((short) (vector.getY() * 8000)));
+        protocolBuffer.writeShort(((short) (vector.getZ() * 8000)));
     }
 }

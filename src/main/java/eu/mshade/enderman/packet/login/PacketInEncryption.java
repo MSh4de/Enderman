@@ -1,17 +1,17 @@
 package eu.mshade.enderman.packet.login;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketIn;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketInEncryption extends PacketIn {
+public class PacketInEncryption implements PacketIn {
 
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
     @Override
-    public void deserialize(ByteMessage byteMessage) {
-        this.sharedSecret = byteMessage.readByteArray();
-        this.verifyToken = byteMessage.readByteArray();
+    public void deserialize(ProtocolBuffer protocolBuffer) {
+        this.sharedSecret = protocolBuffer.readByteArray();
+        this.verifyToken = protocolBuffer.readByteArray();
     }
 
     public byte[] getSharedSecret() {

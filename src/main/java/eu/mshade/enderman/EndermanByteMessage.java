@@ -1,20 +1,10 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackRewriter;
-import eu.mshade.enderframe.item.Material;
-import eu.mshade.enderframe.metadata.*;
-import eu.mshade.enderframe.protocol.ByteMessage;
-import eu.mshade.enderman.itemstack.EndermanItemStackManager;
-import eu.mshade.enderman.itemstack.MaterialData;
-import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
-import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
-import io.netty.buffer.ByteBuf;
+public class EndermanByteMessage {
 
-public class EndermanByteMessage extends ByteMessage {
 
-    private static final EntityMetadataManager metadataManager = new EndermanEntityMetadataManager();
+    /*
+    private static final EntityMetadataManager metadataManager = new EndermanEntityMetadataManager(null);
     private static final EndermanItemStackManager itemStackManager = new EndermanItemStackManager();
 
     public EndermanByteMessage(ByteBuf buf) {
@@ -59,4 +49,6 @@ public class EndermanByteMessage extends ByteMessage {
         }
         return new ItemStack(Material.AIR,1,0);
     }
+
+     */
 }

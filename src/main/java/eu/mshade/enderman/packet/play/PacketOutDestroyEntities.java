@@ -1,14 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-import java.util.List;
-
-import static org.json.XMLTokener.entity;
-
-public class PacketOutDestroyEntities extends PacketOut {
+public class PacketOutDestroyEntities implements PacketOut {
     private final Entity[] entities;
 
     public PacketOutDestroyEntities(Entity...entities) {
@@ -16,10 +12,10 @@ public class PacketOutDestroyEntities extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(entities.length);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(entities.length);
         for(Entity entity : entities) {
-            byteMessage.writeVarInt(entity.getEntityId());
+            protocolBuffer.writeVarInt(entity.getEntityId());
         }
     }
 }

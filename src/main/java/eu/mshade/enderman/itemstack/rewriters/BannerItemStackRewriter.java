@@ -30,7 +30,7 @@ public class BannerItemStackRewriter extends CommonItemStackRewriter {
     }
 
     @Override
-    public ItemStack read(ItemStackManager itemStackManager, Material material, int count, int durability, CompoundBinaryTag compoundBinaryTag) {
+    public ItemStack read(ItemStackManager itemStackManager, MaterialKey material, int count, int durability, CompoundBinaryTag compoundBinaryTag) {
         BannerItemStack bannerItemStack = new BannerItemStack(material, count, durability);
 
         CompoundBinaryTag blockEntityTag = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("BlockEntityTag");
