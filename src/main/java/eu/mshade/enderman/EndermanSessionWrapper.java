@@ -19,6 +19,7 @@ import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
+import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
@@ -30,9 +31,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
 
     private EntityRepository entityRepository;
-    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository) {
+    private EndermanMaterialWrapper endermanMaterialWrapper;
+    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper) {
         super(channel);
         this.entityRepository = entityRepository;
+        this.endermanMaterialWrapper = endermanMaterialWrapper;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendJoinGame(World world, boolean reducedDebugInfo) {
-        MetadataKeyValueBucket<WorldMetadataType> metadataKeyValueBucket = world.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = world.getMetadataKeyValueBucket();
 
         Dimension dimension = metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIMENSION, Dimension.class);
         Difficulty difficulty = metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIFFICULTY, Difficulty.class);
@@ -259,8 +262,10 @@ public class EndermanSessionWrapper extends SessionWrapper {
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
         for (Section sectionBuffer : sections) {
             for (int i = 0; i < 4096; i++) {
-                byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] << 4 | sectionBuffer.getData().get(i)));
-                byteBuffer.put((byte) (sectionBuffer.getBlocks()[i] >> 4));
+                MaterialKey materialKey = sectionBuffer.getBlock(i);
+                MaterialKey wrap = endermanMaterialWrapper.wrap(materialKey);
+                byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
+                byteBuffer.put((byte) (wrap.getId() >> 4));
             }
         }
 
@@ -289,7 +294,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendBlockChange(Vector blockPosition, MaterialKey materialKey) {
-        sendPacket(new PacketOutBlockChange(blockPosition, materialKey));
+        sendPacket(new PacketOutBlockChange(blockPosition, endermanMaterialWrapper.wrap(materialKey)));
     }
 
 

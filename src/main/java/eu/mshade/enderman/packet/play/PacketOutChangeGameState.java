@@ -1,5 +1,6 @@
 package eu.mshade.enderman.packet.play;
 
+import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
@@ -12,6 +13,6 @@ public class PacketOutChangeGameState implements PacketOut {
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
         protocolBuffer.writeByte(3);
-        protocolBuffer.writeFloat(1);
+        protocolBuffer.writeFloat(GameMode.CREATIVE.getId());
     }
 }

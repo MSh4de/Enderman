@@ -18,6 +18,6 @@ public class PacketOutBlockChange implements PacketOut {
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
         protocolBuffer.writeBlockPosition(blockPosition);
-        protocolBuffer.writeVarInt((materialKey.getId() << 4 | (materialKey.getData() & 15)));
+        protocolBuffer.writeVarInt((materialKey.getId() << 4 | (materialKey.getMetadata() & 15)));
     }
 }

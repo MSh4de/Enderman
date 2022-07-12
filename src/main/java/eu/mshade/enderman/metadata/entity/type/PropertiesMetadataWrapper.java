@@ -12,7 +12,7 @@ public class PropertiesMetadataWrapper implements MetadataWrapper<Entity> {
 
     @Override
     public Metadata<?> wrap(Entity entity) {
-        MetadataKeyValueBucket<EntityMetadataKey> metadataKeyValueBucket = entity.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = entity.getMetadataKeyValueBucket();
         int b = 0;
 
         if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(EntityMetadataKey.ON_FIRE, OnFireEntityMetadata.DEFAULT).getMetadataValue()) b |= 0x01;

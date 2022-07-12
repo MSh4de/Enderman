@@ -12,7 +12,7 @@ public class ArmorStandPropertiesMetadataWrapper implements MetadataWrapper<Armo
 
     @Override
     public Metadata<?> wrap(ArmorStand armorStand) {
-        MetadataKeyValueBucket<EntityMetadataKey> metadataKeyValueBucket = armorStand.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = armorStand.getMetadataKeyValueBucket();
         int b = 0;
 
         if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(EntityMetadataKey.SMALL_ARMOR_STAND, SmallArmorStandEntityMetadata.DEFAULT).getMetadataValue()) b |= 0x01;

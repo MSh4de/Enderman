@@ -6,7 +6,7 @@ import eu.mshade.enderframe.packetevent.PacketPlayerDiggingEvent;
 import eu.mshade.enderframe.packetevent.PacketToggleFlyingEvent;
 import eu.mshade.enderframe.protocol.*;
 import eu.mshade.enderframe.protocol.packet.*;
-import eu.mshade.enderman.itemstack.EndermanItemStackManager;
+import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.listener.*;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.enderman.packet.login.PacketInEncryption;
@@ -143,7 +143,7 @@ public class EndermanProtocol extends Protocol {
 
     @Override
     public SessionWrapper getSessionWrapper(Channel channel) {
-        return new EndermanSessionWrapper(channel, this.getEntityRepository());
+        return new EndermanSessionWrapper(channel, this.getEntityRepository(), endermanMaterialWrapper);
     }
 
     @Override

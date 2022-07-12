@@ -8,7 +8,7 @@ import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderman.itemstack.EndermanItemStackManager;
+import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
@@ -32,6 +32,23 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
 
     @Override
     public void writeItemStack(ItemStack itemStack) {
+        CompoundBinaryTag compoundBinaryTag = new CompoundBinaryTag();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        for (MetadataKeyValue<MetadataKey, ?> metadataKeyValue : metadataKeyValueBucket.getMetadataKeyValues()) {
+            if (itemStackManager.hasBuffer(metadataKeyValue.getMetadataKey())) {
+                itemStackManager.getItemStackMetadataBuffer(metadataKeyValue.getMetadataKey()).write(compoundBinaryTag, itemStack);
+            }
+        }
+
+        if(itemStack == null || !endermanMaterialWrapper.isSupport(itemStack.getMaterial())){
+            writeShort(-1);
+            return;
+        }
+        MaterialKey materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial());
+        writeShort(materialKey.getId());
+        writeByte(itemStack.getCount() & 255);
+        writeShort(materialKey.getMetadata());
+        writeCompoundBinaryTag(compoundBinaryTag);
 
     }
 
@@ -41,7 +58,7 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
         if(id != -1) {
             byte count = readByte();
             int durability = readShort();
-            MaterialKey material = endermanMaterialWrapper.reverse(MaterialKey.from(id, durability));
+            MaterialKey material = endermanMaterialWrapper.reverse(MaterialKey.from(id, durability, null));
             CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
 
             return new ItemStack(material, count, durability);
