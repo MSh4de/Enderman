@@ -2,10 +2,10 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.mojang.chat.TextPosition;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutChatMessage extends PacketOut {
+public class PacketOutChatMessage implements PacketOut {
 
     private TextComponent textComponent;
     private TextPosition position;
@@ -16,8 +16,8 @@ public class PacketOutChatMessage extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeValueAsString(textComponent);
-        byteMessage.writeByte(position.getId());
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeValueAsString(textComponent);
+        protocolBuffer.writeByte(position.getId());
     }
 }

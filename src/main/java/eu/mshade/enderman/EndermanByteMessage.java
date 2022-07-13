@@ -1,22 +1,10 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.entity.Item;
-import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackRewriter;
-import eu.mshade.enderframe.item.Material;
-import eu.mshade.enderframe.metadata.MetadataManager;
-import eu.mshade.enderframe.metadata.MetadataMeaning;
-import eu.mshade.enderframe.protocol.ByteMessage;
-import eu.mshade.enderman.itemstack.EndermanItemStackManager;
-import eu.mshade.enderman.itemstack.MaterialData;
-import eu.mshade.enderman.metadata.EndermanMetadataManager;
-import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
-import io.netty.buffer.ByteBuf;
+public class EndermanByteMessage {
 
-public class EndermanByteMessage extends ByteMessage {
 
-    private static final MetadataManager metadataManager = new EndermanMetadataManager();
+    /*
+    private static final EntityMetadataManager metadataManager = new EndermanEntityMetadataManager(null);
     private static final EndermanItemStackManager itemStackManager = new EndermanItemStackManager();
 
     public EndermanByteMessage(ByteBuf buf) {
@@ -24,8 +12,14 @@ public class EndermanByteMessage extends ByteMessage {
     }
 
     @Override
-    public void writeMetadata(Entity entity, MetadataMeaning metadataMeaning) {
-        metadataManager.write(this, entity, metadataMeaning);
+    public void writeEntityMetadata(Entity entity, EntityMetadataType entityMetadataType) {
+        EntityMetadataBucket entityMetadataBucket = metadataManager.getEntityMetadataBucket(entity);
+        EntityMetadataWrapper<Entity> entityMetadataBuffer = entityMetadataBucket.getEntityMetadataBuffer(entityMetadataType);
+        Metadata<?> metadata = entityMetadataBuffer.wrap(entity);
+        int i = (metadataManager.getMetadataIndex(metadata.getMetadataType())) << 5 | entityMetadataBucket.getIndexEntityMetadata(entityMetadataType);
+        this.writeByte(i);
+        MetadataBuffer<Metadata<?>> metadataBuffer = (MetadataBuffer<Metadata<?>>) metadataManager.getMetadataBuffer(metadata.getMetadataType());
+        metadataBuffer.write(this, metadata);
     }
 
     @Override
@@ -55,4 +49,6 @@ public class EndermanByteMessage extends ByteMessage {
         }
         return new ItemStack(Material.AIR,1,0);
     }
+
+     */
 }

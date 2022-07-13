@@ -1,9 +1,9 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutSpawnEntity extends PacketOut {
+public class PacketOutSpawnEntity implements PacketOut {
     private final int aInt;
 
     public PacketOutSpawnEntity(int aInt) {
@@ -11,8 +11,8 @@ public class PacketOutSpawnEntity extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(aInt);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(aInt);
     }
 
 }

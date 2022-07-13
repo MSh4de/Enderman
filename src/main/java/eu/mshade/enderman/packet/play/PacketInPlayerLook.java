@@ -1,16 +1,16 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
 public class PacketInPlayerLook extends PacketInPlayerGround {
 
     private float yaw, pith;
 
     @Override
-    public void deserialize(ByteMessage byteMessage) {
-        this.yaw = byteMessage.readFloat();
-        this.pith = byteMessage.readFloat();
-        super.deserialize(byteMessage);
+    public void deserialize(ProtocolBuffer protocolBuffer) {
+        this.yaw = protocolBuffer.readFloat();
+        this.pith = protocolBuffer.readFloat();
+        super.deserialize(protocolBuffer);
     }
 
     public float getYaw() {

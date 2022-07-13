@@ -1,15 +1,15 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketIn;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketInPlayerGround extends PacketIn {
+public class PacketInPlayerGround implements PacketIn {
 
     private boolean onGround;
 
     @Override
-    public void deserialize(ByteMessage byteMessage) {
-        this.onGround = byteMessage.readBoolean();
+    public void deserialize(ProtocolBuffer protocolBuffer) {
+        this.onGround = protocolBuffer.readBoolean();
     }
 
     public boolean isOnGround() {

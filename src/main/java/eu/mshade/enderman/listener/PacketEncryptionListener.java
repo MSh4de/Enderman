@@ -1,7 +1,6 @@
 package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.EnderFrameSessionHandler;
 import eu.mshade.enderframe.packetevent.PacketEncryptionEvent;
 import eu.mshade.enderman.packet.login.PacketInEncryption;
 import eu.mshade.mwork.ParameterContainer;
@@ -11,7 +10,6 @@ public class PacketEncryptionListener implements EventListener<PacketInEncryptio
 
     @Override
     public void onEvent(PacketInEncryption event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketEncryptionEvent(eventContainer.getContainer(EnderFrameSessionHandler.class),
-                event.getSharedSecret(), event.getVerifyToken()), eventContainer);
+        EnderFrame.get().getPacketEventBus().publish(new PacketEncryptionEvent(event.getSharedSecret(), event.getVerifyToken()), eventContainer);
     }
 }

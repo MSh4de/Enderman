@@ -1,9 +1,9 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutPlayerPositionAndLook extends PacketOut {
+public class PacketOutPlayerPositionAndLook implements PacketOut {
 
     private double x,y,z;
     private float yaw, pitch;
@@ -17,13 +17,13 @@ public class PacketOutPlayerPositionAndLook extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeDouble(x);
-        byteMessage.writeDouble(y);
-        byteMessage.writeDouble(z);
-        byteMessage.writeFloat(yaw);
-        byteMessage.writeFloat(pitch);
-        byteMessage.writeByte(0);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeDouble(x);
+        protocolBuffer.writeDouble(y);
+        protocolBuffer.writeDouble(z);
+        protocolBuffer.writeFloat(yaw);
+        protocolBuffer.writeFloat(pitch);
+        protocolBuffer.writeByte(0);
     }
 
 

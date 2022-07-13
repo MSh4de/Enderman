@@ -2,9 +2,6 @@ package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.packetevent.DefaultPacketMoveEvent;
-import eu.mshade.enderframe.packetevent.PacketMoveEvent;
-import eu.mshade.enderframe.packetevent.PacketMoveType;
-import eu.mshade.enderframe.world.Position;
 import eu.mshade.enderman.packet.play.PacketInPlayerPosition;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;

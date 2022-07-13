@@ -1,25 +1,33 @@
 package eu.mshade.enderman;
 
-import eu.mshade.enderframe.EnderFrameProtocol;
-import eu.mshade.enderframe.EnderFrameSession;
-import eu.mshade.enderframe.EnderFrameSessionHandler;
+import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.EntityType;
-import eu.mshade.enderframe.protocol.ByteMessage;
-import eu.mshade.enderframe.protocol.ProtocolStatus;
-import eu.mshade.enderframe.protocol.ProtocolVersion;
+import eu.mshade.enderframe.packetevent.PacketPlayerDiggingEvent;
+import eu.mshade.enderframe.packetevent.PacketToggleFlyingEvent;
+import eu.mshade.enderframe.protocol.*;
 import eu.mshade.enderframe.protocol.packet.*;
+import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.listener.*;
+import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.enderman.packet.login.PacketInEncryption;
 import eu.mshade.enderman.packet.login.PacketInLogin;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
+import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 
-public class EndermanProtocol extends EnderFrameProtocol {
+public class EndermanProtocol extends Protocol {
 
-
+    private final EndermanEntityMetadataManager entityMetadataManager;
+    private final EndermanItemStackManager itemStackManager;
+    private EndermanMaterialWrapper endermanMaterialWrapper = new EndermanMaterialWrapper();
     public EndermanProtocol() {
+
+        this.entityMetadataManager = new EndermanEntityMetadataManager();
+        this.itemStackManager = new EndermanItemStackManager();
+
         this.getEventBus().subscribe(PacketInKeepAlive.class, new PacketKeepAliveListener());
         this.getEventBus().subscribe(PacketInLogin.class, new PacketLoginListener());
         this.getEventBus().subscribe(PacketInEncryption.class, new PacketEncryptionListener());
@@ -30,6 +38,22 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
         this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
         this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
+
+        this.getEventBus().subscribe(PacketInPlayerAbilities.class, (event, eventContainer) -> {
+            EnderFrame.get().getPacketEventBus().publish(new PacketToggleFlyingEvent(event.isAllowFlying()), eventContainer);
+        });
+
+        this.getEventBus().subscribe(PacketInBlockPlacement.class, new PacketBlockPlacementListener());
+        this.getEventBus().subscribe(PacketInPlayerDigging.class, (event, eventContainer) -> {
+           EnderFrame.get().getPacketEventBus().publish(new PacketPlayerDiggingEvent(event.getBlockPosition(), event.getBlockFace(), event.getDiggingStatus()), eventContainer);
+        });
+
+        /*
+        this.getEventBus().subscribe(PacketIn.class, (event, eventContainer) -> {
+            if (!(event instanceof PacketInKeepAlive)) System.out.println(event);
+        }).withEventFilter(EventFilter.DERIVE);
+
+         */
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
@@ -45,8 +69,10 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x04, PacketInPlayerPosition.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x05, PacketInPlayerLook.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x06, PacketInPlayerPositionAndLook.class);
-        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x08, PacketInPlayerBlockPlacement.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x07, PacketInPlayerDigging.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x08, PacketInBlockPlacement.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0B, PacketInEntityAction.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x13, PacketInPlayerAbilities.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x15, PacketInClientSettings.class);
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x00, PacketOutKeepAlive.class);
@@ -68,12 +94,15 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x1C,  PacketOutEntityMetadata.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY,0x20,  PacketOutEntityProperties.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x21, PacketOutChunkData.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x23, PacketOutBlockChange.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x38, PacketOutPlayerInfo.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x39, PacketOutPlayerAbilities.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x40, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x46, PacketOutSetCompression.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetSlot.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3F, PacketOutPluginMessage.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2B, PacketOutChangeGameState.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
@@ -99,25 +128,27 @@ public class EndermanProtocol extends EnderFrameProtocol {
         this.getEntityRepository().registerEntityTypeId(94, EntityType.SQUID);
         this.getEntityRepository().registerEntityTypeId(95, EntityType.WOLF);
         this.getEntityRepository().registerEntityTypeId(96, EntityType.MOOSHROOM);
-        this.getEntityRepository().registerEntityTypeId(97, EntityType.SNOW_GOLEM);
+        this.getEntityRepository().registerEntityTypeId(97, EntityType.SNOWMAN);
         this.getEntityRepository().registerEntityTypeId(98, EntityType.OCELOT);
         this.getEntityRepository().registerEntityTypeId(99, EntityType.IRON_GOLEM);
         this.getEntityRepository().registerEntityTypeId(100, EntityType.HORSE);
         this.getEntityRepository().registerEntityTypeId(120, EntityType.VILLAGER);
     }
 
+
     @Override
-    public ByteMessage getByteMessage(ByteBuf byteBuf) {
-        return new EndermanByteMessage(byteBuf);
+    public ProtocolBuffer getProtocolBuffer(ByteBuf byteBuf) {
+        return new EndermanProtocolBuffer(this.entityMetadataManager, this.itemStackManager, endermanMaterialWrapper, byteBuf);
     }
 
     @Override
-    public ProtocolVersion getProtocolVersion() {
-        return ProtocolVersion.V1_8;
+    public SessionWrapper getSessionWrapper(Channel channel) {
+        return new EndermanSessionWrapper(channel, this.getEntityRepository(), endermanMaterialWrapper);
     }
 
     @Override
-    public EnderFrameSession getEnderFrameSession(EnderFrameSessionHandler enderFrameSessionHandler) {
-        return new EndermanSession(enderFrameSessionHandler);
+    public MinecraftProtocolVersion getMinecraftProtocolVersion() {
+        return MinecraftProtocolVersion.V1_8;
     }
+
 }

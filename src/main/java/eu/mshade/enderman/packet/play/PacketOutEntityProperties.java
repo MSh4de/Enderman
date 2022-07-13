@@ -1,14 +1,12 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.metadata.attribute.AttributeModifier;
 import eu.mshade.enderframe.metadata.attribute.AttributeProperty;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PacketOutEntityProperties extends PacketOut {
+public class PacketOutEntityProperties implements PacketOut {
     private final int id;
     private final List<AttributeProperty> attributeProperties;
 
@@ -18,13 +16,13 @@ public class PacketOutEntityProperties extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(id);
-        byteMessage.writeInt(attributeProperties.size());
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(id);
+        protocolBuffer.writeInt(attributeProperties.size());
         attributeProperties.forEach(attributeProperty -> {
-            byteMessage.writeString(attributeProperty.getAttribute().getName());
-            byteMessage.writeDouble(attributeProperty.getValue());
-            byteMessage.writeVarInt(0);
+            protocolBuffer.writeString(attributeProperty.getAttribute().getName());
+            protocolBuffer.writeDouble(attributeProperty.getValue());
+            protocolBuffer.writeVarInt(0);
         });
     }
 }

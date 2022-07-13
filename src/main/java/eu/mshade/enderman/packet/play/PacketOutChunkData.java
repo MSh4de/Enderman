@@ -1,9 +1,9 @@
 package eu.mshade.enderman.packet.play;
 
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutChunkData extends PacketOut {
+public class PacketOutChunkData implements PacketOut {
 
     private int x, z;
     private boolean continuous;
@@ -19,11 +19,11 @@ public class PacketOutChunkData extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeInt(x);
-        byteMessage.writeInt(z);
-        byteMessage.writeBoolean(continuous);
-        byteMessage.writeShort(section);
-        byteMessage.writeByteArray(data);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeInt(x);
+        protocolBuffer.writeInt(z);
+        protocolBuffer.writeBoolean(continuous);
+        protocolBuffer.writeShort(section);
+        protocolBuffer.writeByteArray(data);
     }
 }

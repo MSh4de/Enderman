@@ -1,12 +1,10 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Player;
-import eu.mshade.enderframe.protocol.ByteMessage;
 import eu.mshade.enderframe.protocol.PacketOut;
+import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class PacketOutSpawnPlayer extends PacketOut {
+public class PacketOutSpawnPlayer implements PacketOut {
 
     private final Player player;
 
@@ -15,16 +13,16 @@ public class PacketOutSpawnPlayer extends PacketOut {
     }
 
     @Override
-    public void serialize(ByteMessage byteMessage) {
-        byteMessage.writeVarInt(player.getEntityId());
-        byteMessage.writeUUID(player.getUniqueId());
-        byteMessage.writeInt((int) player.getLocation().getX() * 32);
-        byteMessage.writeInt((int) player.getLocation().getY() * 32);
-        byteMessage.writeInt((int) player.getLocation().getZ() * 32);
-        byteMessage.writeByte((byte) (player.getLocation().getYaw() * 256 / 360));
-        byteMessage.writeByte((byte) (player.getLocation().getPitch() * 256 / 360));
-        byteMessage.writeShort(0);
-        byteMessage.writeByte(0x7F);
+    public void serialize(ProtocolBuffer protocolBuffer) {
+        protocolBuffer.writeVarInt(player.getEntityId());
+        protocolBuffer.writeUUID(player.getUniqueId());
+        protocolBuffer.writeInt((int) player.getLocation().getX() * 32);
+        protocolBuffer.writeInt((int) player.getLocation().getY() * 32);
+        protocolBuffer.writeInt((int) player.getLocation().getZ() * 32);
+        protocolBuffer.writeByte((byte) (player.getLocation().getYaw() * 256 / 360));
+        protocolBuffer.writeByte((byte) (player.getLocation().getPitch() * 256 / 360));
+        protocolBuffer.writeShort(0);
+        protocolBuffer.writeByte(0x7F);
     }
 
 }
