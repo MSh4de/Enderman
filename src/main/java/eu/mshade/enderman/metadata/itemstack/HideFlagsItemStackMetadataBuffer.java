@@ -22,7 +22,7 @@ public class HideFlagsItemStackMetadataBuffer implements ItemStackMetadataBuffer
     @Override
     public void read(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        if (compoundBinaryTag.containsKey("HideFlags")) return;
+        if (!compoundBinaryTag.containsKey("HideFlags")) return;
         int v = compoundBinaryTag.getInt("HideFlags");
         HideFlagsItemStackMetadata hideFlagsItemStackMetadata = new HideFlagsItemStackMetadata(ItemFlag.fromByte(v));
         metadataKeyValueBucket.setMetadataKeyValue(hideFlagsItemStackMetadata);

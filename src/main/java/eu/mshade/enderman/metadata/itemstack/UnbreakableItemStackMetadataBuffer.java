@@ -20,7 +20,8 @@ public class UnbreakableItemStackMetadataBuffer implements ItemStackMetadataBuff
     @Override
     public void read(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        boolean unbreakable = compoundBinaryTag.getBoolean("Unbreakable");
+        if (!compoundBinaryTag.containsKey("Unbreakable")) return;
+        boolean unbreakable = compoundBinaryTag.getByte("Unbreakable") == 1;
         metadataKeyValueBucket.setMetadataKeyValue(new UnbreakableItemStackMetadata(unbreakable));
     }
 

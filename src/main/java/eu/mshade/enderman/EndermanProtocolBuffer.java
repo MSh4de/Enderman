@@ -1,9 +1,7 @@
 package eu.mshade.enderman;
 
 import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.Material;
-import eu.mshade.enderframe.item.MaterialKey;
+import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
@@ -28,13 +26,11 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
     }
 
 
-
-
     @Override
     public void writeItemStack(ItemStack itemStack) {
         CompoundBinaryTag compoundBinaryTag = new CompoundBinaryTag();
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        for (MetadataKeyValue<MetadataKey, ?> metadataKeyValue : metadataKeyValueBucket.getMetadataKeyValues()) {
+        for (MetadataKeyValue<?> metadataKeyValue : metadataKeyValueBucket.getMetadataKeyValues()) {
             if (itemStackManager.hasBuffer(metadataKeyValue.getMetadataKey())) {
                 itemStackManager.getItemStackMetadataBuffer(metadataKeyValue.getMetadataKey()).write(compoundBinaryTag, itemStack);
             }
@@ -47,7 +43,7 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
         MaterialKey materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial());
         writeShort(materialKey.getId());
         writeByte(itemStack.getCount() & 255);
-        writeShort(materialKey.getMetadata());
+        writeShort(itemStack.getDurability());
         writeCompoundBinaryTag(compoundBinaryTag);
 
     }
@@ -58,12 +54,19 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
         if(id != -1) {
             byte count = readByte();
             int durability = readShort();
-            MaterialKey material = endermanMaterialWrapper.reverse(MaterialKey.from(id, durability, null));
+            MaterialKey parent = endermanMaterialWrapper.reverse(MaterialKey.from(id));
+            MaterialKey materialKey;
+            if (parent != null && parent.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
+                materialKey = parent;
+            }else {
+                materialKey = endermanMaterialWrapper.reverse(MaterialKey.from(id, durability));
+            }
+            ItemStack itemStack = new ItemStack(materialKey, count, durability);
             CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
-
-            return new ItemStack(material, count, durability);
-
-            //return itemStackManager.getItemStackRewriterByMaterial(material).read(itemStackManager, material, count, durability, compoundBinaryTag);
+            for (ItemStackMetadataBuffer itemStackMetadataBuffer : itemStackManager.getItemStackMetadataBuffers()) {
+                itemStackMetadataBuffer.read(compoundBinaryTag, itemStack);
+            }
+            return itemStack;
         }
         return new ItemStack(Material.AIR,1,0);
 

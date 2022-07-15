@@ -3,11 +3,15 @@ package eu.mshade.enderman.metadata;
 import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
 import eu.mshade.enderman.metadata.itemstack.*;
+import eu.mshade.enderman.wrapper.EndermanAttributeKeyWrapper;
+import eu.mshade.enderman.wrapper.EndermanEquipmentSlotWrapper;
 import eu.mshade.enderman.wrapper.EndermanNamespacedKeyWrapper;
 
 public class EndermanItemStackManager extends ItemStackMetadataManager {
 
     private EndermanNamespacedKeyWrapper endermanNamespacedKeyWrapper = new EndermanNamespacedKeyWrapper();
+    private EndermanAttributeKeyWrapper endermanAttributeKeyWrapper = new EndermanAttributeKeyWrapper();
+    private EndermanEquipmentSlotWrapper endermanEquipmentSlotWrapper = new EndermanEquipmentSlotWrapper();
 
     public EndermanItemStackManager() {
         this.registerBuffer(ItemStackMetadataKey.UNBREAKABLE, new UnbreakableItemStackMetadataBuffer());
@@ -19,5 +23,6 @@ public class EndermanItemStackManager extends ItemStackMetadataManager {
         this.registerBuffer(ItemStackMetadataKey.HIDE_FLAGS, new HideFlagsItemStackMetadataBuffer());
         this.registerBuffer(ItemStackMetadataKey.COLOR, new ColorItemStackMetadataBuffer());
         this.registerBuffer(ItemStackMetadataKey.SKULL_OWNER, new SkullOwnerItemStackMetadataBuffer());
+        this.registerBuffer(ItemStackMetadataKey.ATTRIBUTE_MODIFIERS, new AttributeModifiersItemStackMetadataBuffer(endermanEquipmentSlotWrapper, endermanAttributeKeyWrapper));
     }
 }

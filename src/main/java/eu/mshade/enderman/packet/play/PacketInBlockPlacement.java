@@ -23,8 +23,12 @@ public class PacketInBlockPlacement implements PacketIn {
 
         blockFace = BlockFace.fromId(protocolBuffer.readByte());
 
+        try {
+            this.itemStack = protocolBuffer.readItemStack();
 
-        this.itemStack = protocolBuffer.readItemStack();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         int cursorX = protocolBuffer.readByte();
         int cursorY = protocolBuffer.readByte();

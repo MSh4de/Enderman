@@ -13,6 +13,6 @@ public class PacketOutChangeGameState implements PacketOut {
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
         protocolBuffer.writeByte(3);
-        protocolBuffer.writeFloat(GameMode.CREATIVE.getId());
+        protocolBuffer.writeFloat(GameMode.SURVIVAL.getId());
     }
 }

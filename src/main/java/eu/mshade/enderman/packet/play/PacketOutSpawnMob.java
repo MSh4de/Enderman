@@ -22,7 +22,7 @@ public class PacketOutSpawnMob implements PacketOut {
         protocolBuffer.writeInt(entity.getLocation().getBlockZ() * 32);
         protocolBuffer.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
         protocolBuffer.writeByte((byte) (entity.getLocation().getPitch() * 256 / 360));
-        protocolBuffer.writeByte((byte) 0);
+        protocolBuffer.writeByte((byte) (entity.getLocation().getYaw() * 256 / 360));
         protocolBuffer.writeShort((int) entity.getVelocity().getX());
         protocolBuffer.writeShort((int) entity.getVelocity().getY());
         protocolBuffer.writeShort((int) entity.getVelocity().getZ());
