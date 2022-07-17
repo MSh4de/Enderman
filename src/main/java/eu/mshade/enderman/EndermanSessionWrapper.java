@@ -4,6 +4,7 @@ import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
+import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.item.MaterialData;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
@@ -19,6 +20,7 @@ import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
+import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import io.netty.channel.Channel;
 
@@ -32,10 +34,13 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     private EntityRepository entityRepository;
     private EndermanMaterialWrapper endermanMaterialWrapper;
-    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper) {
+    private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper;
+
+    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper, EndermanInventoryKeyWrapper endermanInventoryKeyWrapper) {
         super(channel);
         this.entityRepository = entityRepository;
         this.endermanMaterialWrapper = endermanMaterialWrapper;
+        this.endermanInventoryKeyWrapper = endermanInventoryKeyWrapper;
     }
 
     @Override
@@ -295,6 +300,16 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendBlockChange(Vector blockPosition, MaterialKey materialKey) {
         sendPacket(new PacketOutBlockChange(blockPosition, endermanMaterialWrapper.wrap(materialKey)));
+    }
+
+    @Override
+    public void sendOpenInventory(Inventory inventory) {
+        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, inventory));
+    }
+
+    @Override
+    public void sendItemStacks(Inventory inventory) {
+        sendPacket(new PacketOutWindowItems(inventory));
     }
 
 

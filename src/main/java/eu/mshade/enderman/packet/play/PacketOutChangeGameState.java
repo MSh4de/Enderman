@@ -9,10 +9,21 @@ import eu.mshade.enderframe.protocol.ProtocolBuffer;
  */
 public class PacketOutChangeGameState implements PacketOut {
 
+    private int reason;
+    private float value;
+
+    public PacketOutChangeGameState(int reason, float value) {
+        this.reason = reason;
+        this.value = value;
+    }
 
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
+        /*
         protocolBuffer.writeByte(3);
         protocolBuffer.writeFloat(GameMode.SURVIVAL.getId());
+         */
+        protocolBuffer.writeByte(reason);
+        protocolBuffer.writeFloat(value);
     }
 }

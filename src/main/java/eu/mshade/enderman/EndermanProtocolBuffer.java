@@ -28,6 +28,10 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
 
     @Override
     public void writeItemStack(ItemStack itemStack) {
+        if(itemStack == null || !endermanMaterialWrapper.isSupport(itemStack.getMaterial())){
+            writeShort(-1);
+            return;
+        }
         CompoundBinaryTag compoundBinaryTag = new CompoundBinaryTag();
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
         for (MetadataKeyValue<?> metadataKeyValue : metadataKeyValueBucket.getMetadataKeyValues()) {
@@ -35,15 +39,14 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
                 itemStackManager.getItemStackMetadataBuffer(metadataKeyValue.getMetadataKey()).write(compoundBinaryTag, itemStack);
             }
         }
-
-        if(itemStack == null || !endermanMaterialWrapper.isSupport(itemStack.getMaterial())){
-            writeShort(-1);
-            return;
-        }
         MaterialKey materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial());
         writeShort(materialKey.getId());
         writeByte(itemStack.getCount() & 255);
-        writeShort(itemStack.getDurability());
+        if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
+            writeShort(itemStack.getDurability());
+        }else {
+            writeShort(materialKey.getMetadata());
+        }
         writeCompoundBinaryTag(compoundBinaryTag);
 
     }

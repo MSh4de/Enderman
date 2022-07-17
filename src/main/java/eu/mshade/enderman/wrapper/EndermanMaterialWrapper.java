@@ -20,6 +20,7 @@ public class EndermanMaterialWrapper extends Wrapper<MaterialKey, MaterialKey> {
         register(Material.ANDESITE, MaterialKey.from(1, 5));
         register(Material.POLISHED_ANDESITE, MaterialKey.from(1, 6));
         register(Material.GRASS, MaterialKey.from(2));
+        register(Material.DIRT, MaterialKey.from(3));
 
         register(Material.WOODEN_PICKAXE, MaterialKey.from(270));
         register(Material.LEATHER_HELMET, MaterialKey.from(298));
