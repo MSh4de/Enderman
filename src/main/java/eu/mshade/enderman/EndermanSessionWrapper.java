@@ -1,11 +1,13 @@
 package eu.mshade.enderman;
 
 import eu.mshade.enderframe.PlayerInfoBuilder;
+import eu.mshade.enderframe.UniqueIdManager;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.item.MaterialData;
+import eu.mshade.enderframe.inventory.PlayerInventory;
+import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
@@ -35,6 +37,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
     private EntityRepository entityRepository;
     private EndermanMaterialWrapper endermanMaterialWrapper;
     private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper;
+    private UniqueIdManager uniqueIdManager = new UniqueIdManager();
 
     public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper, EndermanInventoryKeyWrapper endermanInventoryKeyWrapper) {
         super(channel);
@@ -304,12 +307,37 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendOpenInventory(Inventory inventory) {
-        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, inventory));
+        if (inventory instanceof PlayerInventory) return;
+        int freeId = this.uniqueIdManager.getFreeId();
+        this.inventoryRepository.register(freeId, inventory);
+        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, freeId, inventory));
+    }
+
+    @Override
+    public void sendCloseInventory(Inventory inventory) {
+        int id = this.inventoryRepository.getIdOfInventory(inventory);
+        sendPacket(new PacketOutCloseInventory(id));
+        this.inventoryRepository.flush(inventory);
     }
 
     @Override
     public void sendItemStacks(Inventory inventory) {
-        sendPacket(new PacketOutWindowItems(inventory));
+        int id;
+        if (inventory instanceof PlayerInventory){
+            id = 0;
+        } else id = this.inventoryRepository.getIdOfInventory(inventory);
+
+        sendPacket(new PacketOutInventoryItems(id, inventory));
+    }
+
+    @Override
+    public void sendItemStack(Inventory inventory, int slot, ItemStack itemStack) {
+        int id;
+        if (inventory instanceof PlayerInventory){
+            id = 0;
+            slot = PlayerInventory.accurateSlot(slot);
+        } else id = this.inventoryRepository.getIdOfInventory(inventory);
+        sendPacket(new PacketOutSetItemStack(slot, id, itemStack));
     }
 
 
