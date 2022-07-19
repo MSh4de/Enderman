@@ -8,14 +8,16 @@ import eu.mshade.enderframe.protocol.ProtocolBuffer;
 public class PacketOutWindowItems implements PacketOut {
 
     private Inventory inventory;
+    private int id;
 
-    public PacketOutWindowItems(Inventory inventory) {
+    public PacketOutWindowItems(int id, Inventory inventory) {
         this.inventory = inventory;
+        this.id = id;
     }
 
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeByte(inventory.getId());
+        protocolBuffer.writeByte(id);
         protocolBuffer.writeShort(inventory.getItemStacks().length);
         for (ItemStack itemStack : inventory.getItemStacks()) {
             protocolBuffer.writeItemStack(itemStack);
