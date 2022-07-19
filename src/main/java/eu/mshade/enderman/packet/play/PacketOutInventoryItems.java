@@ -1,16 +1,17 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.inventory.Inventory;
+import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
-public class PacketOutWindowItems implements PacketOut {
+public class PacketOutInventoryItems implements PacketOut {
 
     private Inventory inventory;
     private int id;
 
-    public PacketOutWindowItems(int id, Inventory inventory) {
+    public PacketOutInventoryItems(int id, Inventory inventory) {
         this.inventory = inventory;
         this.id = id;
     }
@@ -18,9 +19,11 @@ public class PacketOutWindowItems implements PacketOut {
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
         protocolBuffer.writeByte(id);
-        protocolBuffer.writeShort(inventory.getItemStacks().length);
-        for (ItemStack itemStack : inventory.getItemStacks()) {
-            protocolBuffer.writeItemStack(itemStack);
+        int length = (inventory instanceof PlayerInventory ? 45 : inventory.getItemStacks().length);
+        protocolBuffer.writeShort(length);
+        for (int i = 0; i < length; i++) {
+            protocolBuffer.writeItemStack(inventory.getItemStacks()[i]);
+            if(i == 0) System.out.println(inventory.getItemStacks()[i]);
         }
     }
 }
