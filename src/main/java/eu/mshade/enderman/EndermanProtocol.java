@@ -2,6 +2,12 @@ package eu.mshade.enderman;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.EntityType;
+import eu.mshade.enderframe.entity.Player;
+import eu.mshade.enderframe.inventory.Inventory;
+import eu.mshade.enderframe.inventory.InventoryRepository;
+import eu.mshade.enderframe.item.ItemStack;
+import eu.mshade.enderframe.item.Material;
+import eu.mshade.enderframe.packetevent.PacketCloseInventoryEvent;
 import eu.mshade.enderframe.packetevent.PacketPlayerDiggingEvent;
 import eu.mshade.enderframe.packetevent.PacketToggleFlyingEvent;
 import eu.mshade.enderframe.protocol.*;
@@ -16,7 +22,6 @@ import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
-import eu.mshade.mwork.event.EventFilter;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -42,6 +47,15 @@ public class EndermanProtocol extends Protocol {
         this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
         this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
         this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
+
+
+        this.getEventBus().subscribe(PacketInCloseInventory.class, (event, eventContainer) -> {
+            Channel channel = eventContainer.getContainer(Channel.class);
+            SessionWrapper sessionWrapper = ProtocolPipeline.get().getSessionWrapper(channel);
+            InventoryRepository inventoryRepository = sessionWrapper.getInventoryRepository();
+            Inventory inventory = inventoryRepository.getInventory(event.getId());
+            EnderFrame.get().getPacketEventBus().publish(new PacketCloseInventoryEvent(inventory), eventContainer);
+        });
 
         this.getEventBus().subscribe(PacketInPlayerAbilities.class, (event, eventContainer) -> {
             EnderFrame.get().getPacketEventBus().publish(new PacketToggleFlyingEvent(event.isAllowFlying()), eventContainer);
@@ -71,6 +85,8 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0B, PacketInEntityAction.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x13, PacketInPlayerAbilities.class);
         this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x15, PacketInClientSettings.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0D, PacketInCloseInventory.class);
+        this.getProtocolRegistry().registerIn(ProtocolStatus.PLAY, 0x0E, PacketInClickInventory.class);
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x00, PacketOutKeepAlive.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x01, PacketOutJoinGame.class);
@@ -97,11 +113,12 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x40, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x46, PacketOutSetCompression.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x47, PacketOutPlayerList.class);
-        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetSlot.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2F, PacketOutSetItemStack.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3F, PacketOutPluginMessage.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2B, PacketOutChangeGameState.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2D, PacketOutOpenInventory.class);
-        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x30, PacketOutWindowItems.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x30, PacketOutInventoryItems.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2E, PacketOutCloseInventory.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
