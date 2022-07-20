@@ -1,8 +1,7 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.inventory;
 
 import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.inventory.PlayerInventory;
-import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
@@ -23,7 +22,6 @@ public class PacketOutInventoryItems implements PacketOut {
         protocolBuffer.writeShort(length);
         for (int i = 0; i < length; i++) {
             protocolBuffer.writeItemStack(inventory.getItemStacks()[i]);
-            if(i == 0) System.out.println(inventory.getItemStacks()[i]);
         }
     }
 }
