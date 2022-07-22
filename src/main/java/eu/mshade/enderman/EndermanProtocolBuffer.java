@@ -28,7 +28,8 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
 
     @Override
     public void writeItemStack(ItemStack itemStack) {
-        if(itemStack == null || !endermanMaterialWrapper.isSupport(itemStack.getMaterial())){
+        MaterialKey materialKey;
+        if(itemStack == null || (materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial())) == null){
             writeShort(-1);
             return;
         }
@@ -39,7 +40,6 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
                 itemStackManager.getItemStackMetadataBuffer(metadataKeyValue.getMetadataKey()).write(compoundBinaryTag, itemStack);
             }
         }
-        MaterialKey materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial());
         writeShort(materialKey.getId());
         writeByte(itemStack.getCount() & 255);
         if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
