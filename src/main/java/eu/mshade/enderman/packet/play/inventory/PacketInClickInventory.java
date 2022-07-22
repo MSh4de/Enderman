@@ -24,9 +24,6 @@ public class PacketInClickInventory implements PacketIn {
 
         itemStack = protocolBuffer.readItemStack();
 
-        System.out.println(itemStack);
-        System.out.println(slot);
-
         if (mode == 0){
             if (button == 0){
                 this.clickType = ClickType.LEFT;
@@ -74,8 +71,29 @@ public class PacketInClickInventory implements PacketIn {
         } else if (mode == 6) {
             if (button == 0) this.clickType = ClickType.DOUBLE_CLICK;
         }
+    }
 
-        System.out.println(clickType);
+    public int getId() {
+        return id;
+    }
 
+    public int getSlot() {
+        return slot;
+    }
+
+    public int getKey() {
+        return key;
+    }
+
+    public short getTransactionId() {
+        return transactionId;
+    }
+
+    public ClickType getClickType() {
+        return clickType;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 }
