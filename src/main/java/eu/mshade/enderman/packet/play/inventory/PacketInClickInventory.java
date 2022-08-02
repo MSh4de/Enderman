@@ -48,4 +48,15 @@ public class PacketInClickInventory implements PacketIn {
     public ItemStack getItemStack() {
         return itemStack;
     }
+
+    @Override
+    public String toString() {
+        return "PacketInClickInventory{" +
+                "id=" + id +
+                ", slot=" + slot +
+                ", button=" + button +
+                ", mode=" + mode +
+                ", transactionId=" + transactionId +
+                '}';
+    }
 }
