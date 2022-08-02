@@ -41,7 +41,7 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
             }
         }
         writeShort(materialKey.getId());
-        writeByte(itemStack.getCount() & 255);
+        writeByte(itemStack.getAmount() & 255);
         if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
             writeShort(itemStack.getDurability());
         }else {
