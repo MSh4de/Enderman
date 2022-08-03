@@ -86,12 +86,17 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
                 clickType = ClickType.END_DRAG_LEFT;
             } else if (button == 6) {
                 clickType = ClickType.END_DRAG_RIGHT;
-            } else if (button == 1 || button == 5) {
+            } else if (button == 8) {
+                clickType = ClickType.START_DRAG_MIDDLE;
+            } else if (button == 10) {
+                clickType = ClickType.END_DRAG_MIDDLE;
+            } else if (button == 1 || button == 5 || button == 9) {
                 clickType = ClickType.ADD_ITEM_FROM_DRAG;
             }
         } else if (mode == 6) {
             if (button == 0) clickType = ClickType.DOUBLE_CLICK;
         }
+
 
         EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(clickedInventory, clickType, itemStack, slot, key), eventContainer);
 
