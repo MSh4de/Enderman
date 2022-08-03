@@ -5,7 +5,6 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.item.MaterialData;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
@@ -17,6 +16,8 @@ import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderframe.protocol.packet.*;
 import eu.mshade.enderframe.world.*;
+import eu.mshade.enderframe.world.border.WorldBorder;
+import eu.mshade.enderframe.world.border.WorldBorderAction;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
@@ -312,6 +313,10 @@ public class EndermanSessionWrapper extends SessionWrapper {
         sendPacket(new PacketOutWindowItems(inventory));
     }
 
+    @Override
+    public void sendWorldBorder(WorldBorderAction worldBorderAction, WorldBorder worldBorder) {
+        sendPacket(new PacketOutWorldBorder(worldBorderAction, worldBorder));
+    }
 
     private boolean hasOverflow(int value) {
         return value > 3 || value < -3;

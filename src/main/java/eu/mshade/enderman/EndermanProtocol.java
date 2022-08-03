@@ -102,6 +102,7 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2B, PacketOutChangeGameState.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2D, PacketOutOpenInventory.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x30, PacketOutWindowItems.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
