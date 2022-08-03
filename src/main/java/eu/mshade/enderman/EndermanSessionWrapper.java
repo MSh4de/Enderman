@@ -312,9 +312,13 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendOpenInventory(Inventory inventory) {
         if (inventory instanceof PlayerInventory) return;
+        ProtocolPipeline.get().getPlayer(channel).setOpenedInventory(inventory);
+        /*
         int freeId = this.uniqueIdManager.getFreeId();
         this.inventoryRepository.register(freeId, inventory);
-        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, freeId, inventory));
+
+         */
+        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, 1, inventory));
     }
 
     @Override
@@ -326,21 +330,32 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendItemStacks(Inventory inventory) {
+
         int id;
+
         if (inventory instanceof PlayerInventory){
             id = 0;
-        } else id = this.inventoryRepository.getIdOfInventory(inventory);
+        } else {
+            id = 1;
+            //id = this.inventoryRepository.getIdOfInventory(inventory);
+        }
+
+
 
         sendPacket(new PacketOutInventoryItems(id, inventory));
     }
 
     @Override
     public void sendItemStack(Inventory inventory, int slot, ItemStack itemStack) {
+
         int id;
         if (inventory instanceof PlayerInventory){
             id = 0;
             slot = PlayerInventory.accurateSlot(slot);
-        } else id = this.inventoryRepository.getIdOfInventory(inventory);
+        } else {
+            id = 1;
+            //id = this.inventoryRepository.getIdOfInventory(inventory);
+        }
         sendPacket(new PacketOutSetItemStack(slot, id, itemStack));
     }
 
