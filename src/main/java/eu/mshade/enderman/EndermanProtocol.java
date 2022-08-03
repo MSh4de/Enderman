@@ -2,6 +2,7 @@ package eu.mshade.enderman;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.EntityType;
+import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.inventory.InventoryRepository;
 import eu.mshade.enderframe.packetevent.PacketCloseInventoryEvent;
@@ -19,7 +20,9 @@ import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
 import eu.mshade.enderman.packet.play.inventory.*;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
+import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
+import eu.mshade.mwork.event.EventFilter;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -45,13 +48,13 @@ public class EndermanProtocol extends Protocol {
         this.getEventBus().subscribe(PacketInPlayerPositionAndLook.class, new PacketPlayerPositionAndLookListener());
         this.getEventBus().subscribe(PacketInChatMessage.class, new PacketChatMessageListener());
         this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
+        this.getEventBus().subscribe(PacketInClickInventory.class, new PacketClickInventoryListener(new EndermanInventorySizeWrapper()));
 
 
         this.getEventBus().subscribe(PacketInCloseInventory.class, (event, eventContainer) -> {
             Channel channel = eventContainer.getContainer(Channel.class);
-            SessionWrapper sessionWrapper = ProtocolPipeline.get().getSessionWrapper(channel);
-            InventoryRepository inventoryRepository = sessionWrapper.getInventoryRepository();
-            Inventory inventory = inventoryRepository.getInventory(event.getId());
+            Player player = ProtocolPipeline.get().getPlayer(channel);
+            Inventory inventory = (player.getOpenedInventory() != null ? player.getOpenedInventory() : player.getPlayerInventory());
             EnderFrame.get().getPacketEventBus().publish(new PacketCloseInventoryEvent(inventory), eventContainer);
         });
 
@@ -63,6 +66,7 @@ public class EndermanProtocol extends Protocol {
         this.getEventBus().subscribe(PacketInPlayerDigging.class, (event, eventContainer) -> {
            EnderFrame.get().getPacketEventBus().publish(new PacketPlayerDiggingEvent(event.getBlockPosition(), event.getBlockFace(), event.getDiggingStatus()), eventContainer);
         });
+
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
