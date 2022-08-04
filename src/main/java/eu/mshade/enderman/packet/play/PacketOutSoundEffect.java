@@ -19,6 +19,6 @@ public class PacketOutSoundEffect implements PacketOut {
         protocolBuffer.writeInt(sound.getSoundPosition().getY());
         protocolBuffer.writeInt(sound.getSoundPosition().getZ());
         protocolBuffer.writeFloat(sound.getSoundVolume());
-        protocolBuffer.writeByte(63);
+        protocolBuffer.writeByte(sound.getSoundPitch());
     }
 }
