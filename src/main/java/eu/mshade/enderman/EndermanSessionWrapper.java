@@ -15,7 +15,7 @@ import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderframe.protocol.packet.*;
-import eu.mshade.enderframe.sound.Sound;
+import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
@@ -313,8 +313,8 @@ public class EndermanSessionWrapper extends SessionWrapper {
     }
 
     @Override
-    public void sendSoundEffect(Sound sound) {
-        sendPacket(new PacketOutSoundEffect(sound));
+    public void sendSoundEffect(SoundEffect soundEffect) {
+        sendPacket(new PacketOutSoundEffect(soundEffect));
     }
 
     private boolean hasOverflow(int value) {

@@ -2,23 +2,23 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.sound.Sound;
+import eu.mshade.enderframe.sound.SoundEffect;
 
 public class PacketOutSoundEffect implements PacketOut {
 
-    private final Sound sound;
+    private final SoundEffect soundEffect;
 
-    public PacketOutSoundEffect(Sound sound) {
-        this.sound = sound;
+    public PacketOutSoundEffect(SoundEffect soundEffect) {
+        this.soundEffect = soundEffect;
     }
 
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeString(sound.getSoundName());
-        protocolBuffer.writeInt(sound.getSoundPosition().getX());
-        protocolBuffer.writeInt(sound.getSoundPosition().getY());
-        protocolBuffer.writeInt(sound.getSoundPosition().getZ());
-        protocolBuffer.writeFloat(sound.getSoundVolume());
-        protocolBuffer.writeByte(sound.getSoundPitch());
+        protocolBuffer.writeString(soundEffect.getSoundName());
+        protocolBuffer.writeInt(soundEffect.getSoundPosition().getX());
+        protocolBuffer.writeInt(soundEffect.getSoundPosition().getY());
+        protocolBuffer.writeInt(soundEffect.getSoundPosition().getZ());
+        protocolBuffer.writeFloat(soundEffect.getSoundVolume());
+        protocolBuffer.writeByte(soundEffect.getSoundPitch());
     }
 }
