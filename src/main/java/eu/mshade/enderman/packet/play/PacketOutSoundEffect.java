@@ -14,7 +14,7 @@ public class PacketOutSoundEffect implements PacketOut {
 
     @Override
     public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeString(sound.getSoundName().getName());
+        protocolBuffer.writeString(sound.getSoundName());
         protocolBuffer.writeInt(sound.getSoundPosition().getX());
         protocolBuffer.writeInt(sound.getSoundPosition().getY());
         protocolBuffer.writeInt(sound.getSoundPosition().getZ());
