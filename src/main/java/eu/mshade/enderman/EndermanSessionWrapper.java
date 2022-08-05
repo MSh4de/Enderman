@@ -6,7 +6,6 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
-<<<<<<< HEAD
 import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
@@ -24,6 +23,8 @@ import eu.mshade.enderframe.scoreboard.ScoreboardMode;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
 import eu.mshade.enderframe.sound.SoundEffect;
+import eu.mshade.enderframe.title.Title;
+import eu.mshade.enderframe.title.TitleAction;
 import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
@@ -383,6 +384,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendSoundEffect(SoundEffect soundEffect) {
         sendPacket(new PacketOutSoundEffect(soundEffect));
+    }
+
+    @Override
+    public void sendTitle(TitleAction titleAction, Title title) {
+        sendPacket(new PacketOutTitle(titleAction, title));
     }
 
     private boolean hasOverflow(int value) {
