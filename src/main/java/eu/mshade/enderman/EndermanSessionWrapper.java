@@ -26,6 +26,8 @@ import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
 import eu.mshade.enderframe.world.*;
+import eu.mshade.enderframe.world.border.WorldBorder;
+import eu.mshade.enderframe.world.border.WorldBorderAction;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
@@ -389,6 +391,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendTitle(TitleAction titleAction, Title title) {
         sendPacket(new PacketOutTitle(titleAction, title));
+    }
+
+    @Override
+    public void sendWorldBorder(WorldBorderAction worldBorderAction, WorldBorder worldBorder) {
+        sendPacket(new PacketOutWorldBorder(worldBorderAction, worldBorder));
     }
 
     private boolean hasOverflow(int value) {

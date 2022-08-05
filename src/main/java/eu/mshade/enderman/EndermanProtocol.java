@@ -125,6 +125,7 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3C, PacketOutUpdateScoreboard.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x29, PacketOutSoundEffect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
