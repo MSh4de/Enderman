@@ -10,5 +10,6 @@ public class EndermanInventoryKeyWrapper extends Wrapper<InventoryKey, String> {
     public EndermanInventoryKeyWrapper() {
         this.register(InventoryType.CHEST, NamespacedKey.minecraft("chest").toString());
         this.register(InventoryType.HOPPER, NamespacedKey.minecraft("hopper").toString());
+
     }
 }

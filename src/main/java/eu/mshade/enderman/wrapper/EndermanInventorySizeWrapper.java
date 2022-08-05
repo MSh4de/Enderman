@@ -11,5 +11,7 @@ public class EndermanInventorySizeWrapper extends Wrapper<InventoryKey, Integer>
         this.registerInput(InventoryType.CHEST, 9*3);
         this.registerInput(InventoryType.HOPPER, 5);
         this.registerInput(InventoryType.PLAYER, 45);
+        this.registerInput(InventoryType.FURNACE, 3);
+
     }
 }

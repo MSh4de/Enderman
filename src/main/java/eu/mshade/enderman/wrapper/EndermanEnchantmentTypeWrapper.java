@@ -35,6 +35,7 @@ public class EndermanEnchantmentTypeWrapper extends Wrapper<EnchantmentType, Int
 
         register(EnchantmentType.LUCK_OF_THE_SEA, 61);
         register(EnchantmentType.LURE, 62);
-        
+
+
     }
 }
