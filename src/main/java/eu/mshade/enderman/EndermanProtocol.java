@@ -22,7 +22,6 @@ import eu.mshade.enderman.packet.play.inventory.*;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
-import eu.mshade.mwork.event.EventFilter;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -121,6 +120,9 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2D, PacketOutOpenInventory.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x30, PacketOutInventoryItems.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2E, PacketOutCloseInventory.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3D, PacketOutDisplayScoreboard.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3B, PacketOutScoreboardObjective.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3C, PacketOutUpdateScoreboard.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);

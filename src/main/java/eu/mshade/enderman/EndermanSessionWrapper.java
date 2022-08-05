@@ -18,6 +18,10 @@ import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderframe.protocol.packet.*;
+import eu.mshade.enderframe.scoreboard.Scoreboard;
+import eu.mshade.enderframe.scoreboard.ScoreboardMode;
+import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
+import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
 import eu.mshade.enderframe.world.*;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
@@ -74,12 +78,12 @@ public class EndermanSessionWrapper extends SessionWrapper {
     }
 
     @Override
-    public void sendHeadAndFooter(String header, String footer) {
+    public void sendHeaderAndFooter(String header, String footer) {
         sendPacket(new PacketOutPlayerList(TextComponent.of(header), TextComponent.of(footer)));
     }
 
     @Override
-    public void sendHeadAndFooter(TextComponent header, TextComponent footer) {
+    public void sendHeaderAndFooter(TextComponent header, TextComponent footer) {
         sendPacket(new PacketOutPlayerList(header, footer));
     }
 
@@ -359,6 +363,20 @@ public class EndermanSessionWrapper extends SessionWrapper {
         sendPacket(new PacketOutSetItemStack(slot, id, itemStack));
     }
 
+    @Override
+    public void sendDisplayScoreboard(Scoreboard<?> scoreboard) {
+        sendPacket(new PacketOutDisplayScoreboard(scoreboard));
+    }
+
+    @Override
+    public void sendScoreboardObjective(Scoreboard<?> scoreboard, ScoreboardMode scoreboardMode) {
+        sendPacket(new PacketOutScoreboardObjective(scoreboard, scoreboardMode));
+    }
+
+    @Override
+    public void sendUpdateScoreboard(ScoreboardObjective<?> scoreboardObjective, ScoreboardObjectiveAction scoreboardObjectiveAction) {
+        sendPacket(new PacketOutUpdateScoreboard(scoreboardObjective, scoreboardObjectiveAction));
+    }
 
     private boolean hasOverflow(int value) {
         return value > 3 || value < -3;
