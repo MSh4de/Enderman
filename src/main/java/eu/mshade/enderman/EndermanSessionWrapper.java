@@ -124,7 +124,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendMessage(String message) {
-
+        sendMessage(TextComponent.of(message));
     }
 
     @Override
@@ -278,24 +278,29 @@ public class EndermanSessionWrapper extends SessionWrapper {
                 sections.add(sectionBuffer);
             }
         }
-        int capacity = sections.size() * (4096 * 4) + 256;
+
+        boolean overWorld = chunk.getWorld().getDimension() == Dimension.OVERWORLD;
+
+        int capacity = sections.size() * (4096 * (overWorld ? 4 : 2)) + 256;
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
-        for (Section sectionBuffer : sections) {
+        for (Section section : sections) {
             for (int i = 0; i < 4096; i++) {
-                MaterialKey materialKey = sectionBuffer.getBlock(i);
+                MaterialKey materialKey = section.getBlock(i);
                 MaterialKey wrap = endermanMaterialWrapper.wrap(materialKey);
                 byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
                 byteBuffer.put((byte) (wrap.getId() >> 4));
             }
         }
 
-        for (Section sectionBuffer : sections) {
-            byteBuffer.put(sectionBuffer.getBlockLight().getRawData());
+        for (Section section : sections) {
+            byteBuffer.put(section.getBlockLight().getRawData());
         }
 
-        for (Section sectionBuffer : sections) {
-            byteBuffer.put(sectionBuffer.getSkyLight().getRawData());
+        if (overWorld) {
+            for (Section section : sections) {
+                byteBuffer.put(section.getSkyLight().getRawData());
+            }
         }
 
         byteBuffer.put(chunk.getBiomes());
@@ -305,7 +310,23 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendSection(Section section) {
+        Chunk chunk = section.getChunk();
+        boolean overWorld = chunk.getWorld().getDimension() == Dimension.OVERWORLD;
+        int capacity = 4096 * (overWorld ? 4 : 2);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
+        for (int i = 0; i < 4096; i++) {
+            MaterialKey materialKey = section.getBlock(i);
+            MaterialKey wrap = endermanMaterialWrapper.wrap(materialKey);
+            byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
+            byteBuffer.put((byte) (wrap.getId() >> 4));
+        }
+
+        byteBuffer.put(section.getBlockLight().getRawData());
+        if (overWorld) {
+            byteBuffer.put(section.getSkyLight().getRawData());
+        }
+        sendPacket(new PacketOutChunkData(chunk.getX(), chunk.getZ(), false, 1 << section.getY(), byteBuffer.array()));
     }
 
     @Override
