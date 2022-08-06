@@ -7,6 +7,9 @@ import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class EndermanMaterialWrapper extends Wrapper<MaterialKey, MaterialKey> {
 
+    /**
+     * Class for wrapping a MaterialKey for protocol 1.8.9
+     */
 
     public EndermanMaterialWrapper() {
         //list minecraft materials id
@@ -31,13 +34,12 @@ public class EndermanMaterialWrapper extends Wrapper<MaterialKey, MaterialKey> {
         register(Material.OAK_WOOD_PLANKS, MaterialKey.from(5));
 
 
+
         register(Material.OAK_WOOD, MaterialKey.from(17));
 
         register(Material.WOODEN_PICKAXE, MaterialKey.from(270));
         register(Material.LEATHER_HELMET, MaterialKey.from(298));
         register(Material.PLAYER_HEAD, MaterialKey.from(397, 3));
-
-
 
 
 
