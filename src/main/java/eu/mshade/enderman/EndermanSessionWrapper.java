@@ -273,10 +273,16 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendChunk(Chunk chunk) {
         List<Section> sections = new ArrayList<>();
+        int bitMask = chunk.getBitMask();
         for (Section sectionBuffer : chunk.getSections()) {
             if (sectionBuffer != null && sectionBuffer.getRealBlock() != 0) {
                 sections.add(sectionBuffer);
             }
+        }
+
+        if (sections.size() == 0) {
+            sections.add(new EmptySection(chunk,0));
+            bitMask = 1;
         }
 
         boolean overWorld = chunk.getWorld().getDimension() == Dimension.OVERWORLD;
@@ -305,7 +311,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
         byteBuffer.put(chunk.getBiomes());
 
-        sendPacket(new PacketOutChunkData(chunk.getX(), chunk.getZ(), true, chunk.getBitMask(), byteBuffer.array()));
+        sendPacket(new PacketOutChunkData(chunk.getX(), chunk.getZ(), true, bitMask, byteBuffer.array()));
     }
 
     @Override
