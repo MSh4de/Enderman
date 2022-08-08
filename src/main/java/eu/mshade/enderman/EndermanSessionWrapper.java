@@ -2,6 +2,7 @@ package eu.mshade.enderman;
 
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.UniqueIdManager;
+import eu.mshade.enderframe.entity.Enderman;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
@@ -14,6 +15,7 @@ import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.metadata.world.WorldMetadataType;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.mojang.chat.TextPosition;
+import eu.mshade.enderframe.particle.Particle;
 import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.SessionWrapper;
@@ -37,6 +39,7 @@ import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
+import eu.mshade.enderman.wrapper.EndermanParticleWrapper;
 import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
@@ -46,17 +49,18 @@ import java.util.List;
 
 public class EndermanSessionWrapper extends SessionWrapper {
 
-
     private EntityRepository entityRepository;
     private EndermanMaterialWrapper endermanMaterialWrapper;
     private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper;
+    private EndermanParticleWrapper endermanParticleWrapper;
     private UniqueIdManager uniqueIdManager = new UniqueIdManager();
 
-    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper, EndermanInventoryKeyWrapper endermanInventoryKeyWrapper) {
+    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper, EndermanInventoryKeyWrapper endermanInventoryKeyWrapper, EndermanParticleWrapper endermanParticleWrapper) {
         super(channel);
         this.entityRepository = entityRepository;
         this.endermanMaterialWrapper = endermanMaterialWrapper;
         this.endermanInventoryKeyWrapper = endermanInventoryKeyWrapper;
+        this.endermanParticleWrapper = endermanParticleWrapper;
     }
 
     @Override
@@ -396,6 +400,17 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendWorldBorder(WorldBorderAction worldBorderAction, WorldBorder worldBorder) {
         sendPacket(new PacketOutWorldBorder(worldBorderAction, worldBorder));
+    }
+
+    @Override
+    public void sendParticle(Particle particle) {
+        Integer particleId = endermanParticleWrapper.wrap(particle.getParticleKey());
+
+        if (particleId == null) {
+            return;
+        }
+
+        sendPacket(new PacketOutParticle(particleId, particle));
     }
 
     private boolean hasOverflow(int value) {

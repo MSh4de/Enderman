@@ -22,6 +22,7 @@ import eu.mshade.enderman.packet.play.inventory.*;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
+import eu.mshade.enderman.wrapper.EndermanParticleWrapper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -31,6 +32,7 @@ public class EndermanProtocol extends Protocol {
     private final EndermanItemStackManager itemStackManager;
     private EndermanMaterialWrapper endermanMaterialWrapper = new EndermanMaterialWrapper();
     private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper = new EndermanInventoryKeyWrapper();
+    private EndermanParticleWrapper endermanParticleWrapper = new EndermanParticleWrapper();
 
     public EndermanProtocol() {
 
@@ -126,6 +128,7 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x29, PacketOutSoundEffect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2A, PacketOutParticle.class);
 
         this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
         this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
@@ -166,7 +169,7 @@ public class EndermanProtocol extends Protocol {
 
     @Override
     public SessionWrapper getSessionWrapper(Channel channel) {
-        return new EndermanSessionWrapper(channel, this.getEntityRepository(), endermanMaterialWrapper, endermanInventoryKeyWrapper);
+        return new EndermanSessionWrapper(channel, this.getEntityRepository(), endermanMaterialWrapper, endermanInventoryKeyWrapper, endermanParticleWrapper);
     }
 
     @Override
