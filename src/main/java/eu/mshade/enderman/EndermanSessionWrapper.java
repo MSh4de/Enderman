@@ -404,13 +404,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendParticle(Particle particle) {
-        Integer particleId = endermanParticleWrapper.wrap(particle.getParticleKey());
-
-        if (particleId == null) {
-            return;
-        }
-
-        sendPacket(new PacketOutParticle(particleId, particle));
+        sendPacket(new PacketOutParticle(endermanMaterialWrapper, endermanParticleWrapper, particle));
     }
 
     private boolean hasOverflow(int value) {
