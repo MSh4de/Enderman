@@ -12,7 +12,7 @@ public class PacketPlayerLookListener implements EventListener<PacketInPlayerLoo
     public void onEvent(PacketInPlayerLook event, ParameterContainer eventContainer) {
         EnderFrame.get().getPacketEventBus().publishAsync(
                 new DefaultPacketLookEvent(
-                        event.getYaw(), event.getPith(), event.isOnGround()),
+                        event.getYaw(), event.getPitch(), event.isOnGround()),
                 eventContainer);
     }
 
