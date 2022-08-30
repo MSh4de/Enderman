@@ -5,13 +5,13 @@ import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.wrapper.Wrapper;
 
 
-public class EndermanMaterialWrapper extends Wrapper<MaterialKey, MaterialKey> {
+public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey> {
 
     /**
      * Class for wrapping a MaterialKey for protocol 1.8.9
      */
 
-    public EndermanMaterialWrapper() {
+    public EndermanMaterialKeyWrapper() {
         //list minecraft materials id
 
         register(Material.AIR, MaterialKey.from(0));
