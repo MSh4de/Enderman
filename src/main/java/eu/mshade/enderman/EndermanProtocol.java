@@ -4,12 +4,12 @@ import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.inventory.InventoryRepository;
 import eu.mshade.enderframe.packetevent.PacketCloseInventoryEvent;
 import eu.mshade.enderframe.packetevent.PacketPlayerDiggingEvent;
 import eu.mshade.enderframe.packetevent.PacketToggleFlyingEvent;
 import eu.mshade.enderframe.protocol.*;
 import eu.mshade.enderframe.protocol.packet.*;
+import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.listener.*;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
@@ -19,9 +19,7 @@ import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
 import eu.mshade.enderman.packet.play.inventory.*;
-import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
-import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
-import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
+import eu.mshade.enderman.wrapper.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
@@ -29,10 +27,20 @@ public class EndermanProtocol extends Protocol {
 
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
-    private EndermanMaterialWrapper endermanMaterialWrapper = new EndermanMaterialWrapper();
-    private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper = new EndermanInventoryKeyWrapper();
+    private final EndermanMaterialKeyWrapper endermanMaterialKeyWrapper = new EndermanMaterialKeyWrapper();
+    private final EndermanInventoryKeyWrapper endermanInventoryKeyWrapper = new EndermanInventoryKeyWrapper();
 
     public EndermanProtocol() {
+        this.wrapperRepository.register(ContextWrapper.MATERIAL_KEY, endermanMaterialKeyWrapper);
+        this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_KEY, endermanInventoryKeyWrapper);
+        this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_SIZE, new EndermanInventorySizeWrapper());
+        this.wrapperRepository.register(EndermanContextWrapper.ATTRIBUTE_KEY, new EndermanAttributeKeyWrapper());
+        this.wrapperRepository.register(EndermanContextWrapper.ENCHANTMENT_TYPE, new EndermanEnchantmentTypeWrapper());
+        this.wrapperRepository.register(EndermanContextWrapper.EQUIPMENT_SLOT, new EndermanEquipmentSlotWrapper());
+        this.wrapperRepository.register(EndermanContextWrapper.ENTITY_TYPE, new EndermanEntityTypeWrapper());
+        this.wrapperRepository.register(EndermanContextWrapper.NAMESPACED_KEY, new EndermanNamespacedKeyWrapper());
+
+
 
         this.entityMetadataManager = new EndermanEntityMetadataManager();
         this.itemStackManager = new EndermanItemStackManager();
@@ -53,7 +61,7 @@ public class EndermanProtocol extends Protocol {
         this.getEventBus().subscribe(PacketInCloseInventory.class, (event, eventContainer) -> {
             Channel channel = eventContainer.getContainer(Channel.class);
             Player player = ProtocolPipeline.get().getPlayer(channel);
-            Inventory inventory = (player.getOpenedInventory() != null ? player.getOpenedInventory() : player.getPlayerInventory());
+            Inventory inventory = (player.getOpenedInventory() != null ? player.getOpenedInventory() : player.getInventory());
             EnderFrame.get().getPacketEventBus().publish(new PacketCloseInventoryEvent(inventory), eventContainer);
         });
 
@@ -127,46 +135,17 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
 
-        this.getEntityRepository().registerEntityTypeId(50, EntityType.CREEPER);
-        this.getEntityRepository().registerEntityTypeId(51, EntityType.SKELETON);
-        this.getEntityRepository().registerEntityTypeId(52, EntityType.SPIDER);
-        this.getEntityRepository().registerEntityTypeId(53, EntityType.GIANT);
-        this.getEntityRepository().registerEntityTypeId(54, EntityType.ZOMBIE);
-        this.getEntityRepository().registerEntityTypeId(55, EntityType.SLIME);
-        this.getEntityRepository().registerEntityTypeId(56, EntityType.GHAST);
-        this.getEntityRepository().registerEntityTypeId(57, EntityType.PIG_ZOMBIE);
-        this.getEntityRepository().registerEntityTypeId(58, EntityType.ENDERMAN);
-        this.getEntityRepository().registerEntityTypeId(59, EntityType.CAVE_SPIDER);
-        this.getEntityRepository().registerEntityTypeId(60, EntityType.SILVERFISH);
-        this.getEntityRepository().registerEntityTypeId(61, EntityType.BLAZE);
-        this.getEntityRepository().registerEntityTypeId(62, EntityType.MAGMA_CUBE);
-        this.getEntityRepository().registerEntityTypeId(63, EntityType.ENDER_DRAGON);
-        this.getEntityRepository().registerEntityTypeId(64, EntityType.WITHER);
-        this.getEntityRepository().registerEntityTypeId(65, EntityType.BAT);
-        this.getEntityRepository().registerEntityTypeId(66, EntityType.WITCH);
-        this.getEntityRepository().registerEntityTypeId(90, EntityType.PIG);
-        this.getEntityRepository().registerEntityTypeId(91, EntityType.SHEEP);
-        this.getEntityRepository().registerEntityTypeId(92, EntityType.COW);
-        this.getEntityRepository().registerEntityTypeId(93, EntityType.CHICKEN);
-        this.getEntityRepository().registerEntityTypeId(94, EntityType.SQUID);
-        this.getEntityRepository().registerEntityTypeId(95, EntityType.WOLF);
-        this.getEntityRepository().registerEntityTypeId(96, EntityType.MOOSHROOM);
-        this.getEntityRepository().registerEntityTypeId(97, EntityType.SNOWMAN);
-        this.getEntityRepository().registerEntityTypeId(98, EntityType.OCELOT);
-        this.getEntityRepository().registerEntityTypeId(99, EntityType.IRON_GOLEM);
-        this.getEntityRepository().registerEntityTypeId(100, EntityType.HORSE);
-        this.getEntityRepository().registerEntityTypeId(120, EntityType.VILLAGER);
     }
 
 
     @Override
     public ProtocolBuffer getProtocolBuffer(ByteBuf byteBuf) {
-        return new EndermanProtocolBuffer(this.entityMetadataManager, this.itemStackManager, endermanMaterialWrapper, byteBuf);
+        return new EndermanProtocolBuffer(this.entityMetadataManager, this.itemStackManager, endermanMaterialKeyWrapper, byteBuf);
     }
 
     @Override
     public SessionWrapper getSessionWrapper(Channel channel) {
-        return new EndermanSessionWrapper(channel, this.getEntityRepository(), endermanMaterialWrapper, endermanInventoryKeyWrapper);
+        return new EndermanSessionWrapper(channel, this);
     }
 
     @Override
