@@ -4,11 +4,10 @@ import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.item.metadata.CanDestroyItemStackMetadata;
-import eu.mshade.enderframe.item.metadata.CanPlaceOnItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
-import eu.mshade.enderman.wrapper.EndermanNamespacedKeyWrapper;
+import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.mwork.binarytag.BinaryTag;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
@@ -20,10 +19,10 @@ import java.util.List;
 
 public class CanDestroyItemStackMetadataBuffer implements ItemStackMetadataBuffer {
 
-    private EndermanNamespacedKeyWrapper endermanNamespacedKeyWrapper;
+    private final Wrapper<MaterialKey, NamespacedKey> namespacedKeyWrapper;
 
-    public CanDestroyItemStackMetadataBuffer(EndermanNamespacedKeyWrapper endermanNamespacedKeyWrapper) {
-        this.endermanNamespacedKeyWrapper = endermanNamespacedKeyWrapper;
+    public CanDestroyItemStackMetadataBuffer(Wrapper<MaterialKey, NamespacedKey> namespacedKeyWrapper) {
+        this.namespacedKeyWrapper = namespacedKeyWrapper;
     }
 
     @Override
@@ -33,8 +32,9 @@ public class CanDestroyItemStackMetadataBuffer implements ItemStackMetadataBuffe
         List<MaterialKey> materialKeys = canDestroyItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {
-            if (endermanNamespacedKeyWrapper.isSupport(materialKey)) {
-                listBinaryTag.add(new StringBinaryTag(endermanNamespacedKeyWrapper.wrap(materialKey).toString()));
+            NamespacedKey namespacedKey = namespacedKeyWrapper.wrap(materialKey);
+            if (namespacedKey != null) {
+                listBinaryTag.add(new StringBinaryTag(namespacedKey.toString()));
             }
         });
         compoundBinaryTag.putBinaryTag("CanDestroy", listBinaryTag);
@@ -49,7 +49,7 @@ public class CanDestroyItemStackMetadataBuffer implements ItemStackMetadataBuffe
         CanDestroyItemStackMetadata canDestroyItemStackMetadata = new CanDestroyItemStackMetadata(new ArrayList<>());
         for (BinaryTag<?> binaryTag : canDestroy) {
             NamespacedKey namespacedKey = NamespacedKey.fromString((String) binaryTag.getValue());
-            canDestroyItemStackMetadata.getMetadataValue().add(endermanNamespacedKeyWrapper.reverse(namespacedKey));
+            canDestroyItemStackMetadata.getMetadataValue().add(namespacedKeyWrapper.reverse(namespacedKey));
         }
         metadataKeyValueBucket.setMetadataKeyValue(canDestroyItemStackMetadata);
     }

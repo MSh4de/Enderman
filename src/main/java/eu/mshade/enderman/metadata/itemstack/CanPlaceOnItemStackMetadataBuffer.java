@@ -7,6 +7,7 @@ import eu.mshade.enderframe.item.metadata.CanPlaceOnItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderman.wrapper.EndermanNamespacedKeyWrapper;
 import eu.mshade.mwork.binarytag.BinaryTag;
 import eu.mshade.mwork.binarytag.BinaryTagType;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class CanPlaceOnItemStackMetadataBuffer implements ItemStackMetadataBuffer {
 
-    private EndermanNamespacedKeyWrapper endermanNamespacedKeyWrapper;
+    private Wrapper<MaterialKey, NamespacedKey> endermanNamespacedKeyWrapper;
 
-    public CanPlaceOnItemStackMetadataBuffer(EndermanNamespacedKeyWrapper endermanNamespacedKeyWrapper) {
+    public CanPlaceOnItemStackMetadataBuffer(Wrapper<MaterialKey, NamespacedKey> endermanNamespacedKeyWrapper) {
         this.endermanNamespacedKeyWrapper = endermanNamespacedKeyWrapper;
     }
 
@@ -32,8 +33,9 @@ public class CanPlaceOnItemStackMetadataBuffer implements ItemStackMetadataBuffe
         List<MaterialKey> materialKeys = canPlaceOnItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {
-            if (endermanNamespacedKeyWrapper.isSupport(materialKey)) {
-                listBinaryTag.add(new StringBinaryTag(endermanNamespacedKeyWrapper.wrap(materialKey).toString()));
+            NamespacedKey namespacedKey = endermanNamespacedKeyWrapper.wrap(materialKey);
+            if (namespacedKey != null) {
+                listBinaryTag.add(new StringBinaryTag(namespacedKey.toString()));
             }
         });
         compoundBinaryTag.putBinaryTag("CanPlaceOn", listBinaryTag);

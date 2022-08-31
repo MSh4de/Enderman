@@ -1,12 +1,15 @@
 package eu.mshade.enderman.metadata.itemstack;
 
+import eu.mshade.enderframe.inventory.EquipmentSlot;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackAttributeModifier;
 import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.metadata.AttributeModifiersItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
+import eu.mshade.enderframe.metadata.attribute.AttributeKey;
 import eu.mshade.enderframe.metadata.attribute.AttributeModifier;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderman.wrapper.EndermanAttributeKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanEquipmentSlotWrapper;
 import eu.mshade.mwork.binarytag.BinaryTagType;
@@ -17,12 +20,12 @@ import java.util.List;
 
 public class AttributeModifiersItemStackMetadataBuffer implements ItemStackMetadataBuffer {
 
-    private EndermanEquipmentSlotWrapper endermanEquipmentSlotWrapper;
-    private EndermanAttributeKeyWrapper endermanAttributeKeyWrapper;
+    private Wrapper<EquipmentSlot, String> endermanEquipmentSlotWrapper;
+    private Wrapper<AttributeKey, String> endermanAttributeKeyWrapper;
 
-    public AttributeModifiersItemStackMetadataBuffer(EndermanEquipmentSlotWrapper endermanEquipmentSlotWrapper, EndermanAttributeKeyWrapper endermanAttributeKeyWrapper) {
-        this.endermanEquipmentSlotWrapper = endermanEquipmentSlotWrapper;
-        this.endermanAttributeKeyWrapper = endermanAttributeKeyWrapper;
+    public AttributeModifiersItemStackMetadataBuffer(Wrapper<EquipmentSlot, String> equipmentSlotWrapper, Wrapper<AttributeKey, String> attributeKeyWrapper) {
+        this.endermanEquipmentSlotWrapper = equipmentSlotWrapper;
+        this.endermanAttributeKeyWrapper = attributeKeyWrapper;
     }
 
     @Override
@@ -33,9 +36,10 @@ public class AttributeModifiersItemStackMetadataBuffer implements ItemStackMetad
         if (metadataValue.isEmpty()) return;
         ListBinaryTag attributeModifiersListBinaryTag = new ListBinaryTag(BinaryTagType.COMPOUND);
         for (ItemStackAttributeModifier itemStackAttributeModifier : metadataValue) {
-            if (endermanAttributeKeyWrapper.isSupport(itemStackAttributeModifier.getAttributeKey())) {
+            String attributeName = endermanAttributeKeyWrapper.wrap(itemStackAttributeModifier.getAttributeKey());
+            if (attributeName != null) {
                 CompoundBinaryTag attributeModifierCompoundBinaryTag = new CompoundBinaryTag();
-                attributeModifierCompoundBinaryTag.putString("AttributeName", endermanAttributeKeyWrapper.wrap(itemStackAttributeModifier.getAttributeKey()));
+                attributeModifierCompoundBinaryTag.putString("AttributeName", attributeName);
                 attributeModifierCompoundBinaryTag.putString("Name", itemStackAttributeModifier.getName());
                 attributeModifierCompoundBinaryTag.putString("Slot", endermanEquipmentSlotWrapper.wrap(itemStackAttributeModifier.getEquipmentSlot()));
                 AttributeModifier attributeModifier = itemStackAttributeModifier.getAttributeModifier();
