@@ -28,11 +28,10 @@ public class EndermanProtocol extends Protocol {
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
     private final EndermanMaterialKeyWrapper endermanMaterialKeyWrapper = new EndermanMaterialKeyWrapper();
-    private final EndermanInventoryKeyWrapper endermanInventoryKeyWrapper = new EndermanInventoryKeyWrapper();
 
     public EndermanProtocol() {
         this.wrapperRepository.register(ContextWrapper.MATERIAL_KEY, endermanMaterialKeyWrapper);
-        this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_KEY, endermanInventoryKeyWrapper);
+        this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_KEY, new EndermanInventoryKeyWrapper());
         this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_SIZE, new EndermanInventorySizeWrapper());
         this.wrapperRepository.register(EndermanContextWrapper.ATTRIBUTE_KEY, new EndermanAttributeKeyWrapper());
         this.wrapperRepository.register(EndermanContextWrapper.ENCHANTMENT_TYPE, new EndermanEnchantmentTypeWrapper());
@@ -43,7 +42,7 @@ public class EndermanProtocol extends Protocol {
 
 
         this.entityMetadataManager = new EndermanEntityMetadataManager();
-        this.itemStackManager = new EndermanItemStackManager();
+        this.itemStackManager = new EndermanItemStackManager(this.getWrapperRepository());
 
         this.getEventBus().subscribe(PacketInKeepAlive.class, new PacketKeepAliveListener());
         this.getEventBus().subscribe(PacketInLogin.class, new PacketLoginListener());
@@ -145,7 +144,7 @@ public class EndermanProtocol extends Protocol {
 
     @Override
     public SessionWrapper getSessionWrapper(Channel channel) {
-        return new EndermanSessionWrapper(channel, this);
+        return new EndermanSessionWrapper(channel);
     }
 
     @Override
