@@ -6,6 +6,7 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
+import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
@@ -28,6 +29,12 @@ import eu.mshade.enderframe.title.TitleAction;
 import eu.mshade.enderframe.world.*;
 import eu.mshade.enderframe.world.border.WorldBorder;
 import eu.mshade.enderframe.world.border.WorldBorderAction;
+import eu.mshade.enderframe.world.chunk.Chunk;
+import eu.mshade.enderframe.world.chunk.EmptySection;
+import eu.mshade.enderframe.world.chunk.Section;
+import eu.mshade.enderframe.wrapper.ContextWrapper;
+import eu.mshade.enderframe.wrapper.Wrapper;
+import eu.mshade.enderframe.wrapper.WrapperRepository;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
@@ -35,8 +42,7 @@ import eu.mshade.enderman.packet.play.inventory.PacketOutCloseInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutInventoryItems;
 import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
-import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
-import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
+import eu.mshade.enderman.wrapper.EndermanContextWrapper;
 import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
@@ -48,15 +54,14 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
 
     private EntityRepository entityRepository;
-    private EndermanMaterialWrapper endermanMaterialWrapper;
-    private EndermanInventoryKeyWrapper endermanInventoryKeyWrapper;
+    private Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
+    private Wrapper<InventoryKey, String> inventoryKeyWrapper;
     private UniqueIdManager uniqueIdManager = new UniqueIdManager();
 
-    public EndermanSessionWrapper(Channel channel, EntityRepository entityRepository, EndermanMaterialWrapper endermanMaterialWrapper, EndermanInventoryKeyWrapper endermanInventoryKeyWrapper) {
+    public EndermanSessionWrapper(Channel channel, WrapperRepository wrapperRepository) {
         super(channel);
-        this.entityRepository = entityRepository;
-        this.endermanMaterialWrapper = endermanMaterialWrapper;
-        this.endermanInventoryKeyWrapper = endermanInventoryKeyWrapper;
+        this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) wrapperRepository.get(ContextWrapper.MATERIAL_KEY);
+        this.inventoryKeyWrapper = (Wrapper<InventoryKey, String>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY);
     }
 
     @Override
@@ -293,7 +298,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
         for (Section section : sections) {
             for (int i = 0; i < 4096; i++) {
                 MaterialKey materialKey = section.getBlock(i);
-                MaterialKey wrap = endermanMaterialWrapper.wrap(materialKey);
+                MaterialKey wrap = materialKeyWrapper.wrap(materialKey);
                 byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
                 byteBuffer.put((byte) (wrap.getId() >> 4));
             }
@@ -323,7 +328,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
         for (int i = 0; i < 4096; i++) {
             MaterialKey materialKey = section.getBlock(i);
-            MaterialKey wrap = endermanMaterialWrapper.wrap(materialKey);
+            MaterialKey wrap = materialKeyWrapper.wrap(materialKey);
             byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
             byteBuffer.put((byte) (wrap.getId() >> 4));
         }
@@ -336,13 +341,56 @@ public class EndermanSessionWrapper extends SessionWrapper {
     }
 
     @Override
+    public void sendSectionFromChunk(Chunk chunk){
+        List<Section> sections = new ArrayList<>();
+        int bitMask = chunk.getBitMask();
+        for (Section sectionBuffer : chunk.getSections()) {
+            if (sectionBuffer != null && sectionBuffer.getRealBlock() != 0) {
+                sections.add(sectionBuffer);
+            }
+        }
+
+        if (sections.size() == 0) {
+            sections.add(new EmptySection(chunk,0));
+            bitMask = 1;
+        }
+
+        boolean overWorld = chunk.getWorld().getDimension() == Dimension.OVERWORLD;
+
+        int capacity = sections.size() * (4096 * (overWorld ? 4 : 2)) + 256;
+
+        ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
+        for (Section section : sections) {
+            for (int i = 0; i < 4096; i++) {
+                MaterialKey materialKey = section.getBlock(i);
+                MaterialKey wrap = materialKeyWrapper.wrap(materialKey);
+                byteBuffer.put((byte) (wrap.getId() << 4 | wrap.getMetadata()));
+                byteBuffer.put((byte) (wrap.getId() >> 4));
+            }
+        }
+
+        for (Section section : sections) {
+            byteBuffer.put(section.getBlockLight().getRawData());
+        }
+
+        if (overWorld) {
+            for (Section section : sections) {
+                byteBuffer.put(section.getSkyLight().getRawData());
+            }
+        }
+
+
+        sendPacket(new PacketOutChunkData(chunk.getX(), chunk.getZ(), false, bitMask, byteBuffer.array()));
+    }
+
+    @Override
     public void sendUnloadChunk(Chunk chunk) {
         sendPacket(new PacketOutChunkData(chunk.getX(), chunk.getZ(), true, 0, new byte[0]));
     }
 
     @Override
     public void sendBlockChange(Vector blockPosition, MaterialKey materialKey) {
-        sendPacket(new PacketOutBlockChange(blockPosition, endermanMaterialWrapper.wrap(materialKey)));
+        sendPacket(new PacketOutBlockChange(blockPosition, materialKeyWrapper.wrap(materialKey)));
     }
 
     @Override
@@ -354,7 +402,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
         this.inventoryRepository.register(freeId, inventory);
 
          */
-        sendPacket(new PacketOutOpenInventory(endermanInventoryKeyWrapper, 1, inventory));
+        sendPacket(new PacketOutOpenInventory(inventoryKeyWrapper, 1, inventory));
     }
 
     @Override
