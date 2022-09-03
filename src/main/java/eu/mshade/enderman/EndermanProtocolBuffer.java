@@ -6,9 +6,11 @@ import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.wrapper.ContextWrapper;
+import eu.mshade.enderframe.wrapper.Wrapper;
+import eu.mshade.enderframe.wrapper.WrapperRepository;
 import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
-import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import io.netty.buffer.ByteBuf;
 
@@ -16,20 +18,20 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
 
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
-    private EndermanMaterialWrapper endermanMaterialWrapper;
+    private final Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
 
-    public EndermanProtocolBuffer(EndermanEntityMetadataManager entityMetadataManager, EndermanItemStackManager itemStackManager, EndermanMaterialWrapper endermanMaterialWrapper, ByteBuf byteBuf) {
+    public EndermanProtocolBuffer(EndermanEntityMetadataManager entityMetadataManager, EndermanItemStackManager itemStackManager, WrapperRepository wrapperRepository, ByteBuf byteBuf) {
         super(byteBuf);
         this.entityMetadataManager = entityMetadataManager;
         this.itemStackManager = itemStackManager;
-        this.endermanMaterialWrapper = endermanMaterialWrapper;
+        this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) wrapperRepository.get(ContextWrapper.MATERIAL_KEY);
     }
 
 
     @Override
     public void writeItemStack(ItemStack itemStack) {
         MaterialKey materialKey;
-        if(itemStack == null || (materialKey = endermanMaterialWrapper.wrap(itemStack.getMaterial())) == null){
+        if (itemStack == null || (materialKey = materialKeyWrapper.wrap(itemStack.getMaterial())) == null) {
             writeShort(-1);
             return;
         }
@@ -42,9 +44,9 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
         }
         writeShort(materialKey.getId());
         writeByte(itemStack.getAmount() & 255);
-        if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
+        if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)) {
             writeShort(itemStack.getDurability());
-        }else {
+        } else {
             writeShort(materialKey.getMetadata());
         }
         writeCompoundBinaryTag(compoundBinaryTag);
@@ -54,24 +56,23 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
     @Override
     public ItemStack readItemStack() {
         int id = readShort();
-        if(id != -1) {
-            byte count = readByte();
-            int durability = readShort();
-            MaterialKey parent = endermanMaterialWrapper.reverse(MaterialKey.from(id));
-            MaterialKey materialKey;
-            if (parent != null && parent.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)){
-                materialKey = parent;
-            }else {
-                materialKey = endermanMaterialWrapper.reverse(MaterialKey.from(id, durability));
-            }
-            ItemStack itemStack = new ItemStack(materialKey, count, durability);
-            CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
-            for (ItemStackMetadataBuffer itemStackMetadataBuffer : itemStackManager.getItemStackMetadataBuffers()) {
-                itemStackMetadataBuffer.read(compoundBinaryTag, itemStack);
-            }
-            return itemStack;
+        if (id == -1) return new ItemStack(Material.AIR, 1, 0);
+
+        byte count = readByte();
+        int durability = readShort();
+        MaterialKey parent = materialKeyWrapper.reverse(MaterialKey.from(id));
+        MaterialKey materialKey;
+        if (parent != null && parent.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)) {
+            materialKey = parent;
+        } else {
+            materialKey = materialKeyWrapper.reverse(MaterialKey.from(id, durability));
         }
-        return new ItemStack(Material.AIR,1,0);
+        ItemStack itemStack = new ItemStack(materialKey, count, durability);
+        CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
+        for (ItemStackMetadataBuffer itemStackMetadataBuffer : itemStackManager.getItemStackMetadataBuffers()) {
+            itemStackMetadataBuffer.read(compoundBinaryTag, itemStack);
+        }
+        return itemStack;
 
     }
 
