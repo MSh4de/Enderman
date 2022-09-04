@@ -5,6 +5,7 @@ import eu.mshade.enderframe.UniqueIdManager;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
+import eu.mshade.enderframe.inventory.ChestInventory;
 import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.inventory.PlayerInventory;
@@ -56,12 +57,14 @@ public class EndermanSessionWrapper extends SessionWrapper {
     private EntityRepository entityRepository;
     private Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
     private Wrapper<InventoryKey, String> inventoryKeyWrapper;
+    private Wrapper<InventoryKey, Integer> inventorySizeWrapper;
     private UniqueIdManager uniqueIdManager = new UniqueIdManager();
 
     public EndermanSessionWrapper(Channel channel, WrapperRepository wrapperRepository) {
         super(channel);
         this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) wrapperRepository.get(ContextWrapper.MATERIAL_KEY);
         this.inventoryKeyWrapper = (Wrapper<InventoryKey, String>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY);
+        this.inventorySizeWrapper = (Wrapper<InventoryKey, Integer>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE);
     }
 
     @Override
@@ -396,13 +399,24 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendOpenInventory(Inventory inventory) {
         if (inventory instanceof PlayerInventory) return;
+
+        String inventoryKey = inventoryKeyWrapper.wrap(inventory.getInventoryKey());
+        if (inventoryKey == null) return;
+        Integer size = inventorySizeWrapper.wrap(inventory.getInventoryKey());
+        if (size == null) return;
+
         ProtocolPipeline.get().getPlayer(channel).setOpenedInventory(inventory);
+
+        if (inventory instanceof ChestInventory) {
+            size = inventory.getSize();
+        }
+
         /*
         int freeId = this.uniqueIdManager.getFreeId();
         this.inventoryRepository.register(freeId, inventory);
 
          */
-        sendPacket(new PacketOutOpenInventory(inventoryKeyWrapper, 1, inventory));
+        sendPacket(new PacketOutOpenInventory(inventoryKey, size, 1, inventory));
     }
 
     @Override
