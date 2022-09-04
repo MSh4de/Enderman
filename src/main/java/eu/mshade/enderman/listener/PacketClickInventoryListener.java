@@ -6,7 +6,6 @@ import eu.mshade.enderframe.inventory.*;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.packetevent.PacketClickInventoryEvent;
 import eu.mshade.enderframe.protocol.ProtocolPipeline;
-import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderman.packet.play.inventory.PacketInClickInventory;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.mwork.ParameterContainer;
@@ -33,14 +32,14 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
         int slot = event.getSlot();
         int key = 0;
 
-        Inventory clickedInventory = (player.getOpenedInventory() != null ? player.getOpenedInventory() : player.getPlayerInventory());
+        Inventory clickedInventory = (player.getOpenedInventory() != null ? player.getOpenedInventory() : player.getInventory());
 
         Integer maxSizeClickedInventory = endermanInventorySizeWrapper.wrap(clickedInventory.getInventoryKey());
 
         if (!(clickedInventory instanceof PlayerInventory)) {
-            int maxSizeSlot = (clickedInventory instanceof ChestInventory chestInventory ? chestInventory.getLine() * 9 : maxSizeClickedInventory);
+            int maxSizeSlot = (clickedInventory instanceof ChestInventory chestInventory ? chestInventory.getRow() * 9 : maxSizeClickedInventory);
             if (slot >= 0 && slot >= maxSizeSlot) {
-                clickedInventory = player.getPlayerInventory();
+                clickedInventory = player.getInventory();
                 int maxSizeSlotWithPlayerInventory = maxSizeSlot + (9 * 4);
                 int firstSlotHotBar = maxSizeSlotWithPlayerInventory - 9;
                 if (slot >= firstSlotHotBar) {
@@ -98,7 +97,7 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
         }
 
 
-        EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(clickedInventory, clickType, itemStack, slot, key), eventContainer);
+        EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(clickedInventory, clickType, itemStack, event.getId(), slot, key), eventContainer);
 
     }
 }
