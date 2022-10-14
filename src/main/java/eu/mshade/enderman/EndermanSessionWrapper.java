@@ -2,7 +2,6 @@ package eu.mshade.enderman;
 
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.UniqueIdManager;
-import eu.mshade.enderframe.entity.Enderman;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityRepository;
 import eu.mshade.enderframe.entity.Player;
@@ -37,6 +36,8 @@ import eu.mshade.enderman.packet.play.inventory.PacketOutCloseInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutInventoryItems;
 import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutScoreboardObjective;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutUpdateScoreboard;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
 import eu.mshade.enderman.wrapper.EndermanParticleWrapper;
