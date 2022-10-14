@@ -18,7 +18,9 @@ import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
 import eu.mshade.enderman.packet.play.inventory.*;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutDisplayScoreboard;
 import eu.mshade.enderman.packet.play.scoreboard.PacketOutScoreboardObjective;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutTeams;
 import eu.mshade.enderman.packet.play.scoreboard.PacketOutUpdateScoreboard;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
@@ -126,6 +128,7 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3D, PacketOutDisplayScoreboard.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3B, PacketOutScoreboardObjective.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3C, PacketOutUpdateScoreboard.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3E, PacketOutTeams.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x29, PacketOutSoundEffect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
