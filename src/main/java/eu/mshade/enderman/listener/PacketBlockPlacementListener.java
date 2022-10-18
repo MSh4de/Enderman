@@ -11,9 +11,6 @@ public class PacketBlockPlacementListener implements EventListener<PacketInBlock
 
     @Override
     public void onEvent(PacketInBlockPlacement event, ParameterContainer eventContainer) {
-        BlockFace blockFace = event.getBlockFace();
-        if (blockFace != BlockFace.NONE){
-            EnderFrame.get().getPacketEventBus().publish(new PacketBlockPlaceEvent(event.getBlockPosition(), event.getBlockFace(), event.getItemStack()), eventContainer);
-        }
+        EnderFrame.get().getPacketEventBus().publish(new PacketBlockPlaceEvent(event.getBlockPosition(), event.getCursorPosition(), event.getBlockFace(), event.getItemStack()), eventContainer);
     }
 }
