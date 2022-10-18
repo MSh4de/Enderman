@@ -1,9 +1,9 @@
 package eu.mshade.enderman;
 
 import eu.mshade.enderframe.EnderFrame;
-import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.Inventory;
+import eu.mshade.enderframe.item.MaterialCategory;
 import eu.mshade.enderframe.packetevent.PacketCloseInventoryEvent;
 import eu.mshade.enderframe.packetevent.PacketPlayerDiggingEvent;
 import eu.mshade.enderframe.packetevent.PacketToggleFlyingEvent;
@@ -19,6 +19,7 @@ import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
 import eu.mshade.enderman.packet.play.inventory.*;
+import eu.mshade.enderman.packet.play.move.*;
 import eu.mshade.enderman.wrapper.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -29,7 +30,8 @@ public class EndermanProtocol extends Protocol {
     private final EndermanItemStackManager itemStackManager;
 
     public EndermanProtocol() {
-        this.wrapperRepository.register(ContextWrapper.MATERIAL_KEY, new EndermanMaterialKeyWrapper());
+        EndermanMaterialKeyWrapper endermanMaterialKeyWrapper = new EndermanMaterialKeyWrapper();
+        this.wrapperRepository.register(ContextWrapper.MATERIAL_KEY, endermanMaterialKeyWrapper);
         this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_KEY, new EndermanInventoryKeyWrapper());
         this.wrapperRepository.register(EndermanContextWrapper.INVENTORY_SIZE, new EndermanInventorySizeWrapper());
         this.wrapperRepository.register(EndermanContextWrapper.ATTRIBUTE_KEY, new EndermanAttributeKeyWrapper());
@@ -55,7 +57,6 @@ public class EndermanProtocol extends Protocol {
         this.getEventBus().subscribe(PacketInEntityAction.class, new PacketEntityActionListener());
         this.getEventBus().subscribe(PacketInClickInventory.class, new PacketClickInventoryListener(new EndermanInventorySizeWrapper()));
 
-
         this.getEventBus().subscribe(PacketInCloseInventory.class, (event, eventContainer) -> {
             Channel channel = eventContainer.getContainer(Channel.class);
             Player player = ProtocolPipeline.get().getPlayer(channel);
@@ -72,6 +73,19 @@ public class EndermanProtocol extends Protocol {
            EnderFrame.get().getPacketEventBus().publish(new PacketPlayerDiggingEvent(event.getBlockPosition(), event.getBlockFace(), event.getDiggingStatus()), eventContainer);
         });
 
+/*        this.getEventBus().subscribe(PacketIn.class, (event, eventContainer) -> {
+            if (event instanceof PacketInPlayerGround || event instanceof PacketInKeepAlive) return;
+            System.out.println(event);
+        }).withEventFilter(EventFilter.DERIVE);*/
+
+
+        this.blockTransformerRepository.registerDefaultTransformer(new CommonBlockTransformer());
+        this.blockTransformerRepository.registerMaterialWrapper(endermanMaterialKeyWrapper);
+
+        this.blockTransformerRepository.register(MaterialCategory.LOG, new LogBlockTransFormer());
+        this.blockTransformerRepository.register(MaterialCategory.STAIRS, new StairsBlockTransformer());
+        this.blockTransformerRepository.register(MaterialCategory.BUTTON, new ButtonBlockTransformer());
+        this.blockTransformerRepository.register(MaterialCategory.LEVER, new LeverBlockTransformer());
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
@@ -132,6 +146,9 @@ public class EndermanProtocol extends Protocol {
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x29, PacketOutSoundEffect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder.class);
+        this.getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x33, PacketOutUpdateSign.class);
+
+
 
     }
 
@@ -143,7 +160,7 @@ public class EndermanProtocol extends Protocol {
 
     @Override
     public SessionWrapper getSessionWrapper(Channel channel) {
-        return new EndermanSessionWrapper(channel, this.getWrapperRepository());
+        return new EndermanSessionWrapper(channel, this.getWrapperRepository(), this.getBlockTransformerRepository());
     }
 
     @Override
