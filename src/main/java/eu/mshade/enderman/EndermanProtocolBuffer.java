@@ -13,8 +13,12 @@ import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import io.netty.buffer.ByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EndermanProtocolBuffer extends ProtocolBuffer {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(EndermanProtocolBuffer.class);
 
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
