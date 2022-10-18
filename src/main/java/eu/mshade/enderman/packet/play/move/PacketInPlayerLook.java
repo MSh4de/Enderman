@@ -1,4 +1,4 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.move;
 
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
@@ -8,8 +8,8 @@ public class PacketInPlayerLook extends PacketInPlayerGround {
 
     @Override
     public void deserialize(ProtocolBuffer protocolBuffer) {
-        this.yaw = protocolBuffer.readFloat();
-        this.pith = protocolBuffer.readFloat();
+        this.yaw = protocolBuffer.readFloat() % 360;
+        this.pith = protocolBuffer.readFloat() % 360;
         super.deserialize(protocolBuffer);
     }
 

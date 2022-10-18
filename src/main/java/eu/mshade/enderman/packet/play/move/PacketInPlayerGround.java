@@ -1,4 +1,4 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.move;
 
 import eu.mshade.enderframe.protocol.PacketIn;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;

@@ -1,6 +1,7 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.move;
 
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderman.packet.play.move.PacketInPlayerLook;
 
 public class PacketInPlayerPositionAndLook extends PacketInPlayerLook {
 
