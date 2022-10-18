@@ -2,7 +2,7 @@ package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.packetevent.DefaultPacketLookEvent;
-import eu.mshade.enderman.packet.play.PacketInPlayerLook;
+import eu.mshade.enderman.packet.play.move.PacketInPlayerLook;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
 

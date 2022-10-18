@@ -2,7 +2,7 @@ package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.packetevent.DefaultPacketGroundEvent;
-import eu.mshade.enderman.packet.play.PacketInPlayerGround;
+import eu.mshade.enderman.packet.play.move.PacketInPlayerGround;
 import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
 
