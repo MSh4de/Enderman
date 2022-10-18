@@ -38,6 +38,7 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.ACACIA_WOOD_PLANKS, MaterialKey.from(5, 4));
         register(Material.DARK_OAK_WOOD_PLANKS, MaterialKey.from(5, 5));
 
+
         register(Material.OAK_SAPLING, MaterialKey.from(6));
         register(Material.SPRUCE_SAPLING, MaterialKey.from(6, 1));
         register(Material.BIRCH_SAPLING, MaterialKey.from(6, 2));
@@ -54,6 +55,7 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.SAND, MaterialKey.from(12));
         register(Material.RED_SAND, MaterialKey.from(12, 1));
         register(Material.GRAVEL, MaterialKey.from(13));
+
         register(Material.GOLD_ORE, MaterialKey.from(14));
         register(Material.IRON_ORE, MaterialKey.from(15));
         register(Material.COAL_ORE, MaterialKey.from(16));
@@ -65,6 +67,7 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.ACACIA_LOG, MaterialKey.from(162));
         register(Material.DARK_OAK_LOG, MaterialKey.from(162, 1));
 
+
         register(Material.OAK_LEAVES, MaterialKey.from(18));
         register(Material.SPRUCE_LEAVES, MaterialKey.from(18, 1));
         register(Material.BIRCH_LEAVES, MaterialKey.from(18, 2));
@@ -72,15 +75,32 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.ACACIA_LEAVES, MaterialKey.from(161));
         register(Material.DARK_OAK_LEAVES, MaterialKey.from(161, 1));
 
+
         register(Material.SPONGE, MaterialKey.from(19));
         register(Material.WET_SPONGE, MaterialKey.from(19, 1));
 
         register(Material.GLASS, MaterialKey.from(20));
 
-        register(Material.LAPIS_ORE, MaterialKey.from(21));
-        register(Material.LAPIS_BLOCK, MaterialKey.from(22));
+        register(Material.LAPIS_LAZULI_ORE, MaterialKey.from(21));
+//        register(Material.LAPIS_BLOCK, MaterialKey.from(22));
         register(Material.DISPENSER, MaterialKey.from(23));
 
+        //register button and lever 1.8.9
+        register(Material.OAK_BUTTON, MaterialKey.from(143));
+        registerInput(Material.SPRUCE_BUTTON, MaterialKey.from(143));
+        registerInput(Material.BIRCH_BUTTON, MaterialKey.from(143));
+        registerInput(Material.JUNGLE_BUTTON, MaterialKey.from(143));
+        registerInput(Material.ACACIA_BUTTON, MaterialKey.from(143));
+        registerInput(Material.DARK_OAK_BUTTON, MaterialKey.from(143));
+
+        //register stone button 1.8.9
+        register(Material.STONE_BUTTON, MaterialKey.from(77));
+
+        register(Material.STONE_LEVER, MaterialKey.from(69));
+
+
+
+ /*
         register(Material.SANDSTONE, MaterialKey.from(24));
         register(Material.CHISELED_SANDSTONE, MaterialKey.from(24, 1));
         register(Material.SMOOTH_SANDSTONE, MaterialKey.from(24, 2));
@@ -103,6 +123,8 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         registerInput(Material.GREEN_BED, MaterialKey.from(26));
         register(Material.RED_BED, MaterialKey.from(26));
         registerInput(Material.BLACK_BED, MaterialKey.from(26));
+
+
 
         register(Material.POWERED_RAIL, MaterialKey.from(27));
         register(Material.DETECTOR_RAIL, MaterialKey.from(28));
@@ -176,7 +198,24 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.TORCH, MaterialKey.from(50));
         register(Material.FIRE, MaterialKey.from(51));
         register(Material.MOB_SPAWNER, MaterialKey.from(52));
+        */
+        //register all stairs 1.8
         register(Material.OAK_WOOD_STAIRS, MaterialKey.from(53));
+        register(Material.COBBLESTONE_STAIRS, MaterialKey.from(67));
+        register(Material.BRICK_STAIRS, MaterialKey.from(108));
+        register(Material.STONE_BRICK_STAIRS, MaterialKey.from(109));
+        register(Material.NETHER_BRICK_STAIRS, MaterialKey.from(114));
+        register(Material.SANDSTONE_STAIRS, MaterialKey.from(128));
+        register(Material.SPRUCE_WOOD_STAIRS, MaterialKey.from(134));
+        register(Material.BIRCH_WOOD_STAIRS, MaterialKey.from(135));
+        register(Material.JUNGLE_WOOD_STAIRS, MaterialKey.from(136));
+        register(Material.QUARTZ_STAIRS, MaterialKey.from(156));
+        register(Material.ACACIA_WOOD_STAIRS, MaterialKey.from(163));
+        register(Material.DARK_OAK_WOOD_STAIRS, MaterialKey.from(164));
+        register(Material.RED_SANDSTONE_STAIRS, MaterialKey.from(180));
+        register(Material.PURPUR_STAIRS, MaterialKey.from(203));
+
+        /*
         register(Material.CHEST, MaterialKey.from(54));
         register(Material.REDSTONE_WIRE, MaterialKey.from(55));
         register(Material.DIAMOND_ORE, MaterialKey.from(56));
@@ -190,7 +229,9 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.OAK_DOOR, MaterialKey.from(64));
         register(Material.LADDER, MaterialKey.from(65));
         register(Material.RAIL, MaterialKey.from(66));
+        */
         register(Material.COBBLESTONE_STAIRS, MaterialKey.from(67));
+        /*
         register(Material.WALL_SIGN, MaterialKey.from(68));
         register(Material.LEVER, MaterialKey.from(69));
         register(Material.STONE_PRESSURE_PLATE, MaterialKey.from(70));
@@ -262,13 +303,14 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.MELON_STEM, MaterialKey.from(105));
         register(Material.VINE, MaterialKey.from(106));
         register(Material.OAK_FENCE_GATE, MaterialKey.from(107));
-        register(Material.BRICK_STAIRS, MaterialKey.from(108));
-        register(Material.STONE_BRICK_STAIRS, MaterialKey.from(109));
+        */
+        /*
         register(Material.MYCELIUM, MaterialKey.from(110));
         register(Material.LILY_PAD, MaterialKey.from(111));
         register(Material.NETHER_BRICK, MaterialKey.from(112));
         register(Material.NETHER_BRICK_FENCE, MaterialKey.from(113));
-        register(Material.NETHER_BRICK_STAIRS, MaterialKey.from(114));
+        */
+        /*
         register(Material.NETHER_WART, MaterialKey.from(115));
         register(Material.ENCHANTING_TABLE, MaterialKey.from(116));
         register(Material.BREWING_STAND, MaterialKey.from(117));
@@ -294,19 +336,26 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.DARK_OAK_SLAB, MaterialKey.from(126, 5));
 
         register(Material.COCOA, MaterialKey.from(127));
-        register(Material.SANDSTONE_STAIRS, MaterialKey.from(128));
+        */
+        /*
         register(Material.EMERALD_ORE, MaterialKey.from(129));
         register(Material.ENDER_CHEST, MaterialKey.from(130));
         register(Material.TRIPWIRE_HOOK, MaterialKey.from(131));
         register(Material.TRIPWIRE, MaterialKey.from(132));
         register(Material.EMERALD_BLOCK, MaterialKey.from(133));
 
-        register(Material.SPRUCE_STAIRS, MaterialKey.from(134));
-        register(Material.BIRCH_STAIRS, MaterialKey.from(135));
-        register(Material.JUNGLE_STAIRS, MaterialKey.from(136));
+        */
+        /*
 
 
         register(Material.HAY_BLOCK, MaterialKey.from(170));
+
+         */
+
+        // carpet
+
+
+
 
 
         /*
