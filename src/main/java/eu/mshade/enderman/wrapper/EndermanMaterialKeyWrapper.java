@@ -52,10 +52,6 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.LAVA, MaterialKey.from(10));
         register(Material.FLOWING_LAVA, MaterialKey.from(11));
 
-        register(Material.SAND, MaterialKey.from(12));
-        register(Material.RED_SAND, MaterialKey.from(12, 1));
-        register(Material.GRAVEL, MaterialKey.from(13));
-
         register(Material.GOLD_ORE, MaterialKey.from(14));
         register(Material.IRON_ORE, MaterialKey.from(15));
         register(Material.COAL_ORE, MaterialKey.from(16));
@@ -79,8 +75,6 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.SPONGE, MaterialKey.from(19));
         register(Material.WET_SPONGE, MaterialKey.from(19, 1));
 
-        register(Material.GLASS, MaterialKey.from(20));
-
         register(Material.LAPIS_LAZULI_ORE, MaterialKey.from(21));
 //        register(Material.LAPIS_BLOCK, MaterialKey.from(22));
         register(Material.DISPENSER, MaterialKey.from(23));
@@ -97,6 +91,111 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.STONE_BUTTON, MaterialKey.from(77));
 
         register(Material.STONE_LEVER, MaterialKey.from(69));
+
+
+        //register glass 1.8.9
+        register(Material.GLASS, MaterialKey.from(20));
+        register(Material.WHITE_STAINED_GLASS, MaterialKey.from(95));
+        register(Material.ORANGE_STAINED_GLASS, MaterialKey.from(95, 1));
+        register(Material.MAGENTA_STAINED_GLASS, MaterialKey.from(95, 2));
+        register(Material.LIGHT_BLUE_STAINED_GLASS, MaterialKey.from(95, 3));
+        register(Material.YELLOW_STAINED_GLASS, MaterialKey.from(95, 4));
+        register(Material.LIME_STAINED_GLASS, MaterialKey.from(95, 5));
+        register(Material.PINK_STAINED_GLASS, MaterialKey.from(95, 6));
+        register(Material.GRAY_STAINED_GLASS, MaterialKey.from(95, 7));
+        register(Material.LIGHT_GRAY_STAINED_GLASS, MaterialKey.from(95, 8));
+        register(Material.CYAN_STAINED_GLASS, MaterialKey.from(95, 9));
+        register(Material.PURPLE_STAINED_GLASS, MaterialKey.from(95, 10));
+        register(Material.BLUE_STAINED_GLASS, MaterialKey.from(95, 11));
+        register(Material.BROWN_STAINED_GLASS, MaterialKey.from(95, 12));
+        register(Material.GREEN_STAINED_GLASS, MaterialKey.from(95, 13));
+        register(Material.RED_STAINED_GLASS, MaterialKey.from(95, 14));
+        register(Material.BLACK_STAINED_GLASS, MaterialKey.from(95, 15));
+
+        //register glass pane 1.8.9
+        register(Material.GLASS_PANE, MaterialKey.from(102));
+        register(Material.WHITE_STAINED_GLASS_PANE, MaterialKey.from(160));
+        register(Material.ORANGE_STAINED_GLASS_PANE, MaterialKey.from(160, 1));
+        register(Material.MAGENTA_STAINED_GLASS_PANE, MaterialKey.from(160, 2));
+        register(Material.LIGHT_BLUE_STAINED_GLASS_PANE, MaterialKey.from(160, 3));
+        register(Material.YELLOW_STAINED_GLASS_PANE, MaterialKey.from(160, 4));
+        register(Material.LIME_STAINED_GLASS_PANE, MaterialKey.from(160, 5));
+        register(Material.PINK_STAINED_GLASS_PANE, MaterialKey.from(160, 6));
+        register(Material.GRAY_STAINED_GLASS_PANE, MaterialKey.from(160, 7));
+        register(Material.LIGHT_GRAY_STAINED_GLASS_PANE, MaterialKey.from(160, 8));
+        register(Material.CYAN_STAINED_GLASS_PANE, MaterialKey.from(160, 9));
+        register(Material.PURPLE_STAINED_GLASS_PANE, MaterialKey.from(160, 10));
+        register(Material.BLUE_STAINED_GLASS_PANE, MaterialKey.from(160, 11));
+        register(Material.BROWN_STAINED_GLASS_PANE, MaterialKey.from(160, 12));
+        register(Material.GREEN_STAINED_GLASS_PANE, MaterialKey.from(160, 13));
+        register(Material.RED_STAINED_GLASS_PANE, MaterialKey.from(160, 14));
+        register(Material.BLACK_STAINED_GLASS_PANE, MaterialKey.from(160, 15));
+
+        //register wool
+        register(Material.WHITE_WOOL, MaterialKey.from(35));
+        register(Material.ORANGE_WOOL, MaterialKey.from(35, 1));
+        register(Material.MAGENTA_WOOL, MaterialKey.from(35, 2));
+        register(Material.LIGHT_BLUE_WOOL, MaterialKey.from(35, 3));
+        register(Material.YELLOW_WOOL, MaterialKey.from(35, 4));
+        register(Material.LIME_WOOL, MaterialKey.from(35, 5));
+        register(Material.PINK_WOOL, MaterialKey.from(35, 6));
+        register(Material.GRAY_WOOL, MaterialKey.from(35, 7));
+        register(Material.LIGHT_GRAY_WOOL, MaterialKey.from(35, 8));
+        register(Material.CYAN_WOOL, MaterialKey.from(35, 9));
+        register(Material.PURPLE_WOOL, MaterialKey.from(35, 10));
+        register(Material.BLUE_WOOL, MaterialKey.from(35, 11));
+        register(Material.BROWN_WOOL, MaterialKey.from(35, 12));
+        register(Material.GREEN_WOOL, MaterialKey.from(35, 13));
+        register(Material.RED_WOOL, MaterialKey.from(35, 14));
+        register(Material.BLACK_WOOL, MaterialKey.from(35, 15));
+
+        //register clay and terracotta
+        register(Material.TERRACOTTA, MaterialKey.from(82));
+        register(Material.WHITE_TERRACOTTA, MaterialKey.from(159));
+        register(Material.ORANGE_TERRACOTTA, MaterialKey.from(159, 1));
+        register(Material.MAGENTA_TERRACOTTA, MaterialKey.from(159, 2));
+        register(Material.LIGHT_BLUE_TERRACOTTA, MaterialKey.from(159, 3));
+        register(Material.YELLOW_TERRACOTTA, MaterialKey.from(159, 4));
+        register(Material.LIME_TERRACOTTA, MaterialKey.from(159, 5));
+        register(Material.PINK_TERRACOTTA, MaterialKey.from(159, 6));
+        register(Material.GRAY_TERRACOTTA, MaterialKey.from(159, 7));
+        register(Material.LIGHT_GRAY_TERRACOTTA, MaterialKey.from(159, 8));
+        register(Material.CYAN_TERRACOTTA, MaterialKey.from(159, 9));
+        register(Material.PURPLE_TERRACOTTA, MaterialKey.from(159, 10));
+        register(Material.BLUE_TERRACOTTA, MaterialKey.from(159, 11));
+        register(Material.BROWN_TERRACOTTA, MaterialKey.from(159, 12));
+        register(Material.GREEN_TERRACOTTA, MaterialKey.from(159, 13));
+        register(Material.RED_TERRACOTTA, MaterialKey.from(159, 14));
+        register(Material.BLACK_TERRACOTTA, MaterialKey.from(159, 15));
+
+        //register sand & sandstone
+        register(Material.SAND, MaterialKey.from(12));
+        register(Material.RED_SAND, MaterialKey.from(12, 1));
+        register(Material.GRAVEL, MaterialKey.from(13));
+        register(Material.SANDSTONE, MaterialKey.from(24));
+        register(Material.CHISELED_SANDSTONE, MaterialKey.from(24, 1));
+        register(Material.SMOOTH_SANDSTONE, MaterialKey.from(24, 2));
+        register(Material.RED_SANDSTONE, MaterialKey.from(179));
+        register(Material.CHISELED_RED_SANDSTONE, MaterialKey.from(179, 1));
+        register(Material.SMOOTH_RED_SANDSTONE, MaterialKey.from(179, 2));
+
+        //register all ore
+        register(Material.COAL_ORE, MaterialKey.from(16));
+        register(Material.IRON_ORE, MaterialKey.from(15));
+        register(Material.GOLD_ORE, MaterialKey.from(14));
+//        register(Material.LAPIS_ORE, MaterialKey.from(21));
+        register(Material.REDSTONE_ORE, MaterialKey.from(73));
+        register(Material.DIAMOND_ORE, MaterialKey.from(56));
+        register(Material.EMERALD_ORE, MaterialKey.from(129));
+        register(Material.NETHER_QUARTZ_ORE, MaterialKey.from(153));
+//        register(Material.NETHER_GOLD_ORE, MaterialKey.from(14, 1));
+        register(Material.ANCIENT_DEBRIS, MaterialKey.from(16, 1));
+
+        //register all block ore
+//        register(Material.COAL, MaterialKey.from(173));
+
+        //register all insak
+
 
 
 
@@ -214,6 +313,46 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.DARK_OAK_WOOD_STAIRS, MaterialKey.from(164));
         register(Material.RED_SANDSTONE_STAIRS, MaterialKey.from(180));
         register(Material.PURPUR_STAIRS, MaterialKey.from(203));
+
+
+        //register all slabs 1.8
+        register(Material.STONE_SLAB, MaterialKey.from(44));
+        register(Material.SANDSTONE_SLAB, MaterialKey.from(44, 1));
+        register(Material.COBBLESTONE_SLAB, MaterialKey.from(44, 3));
+        register(Material.BRICK_SLAB, MaterialKey.from(44, 4));
+        register(Material.STONE_BRICK_SLAB, MaterialKey.from(44, 5));
+        register(Material.NETHER_BRICK_SLAB, MaterialKey.from(44, 6));
+        register(Material.QUARTZ_SLAB, MaterialKey.from(44, 7));
+
+        register(Material.OAK_SLAB, MaterialKey.from(126));
+        register(Material.SPRUCE_SLAB, MaterialKey.from(126, 1));
+        register(Material.BIRCH_SLAB, MaterialKey.from(126, 2));
+        register(Material.JUNGLE_SLAB, MaterialKey.from(126, 3));
+        register(Material.ACACIA_SLAB, MaterialKey.from(126, 4));
+        register(Material.DARK_OAK_SLAB, MaterialKey.from(126, 5));
+
+        register(Material.RED_SANDSTONE_SLAB, MaterialKey.from(182));
+
+
+        //register all double slabs 1.8
+        register(Material.DOUBLE_STONE_SLAB, MaterialKey.from(43));
+        register(Material.DOUBLE_SANDSTONE_SLAB, MaterialKey.from(43, 1));
+        register(Material.DOUBLE_COBBLESTONE_SLAB, MaterialKey.from(43, 3));
+        register(Material.DOUBLE_BRICK_SLAB, MaterialKey.from(43, 4));
+        register(Material.DOUBLE_STONE_BRICK_SLAB, MaterialKey.from(43, 5));
+        register(Material.DOUBLE_NETHER_BRICK_SLAB, MaterialKey.from(43, 6));
+        register(Material.DOUBLE_QUARTZ_SLAB, MaterialKey.from(43, 7));
+
+        register(Material.DOUBLE_OAK_SLAB, MaterialKey.from(125));
+        register(Material.DOUBLE_SPRUCE_SLAB, MaterialKey.from(125, 1));
+        register(Material.DOUBLE_BIRCH_SLAB, MaterialKey.from(125, 2));
+        register(Material.DOUBLE_JUNGLE_SLAB, MaterialKey.from(125, 3));
+        register(Material.DOUBLE_ACACIA_SLAB, MaterialKey.from(125, 4));
+        register(Material.DOUBLE_DARK_OAK_SLAB, MaterialKey.from(125, 5));
+
+        register(Material.DOUBLE_RED_SANDSTONE_SLAB, MaterialKey.from(181));
+
+
 
         /*
         register(Material.CHEST, MaterialKey.from(54));
