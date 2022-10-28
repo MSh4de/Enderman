@@ -82,10 +82,15 @@ public class EndermanProtocol extends Protocol {
         this.blockTransformerRepository.registerDefaultTransformer(new CommonBlockTransformer());
         this.blockTransformerRepository.registerMaterialWrapper(endermanMaterialKeyWrapper);
 
+
+
         this.blockTransformerRepository.register(MaterialCategory.LOG, new LogBlockTransFormer());
         this.blockTransformerRepository.register(MaterialCategory.STAIRS, new StairsBlockTransformer());
         this.blockTransformerRepository.register(MaterialCategory.BUTTON, new ButtonBlockTransformer());
         this.blockTransformerRepository.register(MaterialCategory.LEVER, new LeverBlockTransformer());
+        this.blockTransformerRepository.register(MaterialCategory.SLAB, new SlabBlockTransformer());
+        this.blockTransformerRepository.register(MaterialCategory.LEAVES, new LeavesBlockTransformer());
+        this.blockTransformerRepository.register(MaterialCategory.DOUBLE_SLAB, new DoubleSlabBlockTransformer());
 
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x00, PacketOutDisconnect.class);
         this.getProtocolRegistry().registerOut(ProtocolStatus.LOGIN, 0x01, PacketOutEncryption.class);
