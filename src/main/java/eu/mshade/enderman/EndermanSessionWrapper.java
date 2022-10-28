@@ -23,6 +23,7 @@ import eu.mshade.enderframe.scoreboard.Scoreboard;
 import eu.mshade.enderframe.scoreboard.ScoreboardMode;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
+import eu.mshade.enderframe.scoreboard.team.Team;
 import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
@@ -36,7 +37,9 @@ import eu.mshade.enderman.packet.play.inventory.PacketOutCloseInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutInventoryItems;
 import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutDisplayScoreboard;
 import eu.mshade.enderman.packet.play.scoreboard.PacketOutScoreboardObjective;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutTeams;
 import eu.mshade.enderman.packet.play.scoreboard.PacketOutUpdateScoreboard;
 import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 import eu.mshade.enderman.wrapper.EndermanMaterialWrapper;
@@ -386,6 +389,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendUpdateScoreboard(ScoreboardObjective<?> scoreboardObjective, ScoreboardObjectiveAction scoreboardObjectiveAction) {
         sendPacket(new PacketOutUpdateScoreboard(scoreboardObjective, scoreboardObjectiveAction));
+    }
+
+    @Override
+    public void sendTeams(Team team) {
+        sendPacket(new PacketOutTeams(team));
     }
 
     @Override
