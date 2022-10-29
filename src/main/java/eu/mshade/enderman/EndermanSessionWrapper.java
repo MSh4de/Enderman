@@ -10,7 +10,6 @@ import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
@@ -52,6 +51,10 @@ import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
 import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
 import eu.mshade.enderman.packet.play.PacketOutPlayerPositionAndLook;
 import eu.mshade.enderman.wrapper.EndermanContextWrapper;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutDisplayScoreboard;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutScoreboardObjective;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutTeams;
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutUpdateScoreboard;
 import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
@@ -529,7 +532,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendTeams(Team team) {
-
+        sendPacket(new PacketOutTeams(team));
     }
 
     @Override

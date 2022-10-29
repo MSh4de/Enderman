@@ -21,6 +21,10 @@ import eu.mshade.enderman.packet.play.move.PacketInPlayerGround
 import eu.mshade.enderman.packet.play.move.PacketInPlayerLook
 import eu.mshade.enderman.packet.play.move.PacketInPlayerPosition
 import eu.mshade.enderman.packet.play.move.PacketInPlayerPositionAndLook
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutDisplayScoreboard
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutScoreboardObjective
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutTeams
+import eu.mshade.enderman.packet.play.scoreboard.PacketOutUpdateScoreboard
 import eu.mshade.enderman.wrapper.*
 import eu.mshade.mwork.event.EventListener
 import io.netty.buffer.ByteBuf
@@ -159,6 +163,7 @@ class EndermanProtocol : Protocol() {
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3D, PacketOutDisplayScoreboard::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3B, PacketOutScoreboardObjective::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3C, PacketOutUpdateScoreboard::class.java)
+        getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x3E, PacketOutTeams::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x29, PacketOutSoundEffect::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder::class.java)
