@@ -42,7 +42,7 @@ public class PacketInPlayerPositionAndLook extends PacketInPlayerLook {
                 ", y=" + y +
                 ", z=" + z +
                 ", yaw="+ this.getYaw()+
-                ", pitch="+ this.getPith()+
+                ", pitch="+ this.getPitch()+
                 ", onGround="+this.isOnGround() +
                 '}';
     }

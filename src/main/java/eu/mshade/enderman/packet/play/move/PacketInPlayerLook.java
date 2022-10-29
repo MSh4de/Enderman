@@ -25,7 +25,7 @@ public class PacketInPlayerLook extends PacketInPlayerGround {
         return yaw;
     }
 
-    public float getPith() {
+    public float getPitch() {
         return pith;
     }
 
