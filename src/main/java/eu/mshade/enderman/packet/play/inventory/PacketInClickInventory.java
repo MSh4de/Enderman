@@ -5,15 +5,18 @@ import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.protocol.PacketIn;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.SessionWrapper;
 
 public class PacketInClickInventory implements PacketIn {
 
     private int id, slot, button, mode;
     private short transactionId;
     private ItemStack itemStack;
+    private SessionWrapper sessionWrapper;
 
     @Override
-    public void deserialize(ProtocolBuffer protocolBuffer) {
+    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
+        this.sessionWrapper = sessionWrapper;
         id = protocolBuffer.readByte();
         slot = protocolBuffer.readShort();
 
@@ -47,6 +50,11 @@ public class PacketInClickInventory implements PacketIn {
 
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    @Override
+    public SessionWrapper getSessionWrapper() {
+        return sessionWrapper;
     }
 
     @Override

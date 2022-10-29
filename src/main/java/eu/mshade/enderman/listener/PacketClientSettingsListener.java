@@ -9,10 +9,9 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketClientSettingsListener implements EventListener<PacketInClientSettings> {
 
     @Override
-    public void onEvent(PacketInClientSettings event, ParameterContainer eventContainer) {
+    public void onEvent(PacketInClientSettings event) {
         EnderFrame.get().getPacketEventBus().publishAsync(
                 new PacketClientSettingsEvent(event.getLocale(), event.getViewDistance(), event.getChatMode(),
-                        event.isChatColors(), event.getSkinParts()),
-                eventContainer);
+                        event.isChatColors(), event.getSkinParts()));
     }
 }

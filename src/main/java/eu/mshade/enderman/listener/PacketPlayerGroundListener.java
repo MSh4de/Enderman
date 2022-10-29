@@ -8,8 +8,8 @@ import eu.mshade.mwork.event.EventListener;
 
 public class PacketPlayerGroundListener implements EventListener<PacketInPlayerGround> {
     @Override
-    public void onEvent(PacketInPlayerGround event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new DefaultPacketGroundEvent(event.isOnGround()), eventContainer);
+    public void onEvent(PacketInPlayerGround event) {
+        EnderFrame.get().getPacketEventBus().publishAsync(new DefaultPacketGroundEvent(event.getSessionWrapper().getPlayer(), event.isOnGround()));
     }
 
 }

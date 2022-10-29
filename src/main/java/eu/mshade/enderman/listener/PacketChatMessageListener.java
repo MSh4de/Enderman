@@ -9,8 +9,8 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketChatMessageListener implements EventListener<PacketInChatMessage> {
 
     @Override
-    public void onEvent(PacketInChatMessage event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new PacketChatMessageEvent(event.getMessage()), eventContainer);
+    public void onEvent(PacketInChatMessage event) {
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketChatMessageEvent(event.getSessionWrapper().getPlayer(), event.getMessage()));
     }
 
 }

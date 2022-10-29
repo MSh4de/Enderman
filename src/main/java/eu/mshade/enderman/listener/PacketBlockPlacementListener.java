@@ -10,7 +10,7 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketBlockPlacementListener implements EventListener<PacketInBlockPlacement> {
 
     @Override
-    public void onEvent(PacketInBlockPlacement event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketBlockPlaceEvent(event.getBlockPosition(), event.getCursorPosition(), event.getBlockFace(), event.getItemStack()), eventContainer);
+    public void onEvent(PacketInBlockPlacement event) {
+        EnderFrame.get().getPacketEventBus().publish(new PacketBlockPlaceEvent(event.getSessionWrapper().getPlayer(), event.getBlockPosition(), event.getCursorPosition(), event.getBlockFace(), event.getItemStack()));
     }
 }

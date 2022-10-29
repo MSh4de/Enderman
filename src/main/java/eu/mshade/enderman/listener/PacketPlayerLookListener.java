@@ -9,11 +9,10 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketPlayerLookListener implements EventListener<PacketInPlayerLook> {
 
     @Override
-    public void onEvent(PacketInPlayerLook event, ParameterContainer eventContainer) {
+    public void onEvent(PacketInPlayerLook event) {
         EnderFrame.get().getPacketEventBus().publishAsync(
-                new DefaultPacketLookEvent(
-                        event.getYaw(), event.getPith(), event.isOnGround()),
-                eventContainer);
+                new DefaultPacketLookEvent(event.getSessionWrapper().getPlayer(),
+                        event.getYaw(), event.getPith(), event.isOnGround()));
     }
 
 }

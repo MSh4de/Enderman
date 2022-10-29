@@ -9,7 +9,7 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketKeepAliveListener implements EventListener<PacketInKeepAlive> {
 
     @Override
-    public void onEvent(PacketInKeepAlive event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new PacketKeepAliveEvent(event.getThreshold()), eventContainer);
+    public void onEvent(PacketInKeepAlive event) {
+        EnderFrame.get().getPacketEventBus().publishAsync(new PacketKeepAliveEvent(event.getSessionWrapper(), event.getThreshold()));
     }
 }

@@ -3,21 +3,23 @@ package eu.mshade.enderman.packet.play;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.protocol.PacketIn;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderframe.world.Vector;
 import eu.mshade.enderframe.world.block.BlockFace;
 
 public class PacketInBlockPlacement implements PacketIn {
 
 
-
     private Vector blockPosition;
     private ItemStack itemStack;
     private BlockFace blockFace;
     private Vector cursorPosition;
+    private SessionWrapper sessionWrapper;
 
 
     @Override
-    public void deserialize(ProtocolBuffer protocolBuffer) {
+    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
+        this.sessionWrapper = sessionWrapper;
         this.blockPosition = protocolBuffer.readBlockPosition();
 
         blockFace = BlockFace.fromId(protocolBuffer.readByte());
@@ -51,6 +53,11 @@ public class PacketInBlockPlacement implements PacketIn {
 
     public Vector getCursorPosition() {
         return cursorPosition;
+    }
+
+    @Override
+    public SessionWrapper getSessionWrapper() {
+        return sessionWrapper;
     }
 
     @Override

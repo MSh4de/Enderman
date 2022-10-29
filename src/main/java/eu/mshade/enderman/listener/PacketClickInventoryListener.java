@@ -6,6 +6,7 @@ import eu.mshade.enderframe.inventory.*;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.packetevent.PacketClickInventoryEvent;
 import eu.mshade.enderframe.protocol.ProtocolPipeline;
+import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderman.packet.play.inventory.PacketInClickInventory;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.mwork.ParameterContainer;
@@ -22,9 +23,9 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
     }
 
     @Override
-    public void onEvent(PacketInClickInventory event, ParameterContainer eventContainer) {
-        Channel channel = eventContainer.getContainer(Channel.class);
-        Player player = ProtocolPipeline.get().getPlayer(channel);
+    public void onEvent(PacketInClickInventory event) {
+        SessionWrapper sessionWrapper = event.getSessionWrapper();
+        Player player = sessionWrapper.getPlayer();
 
         ClickType clickType = ClickType.UNKNOWN;
         int button = event.getButton();
@@ -97,7 +98,7 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
         }
 
 
-        EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(clickedInventory, clickType, itemStack, event.getId(), slot, key), eventContainer);
+        EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.getId(), slot, key));
 
     }
 }

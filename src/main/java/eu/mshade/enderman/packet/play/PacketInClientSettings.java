@@ -3,6 +3,7 @@ package eu.mshade.enderman.packet.play;
 import eu.mshade.enderframe.mojang.SkinPart;
 import eu.mshade.enderframe.protocol.PacketIn;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.SessionWrapper;
 
 public class PacketInClientSettings implements PacketIn {
 
@@ -11,9 +12,11 @@ public class PacketInClientSettings implements PacketIn {
     private byte chatMode;
     private boolean chatColors;
     private SkinPart skinPart;
+    private SessionWrapper sessionWrapper;
 
     @Override
-    public void deserialize(ProtocolBuffer protocolBuffer) {
+    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
+        this.sessionWrapper = sessionWrapper;
         this.locale = protocolBuffer.readString();
         this.viewDistance = protocolBuffer.readByte();
         this.chatMode = protocolBuffer.readByte();
@@ -39,5 +42,10 @@ public class PacketInClientSettings implements PacketIn {
 
     public SkinPart getSkinParts() {
         return skinPart;
+    }
+
+    @Override
+    public SessionWrapper getSessionWrapper() {
+        return sessionWrapper;
     }
 }

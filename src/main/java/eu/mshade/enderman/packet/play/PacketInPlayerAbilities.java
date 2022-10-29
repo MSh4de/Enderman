@@ -2,6 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.PacketIn;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.SessionWrapper;
 
 public class PacketInPlayerAbilities implements PacketIn {
 
@@ -11,9 +12,11 @@ public class PacketInPlayerAbilities implements PacketIn {
     private boolean instantBreak;
     private float flyingSpeed;
     private float walkSpeed;
+    private SessionWrapper sessionWrapper;
 
     @Override
-    public void deserialize(ProtocolBuffer protocolBuffer) {
+    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
+        this.sessionWrapper = sessionWrapper;
         byte b = protocolBuffer.readByte();
 
         this.invulnerable = b == (b | 0x08);
@@ -48,6 +51,11 @@ public class PacketInPlayerAbilities implements PacketIn {
 
     public float getWalkSpeed() {
         return walkSpeed;
+    }
+
+    @Override
+    public SessionWrapper getSessionWrapper() {
+        return sessionWrapper;
     }
 
     @Override

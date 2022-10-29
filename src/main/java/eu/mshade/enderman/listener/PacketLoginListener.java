@@ -9,8 +9,8 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketLoginListener implements EventListener<PacketInLogin> {
 
     @Override
-    public void onEvent(PacketInLogin event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publish(new PacketLoginEvent(event.getName()), eventContainer);
+    public void onEvent(PacketInLogin event) {
+        EnderFrame.get().getPacketEventBus().publish(new PacketLoginEvent(event.getSessionWrapper(), event.getName()));
     }
 
 }

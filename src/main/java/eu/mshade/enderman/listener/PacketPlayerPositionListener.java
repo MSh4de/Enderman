@@ -9,8 +9,8 @@ import eu.mshade.mwork.event.EventListener;
 public class PacketPlayerPositionListener implements EventListener<PacketInPlayerPosition> {
 
     @Override
-    public void onEvent(PacketInPlayerPosition event, ParameterContainer eventContainer) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new DefaultPacketMoveEvent(event.getX(), event.getY(), event.getZ(), event.isOnGround()), eventContainer);
+    public void onEvent(PacketInPlayerPosition event) {
+        EnderFrame.get().getPacketEventBus().publishAsync(new DefaultPacketMoveEvent(event.getSessionWrapper().getPlayer(), event.getX(), event.getY(), event.getZ(), event.isOnGround()));
     }
 
 }
