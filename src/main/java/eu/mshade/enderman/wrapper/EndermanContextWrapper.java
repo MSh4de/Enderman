@@ -12,5 +12,6 @@ public class EndermanContextWrapper {
     public static ContextWrapperKey EQUIPMENT_SLOT = ContextWrapperKey.Companion.from("EQUIPMENT_SLOT");
     public static ContextWrapperKey ENTITY_TYPE = ContextWrapperKey.Companion.from("ENTITY_TYPE");
     public static ContextWrapperKey NAMESPACED_KEY = ContextWrapperKey.Companion.from("NAMESPACED_KEY");
+    public static ContextWrapperKey PARTICLE_TYPE = ContextWrapperKey.Companion.from("PARTICLE_TYPE");
 
 }

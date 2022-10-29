@@ -40,6 +40,7 @@ class EndermanProtocol : Protocol() {
         wrapperRepository.register(EndermanContextWrapper.EQUIPMENT_SLOT, EndermanEquipmentSlotWrapper())
         wrapperRepository.register(EndermanContextWrapper.ENTITY_TYPE, EndermanEntityTypeWrapper())
         wrapperRepository.register(EndermanContextWrapper.NAMESPACED_KEY, EndermanNamespacedKeyWrapper())
+        wrapperRepository.register(EndermanContextWrapper.PARTICLE_TYPE, EndermanParticleWrapper())
 
         entityMetadataManager = EndermanEntityMetadataManager()
         itemStackManager = EndermanItemStackManager(getWrapperRepository())
@@ -162,6 +163,7 @@ class EndermanProtocol : Protocol() {
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x45, PacketOutTitle::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x33, PacketOutUpdateSign::class.java)
+        getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2A, PacketOutParticle::class.java)
     }
 
     override fun getProtocolBuffer(byteBuf: ByteBuf): ProtocolBuffer {

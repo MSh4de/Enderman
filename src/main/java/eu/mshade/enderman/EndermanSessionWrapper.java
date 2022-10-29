@@ -17,6 +17,8 @@ import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.metadata.world.WorldMetadataType;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.mojang.chat.TextPosition;
+import eu.mshade.enderframe.particle.Particle;
+import eu.mshade.enderframe.particle.ParticleKey;
 import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.ProtocolStatus;
 import eu.mshade.enderframe.protocol.SessionWrapper;
@@ -25,6 +27,7 @@ import eu.mshade.enderframe.scoreboard.Scoreboard;
 import eu.mshade.enderframe.scoreboard.ScoreboardMode;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
+import eu.mshade.enderframe.scoreboard.team.Team;
 import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
@@ -65,6 +68,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
     private Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
     private Wrapper<InventoryKey, String> inventoryKeyWrapper;
     private Wrapper<InventoryKey, Integer> inventorySizeWrapper;
+    private Wrapper<ParticleKey, Integer> particleKeyWrapper;
     private BlockTransformerRepository blockTransformerRepository;
     private UniqueId uniqueId = new UniqueId();
 
@@ -75,6 +79,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
         this.inventoryKeyWrapper = (Wrapper<InventoryKey, String>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY);
         this.inventorySizeWrapper = (Wrapper<InventoryKey, Integer>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE);
         this.entityTypeWrapper = (Wrapper<EntityType, Integer>) wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE);
+        this.particleKeyWrapper = (Wrapper<ParticleKey, Integer>) wrapperRepository.get(EndermanContextWrapper.PARTICLE_TYPE);
     }
 
     @Override
@@ -523,6 +528,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
     }
 
     @Override
+    public void sendTeams(Team team) {
+
+    }
+
+    @Override
     public void sendSoundEffect(SoundEffect soundEffect) {
         sendPacket(new PacketOutSoundEffect(soundEffect));
     }
@@ -535,6 +545,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendWorldBorder(WorldBorderAction worldBorderAction, WorldBorder worldBorder) {
         sendPacket(new PacketOutWorldBorder(worldBorderAction, worldBorder));
+    }
+
+    @Override
+    public void sendParticle(Particle particle) {
+        sendPacket(new PacketOutParticle(materialKeyWrapper, particleKeyWrapper, particle));
     }
 
     private boolean hasOverflow(int value) {
