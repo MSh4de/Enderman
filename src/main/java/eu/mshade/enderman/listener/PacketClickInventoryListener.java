@@ -5,16 +5,13 @@ import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.*;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.packetevent.PacketClickInventoryEvent;
-import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.SessionWrapper;
-import eu.mshade.enderman.packet.play.inventory.PacketInClickInventory;
+import eu.mshade.enderman.packet.play.inventory.MinecraftPacketInClickInventory;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
-import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
-import io.netty.channel.Channel;
 
 
-public class PacketClickInventoryListener implements EventListener<PacketInClickInventory> {
+public class PacketClickInventoryListener implements EventListener<MinecraftPacketInClickInventory> {
 
     protected EndermanInventorySizeWrapper endermanInventorySizeWrapper;
 
@@ -23,7 +20,7 @@ public class PacketClickInventoryListener implements EventListener<PacketInClick
     }
 
     @Override
-    public void onEvent(PacketInClickInventory event) {
+    public void onEvent(MinecraftPacketInClickInventory event) {
         SessionWrapper sessionWrapper = event.getSessionWrapper();
         Player player = sessionWrapper.getPlayer();
 
