@@ -6,9 +6,9 @@ import eu.mshade.enderframe.item.metadata.LoreItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
 import eu.mshade.mwork.binarytag.BinaryTagType;
+import eu.mshade.mwork.binarytag.StringBinaryTag;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
-import eu.mshade.mwork.binarytag.entity.StringBinaryTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class LoreItemStackMetadataBuffer implements ItemStackMetadataBuffer {
         if (!display.containsKey("Lore")) return;
         ListBinaryTag lore = (ListBinaryTag) display.getBinaryTag("Lore");
         LoreItemStackMetadata loreItemStackMetadata = new LoreItemStackMetadata(new ArrayList<>());
-        lore.forEach(binaryTag -> loreItemStackMetadata.getMetadataValue().add((String) binaryTag.getValue()));
+        lore.getValue().forEach(binaryTag -> loreItemStackMetadata.getMetadataValue().add((String) binaryTag.getValue()));
         metadataKeyValueBucket.setMetadataKeyValue(loreItemStackMetadata);
     }
 }

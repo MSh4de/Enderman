@@ -10,8 +10,6 @@ import eu.mshade.enderframe.metadata.attribute.AttributeKey;
 import eu.mshade.enderframe.metadata.attribute.AttributeModifier;
 import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
 import eu.mshade.enderframe.wrapper.Wrapper;
-import eu.mshade.enderman.wrapper.EndermanAttributeKeyWrapper;
-import eu.mshade.enderman.wrapper.EndermanEquipmentSlotWrapper;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag;

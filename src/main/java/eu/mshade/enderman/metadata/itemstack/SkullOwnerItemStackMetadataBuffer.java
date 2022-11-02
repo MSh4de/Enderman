@@ -48,11 +48,11 @@ public class SkullOwnerItemStackMetadataBuffer implements ItemStackMetadataBuffe
         CompoundBinaryTag skullOwner = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("SkullOwner");
         if (!skullOwner.containsKey("Properties")) return;
         CompoundBinaryTag properties = (CompoundBinaryTag) skullOwner.getBinaryTag("Properties");
-        if (properties.containsKey("textures")) return;
+        if (!properties.containsKey("textures")) return;
         ListBinaryTag textures = (ListBinaryTag) properties.getBinaryTag("textures");
 
         GameProfile gameProfile = new GameProfile(UUID.fromString(skullOwner.getString("id")), skullOwner.getString("Name"));
-        textures.forEach(binaryTag ->{
+        textures.getValue().forEach(binaryTag ->{
             CompoundBinaryTag propertyBinaryTag = (CompoundBinaryTag) binaryTag;
             String signature = propertyBinaryTag.getString("Signature");
             String value = propertyBinaryTag.getString("Value");
