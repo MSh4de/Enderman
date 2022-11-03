@@ -4,13 +4,12 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
-import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderframe.wrapper.WrapperRepository;
-import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
+import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
@@ -81,8 +80,8 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
     }
 
     @Override
-    public void writeEntityMetadata(Entity entity, EntityMetadataKey... entityMetadataKeys) {
-        for (EntityMetadataKey entityMetadataKey : entityMetadataKeys) {
+    public void writeEntityMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
+        for (MetadataKey entityMetadataKey : entityMetadataKeys) {
             EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
             MetadataWrapper<Entity> entityMetadataBuffer = entityMetadataBucket.getEntityMetadataBuffer(entityMetadataKey);
             Metadata<?> metadata = entityMetadataBuffer.wrap(entity);

@@ -3,6 +3,7 @@ package eu.mshade.enderman;
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.UniqueId;
 import eu.mshade.enderframe.entity.Entity;
+import eu.mshade.enderframe.entity.EntityCategory;
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.ChestInventory;
@@ -11,8 +12,8 @@ import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
+import eu.mshade.enderframe.metadata.MetadataKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.metadata.world.WorldMetadataType;
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.mojang.chat.TextPosition;
@@ -280,8 +281,18 @@ public class EndermanSessionWrapper extends SessionWrapper {
                 this.sendPacket(new PacketOutSpawnPlayer((Player)entity));
             } else {
                 Integer id = entityTypeWrapper.wrap(entity.getEntityType());
-                if (id == null) continue;
-                this.sendPacket(new PacketOutSpawnMob(id, entity));
+                if (id == null)
+                    continue;
+
+                EntityCategory category = getProtocol().getEntityMapper().getCategory(entity.getEntityType());
+                if (category == null)
+                    continue;
+
+                if (category == EntityCategory.ENTITY) {
+                    this.sendPacket(new PacketOutSpawnMob(id, entity));
+                } else {
+                    this.sendPacket(new PacketOutSpawnObject(id, entity));
+                }
             }
             this.sendTeleport(entity);
 
@@ -294,7 +305,7 @@ public class EndermanSessionWrapper extends SessionWrapper {
     }
 
     @Override
-    public void sendMetadata(Entity entity, EntityMetadataKey... entityMetadataKeys) {
+    public void sendMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
         sendPacket(new PacketOutEntityMetadata(entity, entityMetadataKeys));
     }
 
