@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutKeepAlive implements MinecraftPacketOut {
 
@@ -12,7 +12,7 @@ public class MinecraftPacketOutKeepAlive implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(threshold);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(threshold);
     }
 }

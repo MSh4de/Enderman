@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play.scoreboard;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.scoreboard.team.Team;
 
 public class MinecraftPacketOutTeams implements MinecraftPacketOut {
@@ -13,33 +13,33 @@ public class MinecraftPacketOutTeams implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeString(team.getTeamName());
-        protocolBuffer.writeByte(team.getTeamMode().getMode());
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeString(team.getTeamName());
+        minecraftByteBuf.writeByte(team.getTeamMode().getMode());
 
         switch (team.getTeamMode()) {
             case CREATE_TEAM -> {
-                protocolBuffer.writeString(team.getTeamDisplayName());
-                protocolBuffer.writeString(team.getTeamPrefix());
-                protocolBuffer.writeString(team.getTeamSuffix());
-                protocolBuffer.writeByte(team.getTeamFriendlyFire().getFriendlyFire());
-                protocolBuffer.writeString(team.getTeamNameTagVisibility().getNameTagVisibility());
-                protocolBuffer.writeByte(team.getTeamColor().ordinal());
-                protocolBuffer.writeVarInt(team.getPlayerCount());
+                minecraftByteBuf.writeString(team.getTeamDisplayName());
+                minecraftByteBuf.writeString(team.getTeamPrefix());
+                minecraftByteBuf.writeString(team.getTeamSuffix());
+                minecraftByteBuf.writeByte(team.getTeamFriendlyFire().getFriendlyFire());
+                minecraftByteBuf.writeString(team.getTeamNameTagVisibility().getNameTagVisibility());
+                minecraftByteBuf.writeByte(team.getTeamColor().ordinal());
+                minecraftByteBuf.writeVarInt(team.getPlayerCount());
 
-                team.getPlayersName().forEach(protocolBuffer::writeString);
+                team.getPlayersName().forEach(minecraftByteBuf::writeString);
             }
             case UPDATE_TEAM_INFOS -> {
-                protocolBuffer.writeString(team.getTeamPrefix());
-                protocolBuffer.writeString(team.getTeamSuffix());
-                protocolBuffer.writeByte(team.getTeamFriendlyFire().getFriendlyFire());
-                protocolBuffer.writeString(team.getTeamNameTagVisibility().getNameTagVisibility());
-                protocolBuffer.writeByte(14);
+                minecraftByteBuf.writeString(team.getTeamPrefix());
+                minecraftByteBuf.writeString(team.getTeamSuffix());
+                minecraftByteBuf.writeByte(team.getTeamFriendlyFire().getFriendlyFire());
+                minecraftByteBuf.writeString(team.getTeamNameTagVisibility().getNameTagVisibility());
+                minecraftByteBuf.writeByte(14);
             }
             case ADD_PLAYER, REMOVE_PLAYER ->  {
-                protocolBuffer.writeVarInt(team.getPlayerCount());
+                minecraftByteBuf.writeVarInt(team.getPlayerCount());
 
-                team.getPlayersName().forEach(protocolBuffer::writeString);
+                team.getPlayersName().forEach(minecraftByteBuf::writeString);
             }
         }
     }

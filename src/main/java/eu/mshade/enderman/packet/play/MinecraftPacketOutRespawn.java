@@ -2,13 +2,9 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.GameMode;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.world.WorldMetadataType;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.world.Difficulty;
-import eu.mshade.enderframe.world.Dimension;
-import eu.mshade.enderframe.world.LevelType;
-import eu.mshade.enderframe.world.World;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.world.*;
 
 public class MinecraftPacketOutRespawn implements MinecraftPacketOut {
 
@@ -31,10 +27,10 @@ public class MinecraftPacketOutRespawn implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeInt(dimension.getId());
-        protocolBuffer.writeByte(difficulty.getId());
-        protocolBuffer.writeByte(gameMode.getId());
-        protocolBuffer.writeString(levelType);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeInt(dimension.getId());
+        minecraftByteBuf.writeByte(difficulty.getId());
+        minecraftByteBuf.writeByte(gameMode.getId());
+        minecraftByteBuf.writeString(levelType);
     }
 }

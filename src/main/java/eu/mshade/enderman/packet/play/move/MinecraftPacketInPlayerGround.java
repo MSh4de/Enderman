@@ -1,18 +1,18 @@
 package eu.mshade.enderman.packet.play.move;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInPlayerGround implements MinecraftPacketIn {
 
     private boolean onGround;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        this.onGround = protocolBuffer.readBoolean();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        this.onGround = minecraftByteBuf.readBoolean();
     }
 
     public boolean isOnGround() {
@@ -20,8 +20,8 @@ public class MinecraftPacketInPlayerGround implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
 

@@ -2,8 +2,8 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 import eu.mshade.enderframe.world.Vector;
 import eu.mshade.enderframe.world.block.BlockFace;
 
@@ -14,26 +14,26 @@ public class MinecraftPacketInBlockPlacement implements MinecraftPacketIn {
     private ItemStack itemStack;
     private BlockFace blockFace;
     private Vector cursorPosition;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        this.blockPosition = protocolBuffer.readBlockPosition();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        this.blockPosition = minecraftByteBuf.readBlockPosition();
 
-        blockFace = BlockFace.fromId(protocolBuffer.readByte());
+        blockFace = BlockFace.fromId(minecraftByteBuf.readByte());
 
         try {
-            this.itemStack = protocolBuffer.readItemStack();
+            this.itemStack = minecraftByteBuf.readItemStack();
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        int cursorX = protocolBuffer.readByte();
-        int cursorY = protocolBuffer.readByte();
-        int cursorZ = protocolBuffer.readByte();
+        int cursorX = minecraftByteBuf.readByte();
+        int cursorY = minecraftByteBuf.readByte();
+        int cursorZ = minecraftByteBuf.readByte();
 
         this.cursorPosition = new Vector(cursorX, cursorY, cursorZ);
 
@@ -56,8 +56,8 @@ public class MinecraftPacketInBlockPlacement implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     @Override

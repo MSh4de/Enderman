@@ -1,25 +1,25 @@
 package eu.mshade.enderman.packet.login;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInEncryption implements MinecraftPacketIn {
 
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        this.sharedSecret = protocolBuffer.readByteArray();
-        this.verifyToken = protocolBuffer.readByteArray();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        this.sharedSecret = minecraftByteBuf.readByteArray();
+        this.verifyToken = minecraftByteBuf.readByteArray();
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     public byte[] getSharedSecret() {

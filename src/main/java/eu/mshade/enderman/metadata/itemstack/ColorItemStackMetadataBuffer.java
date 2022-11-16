@@ -4,7 +4,7 @@ import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.metadata.ColorItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
+import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.Color;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 

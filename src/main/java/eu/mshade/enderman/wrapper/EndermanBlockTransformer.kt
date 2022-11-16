@@ -349,6 +349,50 @@ class DoubleSlabBlockTransformer : BlockTransformer() {
 
 }
 
+class VineBlockTransformer: BlockTransformer(){
+
+    val idFromBlockFace = mapOf(
+        BlockFace.NORTH to 1,
+        BlockFace.EAST to 2,
+        BlockFace.SOUTH to 4,
+        BlockFace.WEST to 8,
+    )
+
+    override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
+        val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
+        val multipleFace: Set<BlockFace> = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.MULTIPLE_FACE, MultipleFaceBlockMetadata::class.java)?.metadataValue ?: emptySet()
+
+        val materialKey = materialWrapper.wrap(block.getMaterialKey())
+        var data = 0
+        multipleFace.forEach{
+            data += idFromBlockFace[it]?: 0
+        }
+
+        if (data == 0) data = 1
+
+        return MaterialKey.from(materialKey!!.id, data)
+    }
+
+
+    override fun transform(materialKey: MaterialKey, materialWrapper: Wrapper<MaterialKey, MaterialKey>): Block? {
+        val metadata = materialKey.metadata
+        val multipleFace = mutableSetOf<BlockFace>()
+
+        idFromBlockFace.forEach{
+            if (metadata and it.value == it.value){
+                multipleFace.add(it.key)
+            }
+        }
+
+        val wrap = materialWrapper.reverse(MaterialKey.from(materialKey.id))
+        val block = wrap!!.toBlock()
+        val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
+        metadataKeyValueBucket.setMetadataKeyValue(MultipleFaceBlockMetadata(multipleFace))
+        return block
+    }
+
+}
+
 
 class CommonBlockTransformer : BlockTransformer() {
 

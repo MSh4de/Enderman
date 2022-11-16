@@ -2,27 +2,27 @@ package eu.mshade.enderman.packet.play.inventory;
 
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInClickInventory implements MinecraftPacketIn {
 
     private int id, slot, button, mode;
     private short transactionId;
     private ItemStack itemStack;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        id = protocolBuffer.readByte();
-        slot = protocolBuffer.readShort();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        id = minecraftByteBuf.readByte();
+        slot = minecraftByteBuf.readShort();
 
-        button = protocolBuffer.readByte();
-        transactionId = protocolBuffer.readShort();
-        mode = protocolBuffer.readByte();
+        button = minecraftByteBuf.readByte();
+        transactionId = minecraftByteBuf.readShort();
+        mode = minecraftByteBuf.readByte();
 
-        itemStack = protocolBuffer.readItemStack();
+        itemStack = minecraftByteBuf.readItemStack();
 
     }
 
@@ -51,8 +51,8 @@ public class MinecraftPacketInClickInventory implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     @Override

@@ -4,8 +4,8 @@ import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.*;
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.packetevent.PacketClickInventoryEvent;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.packetevent.MinecraftPacketClickInventoryEvent;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 import eu.mshade.enderman.packet.play.inventory.MinecraftPacketInClickInventory;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
 import eu.mshade.mwork.event.EventListener;
@@ -21,8 +21,8 @@ public class PacketClickInventoryListener implements EventListener<MinecraftPack
 
     @Override
     public void onEvent(MinecraftPacketInClickInventory event) {
-        SessionWrapper sessionWrapper = event.getSessionWrapper();
-        Player player = sessionWrapper.getPlayer();
+        MinecraftSession minecraftSession = event.getSessionWrapper();
+        Player player = minecraftSession.getPlayer();
 
         ClickType clickType = ClickType.UNKNOWN;
         int button = event.getButton();
@@ -95,7 +95,7 @@ public class PacketClickInventoryListener implements EventListener<MinecraftPack
         }
 
 
-        EnderFrame.get().getPacketEventBus().publish(new PacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.getId(), slot, key));
+        EnderFrame.get().getPacketEventBus().publish(new MinecraftPacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.getId(), slot, key));
 
     }
 }

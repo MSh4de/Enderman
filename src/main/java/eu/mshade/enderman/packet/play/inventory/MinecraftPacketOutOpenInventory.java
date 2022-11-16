@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play.inventory;
 
 import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutOpenInventory implements MinecraftPacketOut {
 
@@ -19,11 +19,11 @@ public class MinecraftPacketOutOpenInventory implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeByte(id);
-        protocolBuffer.writeString(name);
-        protocolBuffer.writeValueAsString(inventory.getTextComponent());
-        protocolBuffer.writeByte(size);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeByte(id);
+        minecraftByteBuf.writeString(name);
+        minecraftByteBuf.writeValueAsString(inventory.getTextComponent());
+        minecraftByteBuf.writeByte(size);
 
 
     }

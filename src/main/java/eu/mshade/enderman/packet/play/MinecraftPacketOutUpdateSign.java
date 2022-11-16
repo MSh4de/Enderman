@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.mojang.chat.TextComponent;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.world.Vector;
 
 import java.util.List;
@@ -18,15 +18,15 @@ public class MinecraftPacketOutUpdateSign implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeBlockPosition(vector);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeBlockPosition(vector);
 
         for (int i = 0; i < 4; i++) {
             if (textComponents.size() - 1 >= i) {
                 TextComponent textComponent = textComponents.get(i);
-                protocolBuffer.writeValueAsString(textComponent == null ? TextComponent.empty() : textComponent);
+                minecraftByteBuf.writeValueAsString(textComponent == null ? TextComponent.empty() : textComponent);
             } else {
-                protocolBuffer.writeValueAsString(TextComponent.empty());
+                minecraftByteBuf.writeValueAsString(TextComponent.empty());
             }
         }
     }

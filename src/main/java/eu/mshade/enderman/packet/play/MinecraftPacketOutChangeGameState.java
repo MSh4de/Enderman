@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 /**
  * permit to pick block
@@ -17,12 +17,12 @@ public class MinecraftPacketOutChangeGameState implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
         /*
         protocolBuffer.writeByte(3);
         protocolBuffer.writeFloat(GameMode.SURVIVAL.getId());
          */
-        protocolBuffer.writeByte(reason);
-        protocolBuffer.writeFloat(value);
+        minecraftByteBuf.writeByte(reason);
+        minecraftByteBuf.writeFloat(value);
     }
 }

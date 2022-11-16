@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.login;
 
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutLoginSuccess implements MinecraftPacketOut {
 
@@ -13,8 +13,8 @@ public class MinecraftPacketOutLoginSuccess implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeString(gameProfile.getId().toString());
-        protocolBuffer.writeString(gameProfile.getName());
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeString(gameProfile.getId().toString());
+        minecraftByteBuf.writeString(gameProfile.getName());
     }
 }

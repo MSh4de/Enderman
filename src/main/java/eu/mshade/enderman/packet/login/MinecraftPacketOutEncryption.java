@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.login;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 import java.security.PublicKey;
 
@@ -18,9 +18,9 @@ public class MinecraftPacketOutEncryption implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeString(this.hashedServerId);
-        protocolBuffer.writeByteArray(this.publicKey.getEncoded());
-        protocolBuffer.writeByteArray(this.verifyToken);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeString(this.hashedServerId);
+        minecraftByteBuf.writeByteArray(this.publicKey.getEncoded());
+        minecraftByteBuf.writeByteArray(this.verifyToken);
     }
 }

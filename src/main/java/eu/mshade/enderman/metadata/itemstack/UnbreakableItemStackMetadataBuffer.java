@@ -4,7 +4,7 @@ import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.metadata.UnbreakableItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
+import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.mwork.binarytag.ByteBinaryTag;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 

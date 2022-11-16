@@ -1,8 +1,8 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInPlayerAbilities implements MinecraftPacketIn {
 
@@ -12,12 +12,12 @@ public class MinecraftPacketInPlayerAbilities implements MinecraftPacketIn {
     private boolean instantBreak;
     private float flyingSpeed;
     private float walkSpeed;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        byte b = protocolBuffer.readByte();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        byte b = minecraftByteBuf.readByte();
 
         this.invulnerable = b == (b | 0x08);
         this.allowFlying = b == (b | 0x04);
@@ -25,8 +25,8 @@ public class MinecraftPacketInPlayerAbilities implements MinecraftPacketIn {
         this.instantBreak = b == (b | 0x01);
 
 
-        this.flyingSpeed = protocolBuffer.readFloat();
-        this.walkSpeed = protocolBuffer.readFloat();
+        this.flyingSpeed = minecraftByteBuf.readFloat();
+        this.walkSpeed = minecraftByteBuf.readFloat();
     }
 
     public boolean isInvulnerable() {
@@ -54,8 +54,8 @@ public class MinecraftPacketInPlayerAbilities implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutChunkData implements MinecraftPacketOut {
 
@@ -19,11 +19,11 @@ public class MinecraftPacketOutChunkData implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeInt(x);
-        protocolBuffer.writeInt(z);
-        protocolBuffer.writeBoolean(continuous);
-        protocolBuffer.writeShort(section);
-        protocolBuffer.writeByteArray(data);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeInt(x);
+        minecraftByteBuf.writeInt(z);
+        minecraftByteBuf.writeBoolean(continuous);
+        minecraftByteBuf.writeShort(section);
+        minecraftByteBuf.writeByteArray(data);
     }
 }

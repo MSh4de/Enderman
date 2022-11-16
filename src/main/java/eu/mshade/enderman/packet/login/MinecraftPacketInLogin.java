@@ -1,23 +1,23 @@
 package eu.mshade.enderman.packet.login;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInLogin implements MinecraftPacketIn {
 
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
     private String name;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.name = protocolBuffer.readString();
-        this.sessionWrapper = sessionWrapper;
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.name = minecraftByteBuf.readString();
+        this.minecraftSession = minecraftSession;
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     public String getName() {

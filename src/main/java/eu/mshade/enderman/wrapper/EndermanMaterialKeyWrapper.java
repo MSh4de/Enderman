@@ -370,6 +370,9 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.RAIL, MaterialKey.from(66));
         */
         register(Material.COBBLESTONE_STAIRS, MaterialKey.from(67));
+
+        register(Material.VINE, MaterialKey.from(106));
+
         /*
         register(Material.WALL_SIGN, MaterialKey.from(68));
         register(Material.LEVER, MaterialKey.from(69));

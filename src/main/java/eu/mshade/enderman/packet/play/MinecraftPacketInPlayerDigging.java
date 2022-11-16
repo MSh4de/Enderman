@@ -1,8 +1,8 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 import eu.mshade.enderframe.world.Vector;
 import eu.mshade.enderframe.world.block.BlockFace;
 import eu.mshade.enderframe.world.block.DiggingStatus;
@@ -12,14 +12,14 @@ public class MinecraftPacketInPlayerDigging implements MinecraftPacketIn {
     private Vector blockPosition;
     private DiggingStatus diggingStatus;
     private BlockFace blockFace;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        this.diggingStatus = DiggingStatus.fromId(protocolBuffer.readByte());
-        this.blockPosition = protocolBuffer.readBlockPosition();
-        this.blockFace = BlockFace.fromId(protocolBuffer.readByte());
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        this.diggingStatus = DiggingStatus.fromId(minecraftByteBuf.readByte());
+        this.blockPosition = minecraftByteBuf.readBlockPosition();
+        this.blockFace = BlockFace.fromId(minecraftByteBuf.readByte());
     }
 
     public Vector getBlockPosition() {
@@ -35,8 +35,8 @@ public class MinecraftPacketInPlayerDigging implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
 }

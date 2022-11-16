@@ -5,7 +5,7 @@ import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.item.metadata.CanPlaceOnItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
+import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
 import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.mwork.binarytag.BinaryTag;

@@ -1,25 +1,25 @@
 package eu.mshade.enderman.packet.play.move;
 
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInPlayerPosition extends MinecraftPacketInPlayerGround {
 
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
     private double x, y, z;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        this.x = protocolBuffer.readDouble();
-        this.y = protocolBuffer.readDouble();
-        this.z = protocolBuffer.readDouble();
-        super.deserialize(sessionWrapper, protocolBuffer);
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        this.x = minecraftByteBuf.readDouble();
+        this.y = minecraftByteBuf.readDouble();
+        this.z = minecraftByteBuf.readDouble();
+        super.deserialize(minecraftSession, minecraftByteBuf);
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 
     public double getX() {

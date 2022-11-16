@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutSpawnEntity implements MinecraftPacketOut {
     private final int aInt;
@@ -11,8 +11,8 @@ public class MinecraftPacketOutSpawnEntity implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(aInt);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(aInt);
     }
 
 }

@@ -5,7 +5,7 @@ import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderframe.wrapper.WrapperRepository;
@@ -16,15 +16,15 @@ import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EndermanProtocolBuffer extends ProtocolBuffer {
+public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EndermanProtocolBuffer.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(EndermanMinecraftByteBuf.class);
 
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
     private final Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
 
-    public EndermanProtocolBuffer(EndermanEntityMetadataManager entityMetadataManager, EndermanItemStackManager itemStackManager, WrapperRepository wrapperRepository, ByteBuf byteBuf) {
+    public EndermanMinecraftByteBuf(EndermanEntityMetadataManager entityMetadataManager, EndermanItemStackManager itemStackManager, WrapperRepository wrapperRepository, ByteBuf byteBuf) {
         super(byteBuf);
         this.entityMetadataManager = entityMetadataManager;
         this.itemStackManager = itemStackManager;

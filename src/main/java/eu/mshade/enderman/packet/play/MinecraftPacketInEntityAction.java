@@ -2,21 +2,21 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.metadata.ActionType;
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.protocol.SessionWrapper;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.protocol.MinecraftSession;
 
 public class MinecraftPacketInEntityAction implements MinecraftPacketIn {
 
     private int id, actionParameter;
     private ActionType actionType;
-    private SessionWrapper sessionWrapper;
+    private MinecraftSession minecraftSession;
 
     @Override
-    public void deserialize(SessionWrapper sessionWrapper, ProtocolBuffer protocolBuffer) {
-        this.sessionWrapper = sessionWrapper;
-        id = protocolBuffer.readVarInt();
-        actionType = ActionType.getActionTypeByIndex(protocolBuffer.readVarInt());
-        actionParameter = protocolBuffer.readVarInt();
+    public void deserialize(MinecraftSession minecraftSession, MinecraftByteBuf minecraftByteBuf) {
+        this.minecraftSession = minecraftSession;
+        id = minecraftByteBuf.readVarInt();
+        actionType = ActionType.getActionTypeByIndex(minecraftByteBuf.readVarInt());
+        actionParameter = minecraftByteBuf.readVarInt();
     }
 
     public int getId() {
@@ -32,7 +32,7 @@ public class MinecraftPacketInEntityAction implements MinecraftPacketIn {
     }
 
     @Override
-    public SessionWrapper getSessionWrapper() {
-        return sessionWrapper;
+    public MinecraftSession getSessionWrapper() {
+        return minecraftSession;
     }
 }

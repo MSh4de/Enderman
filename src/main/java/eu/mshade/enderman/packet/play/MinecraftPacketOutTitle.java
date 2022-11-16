@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
 
@@ -16,20 +16,20 @@ public class MinecraftPacketOutTitle implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(titleAction.getAction());
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(titleAction.getAction());
 
         switch (titleAction) {
             case SET_TITLE -> {
-                protocolBuffer.writeValueAsString(title.getTitle());
+                minecraftByteBuf.writeValueAsString(title.getTitle());
             }
             case SET_SUBTITLE -> {
-                protocolBuffer.writeValueAsString(title.getSubtitle());
+                minecraftByteBuf.writeValueAsString(title.getSubtitle());
             }
             case SET_TIME -> {
-                protocolBuffer.writeInt(title.getTitleTime().getFadeIn());
-                protocolBuffer.writeInt(title.getTitleTime().getStay());
-                protocolBuffer.writeInt(title.getTitleTime().getFadeOut());
+                minecraftByteBuf.writeInt(title.getTitleTime().getFadeIn());
+                minecraftByteBuf.writeInt(title.getTitleTime().getStay());
+                minecraftByteBuf.writeInt(title.getTitleTime().getFadeOut());
             }
         }
     }

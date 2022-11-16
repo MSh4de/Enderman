@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutSpawnPlayer implements MinecraftPacketOut {
 
@@ -13,16 +13,16 @@ public class MinecraftPacketOutSpawnPlayer implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(player.getEntityId());
-        protocolBuffer.writeUUID(player.getUniqueId());
-        protocolBuffer.writeInt((int) player.getLocation().getX() * 32);
-        protocolBuffer.writeInt((int) player.getLocation().getY() * 32);
-        protocolBuffer.writeInt((int) player.getLocation().getZ() * 32);
-        protocolBuffer.writeByte((byte) (player.getLocation().getYaw() * 256 / 360));
-        protocolBuffer.writeByte((byte) (player.getLocation().getPitch() * 256 / 360));
-        protocolBuffer.writeShort(0);
-        protocolBuffer.writeByte(0x7F);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(player.getEntityId());
+        minecraftByteBuf.writeUUID(player.getUniqueId());
+        minecraftByteBuf.writeInt((int) player.getLocation().getX() * 32);
+        minecraftByteBuf.writeInt((int) player.getLocation().getY() * 32);
+        minecraftByteBuf.writeInt((int) player.getLocation().getZ() * 32);
+        minecraftByteBuf.writeByte((byte) (player.getLocation().getYaw() * 256 / 360));
+        minecraftByteBuf.writeByte((byte) (player.getLocation().getPitch() * 256 / 360));
+        minecraftByteBuf.writeShort(0);
+        minecraftByteBuf.writeByte(0x7F);
     }
 
 }

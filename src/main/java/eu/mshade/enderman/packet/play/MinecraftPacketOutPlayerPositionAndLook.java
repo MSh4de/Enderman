@@ -1,7 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutPlayerPositionAndLook implements MinecraftPacketOut {
 
@@ -17,13 +17,13 @@ public class MinecraftPacketOutPlayerPositionAndLook implements MinecraftPacketO
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeDouble(x);
-        protocolBuffer.writeDouble(y);
-        protocolBuffer.writeDouble(z);
-        protocolBuffer.writeFloat(yaw);
-        protocolBuffer.writeFloat(pitch);
-        protocolBuffer.writeByte(0);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeDouble(x);
+        minecraftByteBuf.writeDouble(y);
+        minecraftByteBuf.writeDouble(z);
+        minecraftByteBuf.writeFloat(yaw);
+        minecraftByteBuf.writeFloat(pitch);
+        minecraftByteBuf.writeByte(0);
     }
 
 

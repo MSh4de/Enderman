@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 public class MinecraftPacketOutDestroyEntities implements MinecraftPacketOut {
     private final Entity[] entities;
@@ -12,10 +12,10 @@ public class MinecraftPacketOutDestroyEntities implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(entities.length);
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(entities.length);
         for(Entity entity : entities) {
-            protocolBuffer.writeVarInt(entity.getEntityId());
+            minecraftByteBuf.writeVarInt(entity.getEntityId());
         }
     }
 }

@@ -3,7 +3,7 @@ package eu.mshade.enderman.packet.play.scoreboard;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.scoreboard.EntityScoreboard;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
@@ -19,7 +19,7 @@ public class MinecraftPacketOutUpdateScoreboard implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
         String objectiveName;
 
         if (scoreboardObjective.getScoreboard() instanceof EntityScoreboard) {
@@ -37,12 +37,12 @@ public class MinecraftPacketOutUpdateScoreboard implements MinecraftPacketOut {
             throw new IndexOutOfBoundsException(objectiveName + " is bigger than 40 letters");
         }
 
-        protocolBuffer.writeString(objectiveName);
-        protocolBuffer.writeVarInt(scoreboardObjectiveAction.ordinal());
-        protocolBuffer.writeString(scoreboardObjective.getScoreboard().getScoreboardId());
+        minecraftByteBuf.writeString(objectiveName);
+        minecraftByteBuf.writeVarInt(scoreboardObjectiveAction.ordinal());
+        minecraftByteBuf.writeString(scoreboardObjective.getScoreboard().getScoreboardId());
 
         if (scoreboardObjectiveAction == ScoreboardObjectiveAction.CREATE_OR_UPDATE) {
-            protocolBuffer.writeVarInt(scoreboardObjective.getObjectiveValue());
+            minecraftByteBuf.writeVarInt(scoreboardObjective.getObjectiveValue());
         }
     }
 }

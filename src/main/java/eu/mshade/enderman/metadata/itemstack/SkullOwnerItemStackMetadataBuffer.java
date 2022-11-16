@@ -4,7 +4,7 @@ import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
 import eu.mshade.enderframe.item.metadata.SkullOwnerItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
-import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey;
+import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.GameProfile;
 import eu.mshade.enderframe.mojang.Property;
 import eu.mshade.mwork.binarytag.BinaryTagType;

@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.metadata.attribute.AttributeProperty;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ public class MinecraftPacketOutEntityProperties implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(id);
-        protocolBuffer.writeInt(attributeProperties.size());
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(id);
+        minecraftByteBuf.writeInt(attributeProperties.size());
         attributeProperties.forEach(attributeProperty -> {
-            protocolBuffer.writeString(attributeProperty.getAttribute().getName());
-            protocolBuffer.writeDouble(attributeProperty.getValue());
-            protocolBuffer.writeVarInt(0);
+            minecraftByteBuf.writeString(attributeProperty.getAttribute().getName());
+            minecraftByteBuf.writeDouble(attributeProperty.getValue());
+            minecraftByteBuf.writeVarInt(0);
         });
     }
 }

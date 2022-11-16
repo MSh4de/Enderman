@@ -2,7 +2,7 @@ package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
-import eu.mshade.enderframe.protocol.ProtocolBuffer;
+import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.world.Location;
 
 public class MinecraftPacketOutEntityHeadLook implements MinecraftPacketOut {
@@ -16,8 +16,8 @@ public class MinecraftPacketOutEntityHeadLook implements MinecraftPacketOut {
     }
 
     @Override
-    public void serialize(ProtocolBuffer protocolBuffer) {
-        protocolBuffer.writeVarInt(entity.getEntityId());
-        protocolBuffer.writeByte((byte) (location.getYaw()  * 256 / 360));
+    public void serialize(MinecraftByteBuf minecraftByteBuf) {
+        minecraftByteBuf.writeVarInt(entity.getEntityId());
+        minecraftByteBuf.writeByte((byte) (location.getYaw()  * 256 / 360));
     }
 }
