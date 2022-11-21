@@ -1,7 +1,7 @@
 package eu.mshade.enderman.metadata.itemstack;
 
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
+import eu.mshade.enderframe.item.ItemStackMetadataWrapper;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.item.metadata.CanDestroyItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
@@ -17,11 +17,11 @@ import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CanDestroyItemStackMetadataBuffer implements ItemStackMetadataBuffer {
+public class CanDestroyItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     private final Wrapper<MaterialKey, NamespacedKey> namespacedKeyWrapper;
 
-    public CanDestroyItemStackMetadataBuffer(Wrapper<MaterialKey, NamespacedKey> namespacedKeyWrapper) {
+    public CanDestroyItemStackMetadataWrapper(Wrapper<MaterialKey, NamespacedKey> namespacedKeyWrapper) {
         this.namespacedKeyWrapper = namespacedKeyWrapper;
     }
 

@@ -1,7 +1,7 @@
 package eu.mshade.enderman.metadata.itemstack;
 
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
+import eu.mshade.enderframe.item.ItemStackMetadataWrapper;
 import eu.mshade.enderframe.item.metadata.SkullOwnerItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
@@ -13,7 +13,7 @@ import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
 
 import java.util.UUID;
 
-public class SkullOwnerItemStackMetadataBuffer implements ItemStackMetadataBuffer {
+public class SkullOwnerItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {

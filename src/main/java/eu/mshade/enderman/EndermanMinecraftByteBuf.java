@@ -73,8 +73,8 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
         }
         ItemStack itemStack = new ItemStack(materialKey, count, durability);
         CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
-        for (ItemStackMetadataBuffer itemStackMetadataBuffer : itemStackManager.getItemStackMetadataBuffers()) {
-            itemStackMetadataBuffer.read(compoundBinaryTag, itemStack);
+        for (ItemStackMetadataWrapper itemStackMetadataWrapper : itemStackManager.getItemStackMetadataBuffers()) {
+            itemStackMetadataWrapper.read(compoundBinaryTag, itemStack);
         }
         return itemStack;
 

@@ -1,13 +1,13 @@
 package eu.mshade.enderman.metadata.itemstack;
 
 import eu.mshade.enderframe.item.ItemStack;
-import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
+import eu.mshade.enderframe.item.ItemStackMetadataWrapper;
 import eu.mshade.enderframe.item.metadata.NameItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 
-public class NameItemStackMetadataBuffer implements ItemStackMetadataBuffer {
+public class NameItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {

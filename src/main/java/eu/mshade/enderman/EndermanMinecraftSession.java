@@ -5,10 +5,7 @@ import eu.mshade.enderframe.UniqueId;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.entity.Player;
-import eu.mshade.enderframe.inventory.ChestInventory;
-import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.inventory.InventoryKey;
-import eu.mshade.enderframe.inventory.PlayerInventory;
+import eu.mshade.enderframe.inventory.*;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
@@ -466,8 +463,7 @@ public class EndermanMinecraftSession extends MinecraftSession {
 
 
     @Override
-    public void sendOpenInventory(Inventory inventory) {
-        if (inventory instanceof PlayerInventory) return;
+    public void sendOpenInventory(NamedInventory inventory) {
 
         String inventoryKey = inventoryKeyWrapper.wrap(inventory.getInventoryKey());
         if (inventoryKey == null) return;
@@ -476,7 +472,7 @@ public class EndermanMinecraftSession extends MinecraftSession {
 
         MinecraftProtocolPipeline.get().getPlayer(channel).setOpenedInventory(inventory);
 
-        if (inventory instanceof ChestInventory) {
+        if (inventory.getInventoryKey().equals(InventoryType.CHEST)) {
             size = inventory.getSize();
         }
 

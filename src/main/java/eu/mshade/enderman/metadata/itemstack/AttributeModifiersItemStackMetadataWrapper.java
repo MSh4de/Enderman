@@ -3,7 +3,7 @@ package eu.mshade.enderman.metadata.itemstack;
 import eu.mshade.enderframe.inventory.EquipmentSlot;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.ItemStackAttributeModifier;
-import eu.mshade.enderframe.item.ItemStackMetadataBuffer;
+import eu.mshade.enderframe.item.ItemStackMetadataWrapper;
 import eu.mshade.enderframe.item.metadata.AttributeModifiersItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.attribute.AttributeKey;
@@ -16,12 +16,12 @@ import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
 
 import java.util.List;
 
-public class AttributeModifiersItemStackMetadataBuffer implements ItemStackMetadataBuffer {
+public class AttributeModifiersItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     private Wrapper<EquipmentSlot, String> endermanEquipmentSlotWrapper;
     private Wrapper<AttributeKey, String> endermanAttributeKeyWrapper;
 
-    public AttributeModifiersItemStackMetadataBuffer(Wrapper<EquipmentSlot, String> equipmentSlotWrapper, Wrapper<AttributeKey, String> attributeKeyWrapper) {
+    public AttributeModifiersItemStackMetadataWrapper(Wrapper<EquipmentSlot, String> equipmentSlotWrapper, Wrapper<AttributeKey, String> attributeKeyWrapper) {
         this.endermanEquipmentSlotWrapper = equipmentSlotWrapper;
         this.endermanAttributeKeyWrapper = attributeKeyWrapper;
     }
