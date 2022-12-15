@@ -169,6 +169,7 @@ class EndermanProtocol : Protocol() {
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x44, PacketOutWorldBorder::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x33, PacketOutUpdateSign::class.java)
         getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x2A, PacketOutParticle::class.java)
+        getProtocolRegistry().registerOut(ProtocolStatus.PLAY, 0x31, PacketOutWindowProperty::class.java)
     }
 
     override fun getProtocolBuffer(byteBuf: ByteBuf): ProtocolBuffer {
