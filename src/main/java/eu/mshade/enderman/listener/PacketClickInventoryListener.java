@@ -3,15 +3,14 @@ package eu.mshade.enderman.listener;
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.inventory.*;
+import eu.mshade.enderframe.inventory.type.ChestInventory;
+import eu.mshade.enderframe.inventory.type.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.packetevent.PacketClickInventoryEvent;
-import eu.mshade.enderframe.protocol.ProtocolPipeline;
 import eu.mshade.enderframe.protocol.SessionWrapper;
 import eu.mshade.enderman.packet.play.inventory.PacketInClickInventory;
 import eu.mshade.enderman.wrapper.EndermanInventorySizeWrapper;
-import eu.mshade.mwork.ParameterContainer;
 import eu.mshade.mwork.event.EventListener;
-import io.netty.channel.Channel;
 
 
 public class PacketClickInventoryListener implements EventListener<PacketInClickInventory> {

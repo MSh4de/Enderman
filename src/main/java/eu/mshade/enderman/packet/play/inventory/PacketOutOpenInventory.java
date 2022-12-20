@@ -1,11 +1,8 @@
 package eu.mshade.enderman.packet.play.inventory;
 
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
-import eu.mshade.enderframe.wrapper.Wrapper;
-import eu.mshade.enderman.wrapper.EndermanInventoryKeyWrapper;
 
 public class PacketOutOpenInventory implements PacketOut {
 

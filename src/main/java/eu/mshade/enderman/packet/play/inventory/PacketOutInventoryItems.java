@@ -1,7 +1,6 @@
 package eu.mshade.enderman.packet.play.inventory;
 
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 

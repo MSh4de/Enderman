@@ -5,12 +5,12 @@ import eu.mshade.enderframe.UniqueId;
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.entity.Player;
-import eu.mshade.enderframe.inventory.ChestInventory;
+import eu.mshade.enderframe.inventory.type.ChestInventory;
 import eu.mshade.enderframe.inventory.Inventory;
-import eu.mshade.enderframe.inventory.InventoryKey;
-import eu.mshade.enderframe.inventory.PlayerInventory;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.item.MaterialKey;
+import eu.mshade.enderframe.metadata.MetadataKey;
+import eu.mshade.enderframe.metadata.MetadataKeyValue;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.metadata.world.WorldMetadataType;
@@ -31,6 +31,7 @@ import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
 import eu.mshade.enderframe.world.*;
+import eu.mshade.enderframe.world.Vector;
 import eu.mshade.enderframe.world.block.Block;
 import eu.mshade.enderframe.world.block.BlockTransformerRepository;
 import eu.mshade.enderframe.world.border.WorldBorder;
@@ -45,10 +46,7 @@ import eu.mshade.enderframe.wrapper.WrapperRepository;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
-import eu.mshade.enderman.packet.play.inventory.PacketOutCloseInventory;
-import eu.mshade.enderman.packet.play.inventory.PacketOutInventoryItems;
-import eu.mshade.enderman.packet.play.inventory.PacketOutOpenInventory;
-import eu.mshade.enderman.packet.play.inventory.PacketOutSetItemStack;
+import eu.mshade.enderman.packet.play.inventory.*;
 import eu.mshade.enderman.packet.play.PacketOutPlayerPositionAndLook;
 import eu.mshade.enderman.wrapper.EndermanContextWrapper;
 import eu.mshade.enderman.packet.play.scoreboard.PacketOutDisplayScoreboard;
@@ -59,10 +57,7 @@ import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EndermanSessionWrapper extends SessionWrapper {
 
@@ -553,6 +548,17 @@ public class EndermanSessionWrapper extends SessionWrapper {
     @Override
     public void sendParticle(Particle particle) {
         sendPacket(new PacketOutParticle(materialKeyWrapper, particleKeyWrapper, particle));
+    }
+
+    @Override
+    public void sendInventoryUpdate(Block block, MetadataKey... metadataKeys) {
+        final MetadataKeyValueBucket bucket = block.getMetadataKeyValueBucket();
+
+        for (final MetadataKey metadataKey : metadataKeys) {
+            final MetadataKeyValue<?> value = bucket.getMetadataKeyValue(metadataKey);
+
+
+        }
     }
 
     private boolean hasOverflow(int value) {
