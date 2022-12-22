@@ -16,7 +16,7 @@ public class MinecraftPacketInLogin implements MinecraftPacketIn {
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

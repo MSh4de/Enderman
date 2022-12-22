@@ -17,7 +17,7 @@ public class MinecraftPacketInPlayerLook extends MinecraftPacketInPlayerGround {
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

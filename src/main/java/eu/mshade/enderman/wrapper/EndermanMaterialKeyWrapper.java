@@ -191,6 +191,14 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
 //        register(Material.NETHER_GOLD_ORE, MaterialKey.from(14, 1));
         register(Material.ANCIENT_DEBRIS, MaterialKey.from(16, 1));
 
+        registerOutput(Material.SNOW, MaterialKey.from(78));
+        registerInput(Material.SNOW, MaterialKey.from(80));
+
+        registerInput(Material.ICE, MaterialKey.from(79));
+        registerOutput(Material.ICE, MaterialKey.from(174));
+        registerOutput(Material.ICE, MaterialKey.from(212));
+
+
         //register all block ore
 //        register(Material.COAL, MaterialKey.from(173));
 

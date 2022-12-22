@@ -18,7 +18,7 @@ public class MinecraftPacketInPlayerPositionAndLook extends MinecraftPacketInPla
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

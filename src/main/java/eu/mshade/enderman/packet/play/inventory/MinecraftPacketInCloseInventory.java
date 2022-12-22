@@ -17,7 +17,7 @@ public class MinecraftPacketInCloseInventory implements MinecraftPacketIn {
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

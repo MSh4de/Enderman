@@ -35,7 +35,7 @@ public class MinecraftPacketInPlayerDigging implements MinecraftPacketIn {
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

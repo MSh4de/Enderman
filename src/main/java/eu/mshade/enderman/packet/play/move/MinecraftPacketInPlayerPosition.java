@@ -18,7 +18,7 @@ public class MinecraftPacketInPlayerPosition extends MinecraftPacketInPlayerGrou
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 

@@ -9,7 +9,7 @@ public class EndermanNamespacedKeyWrapper extends Wrapper<MaterialKey, Namespace
 
     public EndermanNamespacedKeyWrapper() {
 
-        this.registerOutput(NamespacedKey.minecraft("stone"), Material.STONE);
+        this.registerOutput(Material.STONE, NamespacedKey.minecraft("stone"));
 
         this.registerInput(Material.STONE, NamespacedKey.minecraft("stone"));
         this.registerInput(Material.GRANITE, NamespacedKey.minecraft("stone"));

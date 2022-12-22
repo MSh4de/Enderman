@@ -45,7 +45,7 @@ public class MinecraftPacketInClientSettings implements MinecraftPacketIn {
     }
 
     @Override
-    public MinecraftSession getSessionWrapper() {
+    public MinecraftSession getMinecraftSession() {
         return minecraftSession;
     }
 }
