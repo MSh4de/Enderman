@@ -5,6 +5,7 @@ import eu.mshade.enderframe.entity.metadata.EntityMetadataKey
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket
 import eu.mshade.enderframe.metadata.type.*
 import eu.mshade.enderman.metadata.entity.type.PropertiesMetadataWrapper
+import eu.mshade.enderman.metadata.entity.type.TameablePropertiesMetadataWrapper
 
 
 open class DefaultEntityMetadataBucket : EntityMetadataBucket() {
@@ -15,98 +16,125 @@ open class DefaultEntityMetadataBucket : EntityMetadataBucket() {
         registerEntityMetadata(1,
             { entity: Entity ->
                 ShortMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.AIR_TICKS,
-                        Short::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.AIR_TICKS
+                    ).metadataValue as Short
                 )
             }, EntityMetadataKey.AIR_TICKS
         )
-        registerEntityMetadata(2,
-            { entity: Entity ->
-                StringMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.CUSTOM_NAME,
-                        String::class.java
-                    )
-                )
-            }, EntityMetadataKey.CUSTOM_NAME
-        )
-        registerEntityMetadata(3,
-            { entity: Entity ->
-                ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.CUSTOM_NAME_VISIBLE,
-                        Boolean::class.java
-                    )
-                )
-            }, EntityMetadataKey.CUSTOM_NAME_VISIBLE
-        )
-        registerEntityMetadata(4,
-            { entity: Entity ->
-                ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.SILENT,
-                        Boolean::class.java
-                    )
-                )
-            }, EntityMetadataKey.SILENT
-        )
+        //????
+//        registerEntityMetadata(4,
+//            { entity: Entity ->
+//                ByteMetadata(
+//                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+//                        EntityMetadataKey.SILENT
+//                    ).metadataValue as Boolean
+//                )
+//            }, EntityMetadataKey.SILENT
+//        )
     }
 }
 
 open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
 
     init {
+        registerEntityMetadata(2,
+            { entity: Entity ->
+                StringMetadata(
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.CUSTOM_NAME
+                    ).metadataValue as String
+                )
+            }, EntityMetadataKey.CUSTOM_NAME
+        )
+        registerEntityMetadata(3,
+            { entity: Entity ->
+                ByteMetadata(
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.CUSTOM_NAME_VISIBLE
+                    ).metadataValue as Boolean
+                )
+            }, EntityMetadataKey.CUSTOM_NAME_VISIBLE
+        )
         registerEntityMetadata(6,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.HEALTH,
-                        Float::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.HEALTH
+                    ).metadataValue as Float
                 )
             }, EntityMetadataKey.HEALTH
         )
         registerEntityMetadata(7,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.POTION_EFFECT_COLOR,
-                        Int::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.POTION_EFFECT_COLOR
+                    ).metadataValue as Int
                 )
             }, EntityMetadataKey.POTION_EFFECT_COLOR
         )
         registerEntityMetadata(8,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.POTION_EFFECT_AMBIENT,
-                        Boolean::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.POTION_EFFECT_AMBIENT
+                    ).metadataValue as Boolean
                 )
             }, EntityMetadataKey.POTION_EFFECT_AMBIENT
         )
         registerEntityMetadata(9,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.NUMBER_OF_ARROWS_IN_ENTITY,
-                        Int::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.NUMBER_OF_ARROWS_IN_ENTITY
+                    ).metadataValue as Int
                 )
             }, EntityMetadataKey.NUMBER_OF_ARROWS_IN_ENTITY
         )
         registerEntityMetadata(15,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.WHETHER_ARTIFICIAL_INTELLIGENCE,
-                        Boolean::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.WHETHER_ARTIFICIAL_INTELLIGENCE
+                    ).metadataValue as Boolean
                 )
             }, EntityMetadataKey.WHETHER_ARTIFICIAL_INTELLIGENCE
+        )
+    }
+}
+
+open class AgeableEntityMetadataBucket: LivingEntityMetadataBucket() {
+
+    init {
+        registerEntityMetadata(12,
+            { entity: Entity ->
+                ByteMetadata(
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.AGE
+                    ).metadataValue as Int
+                )
+            }, EntityMetadataKey.AGE
+        )
+    }
+}
+
+open class TameableEntityMetadataBucket: AgeableEntityMetadataBucket() {
+
+    init {
+        registerEntityMetadata(16,
+            TameablePropertiesMetadataWrapper(),
+            EntityMetadataKey.SITTING, EntityMetadataKey.TAMED
+        )
+
+        registerEntityMetadata(17,
+            { entity: Entity ->
+                StringMetadata(
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.OWNER
+                    ).metadataValue as String
+                )
+            }, EntityMetadataKey.OWNER
         )
     }
 }

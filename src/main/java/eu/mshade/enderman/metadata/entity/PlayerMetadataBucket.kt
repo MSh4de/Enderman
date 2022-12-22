@@ -12,30 +12,36 @@ class PlayerMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(10,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.SKIN_PART,
-                        SkinPart::class.java
-                    ).toByte()
+                    (entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.SKIN_PART
+                    ).metadataValue as SkinPart).toByte()
                 )
             }, EntityMetadataKey.SKIN_PART
+        )
+        registerEntityMetadata(16,
+            { entity: Entity ->
+                ByteMetadata(
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.HIDE_CAPE
+                    ).metadataValue as Boolean
+                )
+            }, EntityMetadataKey.HIDE_CAPE
         )
         registerEntityMetadata(17,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.ADDITIONAL_HEARTS,
-                        Float::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.ADDITIONAL_HEARTS
+                    ).metadataValue as Float
                 )
             }, EntityMetadataKey.ADDITIONAL_HEARTS
         )
         registerEntityMetadata(18,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getValueOfMetadataKeyValue(
-                        EntityMetadataKey.SCORE,
-                        Int::class.java
-                    )
+                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                        EntityMetadataKey.SCORE
+                    ).metadataValue as Int
                 )
             }, EntityMetadataKey.SCORE
         )

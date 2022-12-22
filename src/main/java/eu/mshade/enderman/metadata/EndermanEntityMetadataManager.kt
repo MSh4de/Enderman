@@ -8,9 +8,7 @@ import eu.mshade.enderframe.metadata.entity.EntityMetadataManager
 import eu.mshade.enderframe.protocol.ProtocolBuffer
 import eu.mshade.enderframe.world.Rotation
 import eu.mshade.enderframe.world.Vector
-import eu.mshade.enderman.metadata.entity.ArmorStandMetadataBucket
-import eu.mshade.enderman.metadata.entity.PlayerMetadataBucket
-import eu.mshade.enderman.metadata.entity.ZombieMetadataBucket
+import eu.mshade.enderman.metadata.entity.*
 
 class EndermanEntityMetadataManager: EntityMetadataManager() {
 
@@ -54,7 +52,47 @@ class EndermanEntityMetadataManager: EntityMetadataManager() {
         }
 
         registerEntityMetadataBucket(EntityType.PLAYER, PlayerMetadataBucket())
-        registerEntityMetadataBucket(EntityType.ARMOR_STAND, ArmorStandMetadataBucket())
+
+        //Hostile
+        registerEntityMetadataBucket(EntityType.BLAZE, BlazeMetadataBucket())
+        registerEntityMetadataBucket(EntityType.CREEPER, CreeperMetadataBucket())
+        registerEntityMetadataBucket(EntityType.GHAST, GhastMetadataBucket())
+        registerEntityMetadataBucket(EntityType.GUARDIAN, GuardianMetadataBucket())
+        registerEntityMetadataBucket(EntityType.MAGMA_CUBE, MagmaCubeMetadataBucket())
+        registerEntityMetadataBucket(EntityType.SKELETON, SkeletonMetadataBucket())
+        registerEntityMetadataBucket(EntityType.SLIME, SlimeMetadataBucket())
         registerEntityMetadataBucket(EntityType.ZOMBIE, ZombieMetadataBucket())
+        registerEntityMetadataBucket(EntityType.WITCH, WitchMetadataBucket())
+
+        //Passive
+        registerEntityMetadataBucket(EntityType.BAT, BatMetadataBucket())
+        registerEntityMetadataBucket(EntityType.CHICKEN, ChickenMetadataBucket())
+        registerEntityMetadataBucket(EntityType.HORSE, HorseMetadataBucket())
+        registerEntityMetadataBucket(EntityType.OCELOT, OcelotMetadataBucket())
+        registerEntityMetadataBucket(EntityType.PIG, PigMetadataBucket())
+        registerEntityMetadataBucket(EntityType.RABBIT, RabbitMetadataBucket())
+        registerEntityMetadataBucket(EntityType.SHEEP, SheepMetadataBucket())
+        registerEntityMetadataBucket(EntityType.VILLAGER, VillagerMetadataBucket())
+
+        //Neutral
+        registerEntityMetadataBucket(EntityType.CAVE_SPIDER, CaveSpiderMetadataBucket())
+        registerEntityMetadataBucket(EntityType.ENDERMAN, EndermanMetadataBucket())
+        registerEntityMetadataBucket(EntityType.CAVE_SPIDER, IronGolemMetadataBucket())
+        registerEntityMetadataBucket(EntityType.SPIDER, SpiderMetadataBucket())
+        registerEntityMetadataBucket(EntityType.WOLF, WolfMetadataBucket())
+
+        //Boss
+        registerEntityMetadataBucket(EntityType.WITHER, WitherMetadataBucket())
+
+        //TileEntity
+        registerEntityMetadataBucket(EntityType.ARMOR_STAND, ArmorStandMetadataBucket())
+        registerEntityMetadataBucket(EntityType.BOAT, BoatMetadataBucket())
+        registerEntityMetadataBucket(EntityType.MINECART, MinecartMetadataBucket())
+        registerEntityMetadataBucket(EntityType.MINECART_FURNACE, FurnaceMinecartMetadataBucket())
+        registerEntityMetadataBucket(EntityType.DROPPED_ITEM, ItemMetadataBucket())
+        registerEntityMetadataBucket(EntityType.ARROW, ArrowMetadataBucket())
+        registerEntityMetadataBucket(EntityType.FIREWORK, FireworkMetadataBucket())
+        registerEntityMetadataBucket(EntityType.ITEM_FRAME, ItemFrameMetadataBucket())
+        registerEntityMetadataBucket(EntityType.ENDER_CRYSTAL, EnderCrystalMetadataBucket())
     }
 }

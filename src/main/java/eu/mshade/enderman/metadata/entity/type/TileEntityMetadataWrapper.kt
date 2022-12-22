@@ -8,39 +8,30 @@ import eu.mshade.enderframe.metadata.type.ByteMetadata
 
 class ArmorStandPropertiesMetadataWrapper : MetadataWrapper<ArmorStand> {
 
-    override fun wrap(armorStand: ArmorStand): Metadata<*> {
+    override fun wrap(armorStand: ArmorStand): Metadata<Byte> {
         val metadataKeyValueBucket = armorStand.metadataKeyValueBucket
         var b = 0
 
-        if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(
-                EntityMetadataKey.SMALL_ARMOR_STAND,
-                SmallArmorStandEntityMetadata(false))
-                .metadataValue
-        ) b = b or 0x01
+        val small = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.SMALL_ARMOR_STAND)?.metadataValue)?: false) as Boolean
+        val gravity = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.GRAVITY)?.metadataValue)?: false) as Boolean
+        val arms = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.ARMS)?.metadataValue)?: false) as Boolean
+        val removeBasePlate = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.REMOVE_BASE_PLATE)?.metadataValue)?: false) as Boolean
+        val marker = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.MARKER)?.metadataValue)?: false) as Boolean
 
-        if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(
-                EntityMetadataKey.GRAVITY,
-                GravityEntityMetadata(false))
-                .metadataValue
-        ) b = b or 0x02
+        if (small)
+            b = b or 0x01
 
-        if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(
-                EntityMetadataKey.ARMS,
-                ArmsEntityMetadata(false))
-                .metadataValue
-        ) b = b or 0x04
+        if (gravity)
+            b = b or 0x02
 
-        if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(
-                EntityMetadataKey.BASE_PLATE,
-                BasePlateEntityMetadata(false))
-                .metadataValue
-        ) b = b or 0x08
+        if (arms)
+            b = b or 0x04
 
-        if (metadataKeyValueBucket.getMetadataKeyValueOrDefault(
-                EntityMetadataKey.MARKER,
-                SmallArmorStandEntityMetadata(false))
-                .metadataValue
-        ) b = b or 0x10
+        if (removeBasePlate)
+            b = b or 0x08
+
+        if (marker)
+            b = b or 0x10
 
         return ByteMetadata(b)
     }
