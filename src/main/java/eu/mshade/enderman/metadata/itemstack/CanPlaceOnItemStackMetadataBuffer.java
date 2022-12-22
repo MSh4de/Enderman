@@ -29,7 +29,7 @@ public class CanPlaceOnItemStackMetadataBuffer implements ItemStackMetadataBuffe
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        CanPlaceOnItemStackMetadata canPlaceOnItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_PLACE_ON, CanPlaceOnItemStackMetadata.class);
+        CanPlaceOnItemStackMetadata canPlaceOnItemStackMetadata = (CanPlaceOnItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_PLACE_ON);
         List<MaterialKey> materialKeys = canPlaceOnItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {

@@ -28,7 +28,7 @@ public class CanDestroyItemStackMetadataBuffer implements ItemStackMetadataBuffe
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        CanDestroyItemStackMetadata canDestroyItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_DESTROY, CanDestroyItemStackMetadata.class);
+        CanDestroyItemStackMetadata canDestroyItemStackMetadata = (CanDestroyItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_DESTROY);
         List<MaterialKey> materialKeys = canDestroyItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {

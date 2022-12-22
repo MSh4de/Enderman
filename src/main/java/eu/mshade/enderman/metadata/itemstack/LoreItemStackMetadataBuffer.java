@@ -18,7 +18,7 @@ public class LoreItemStackMetadataBuffer implements ItemStackMetadataBuffer {
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        LoreItemStackMetadata loreItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.LORE, LoreItemStackMetadata.class);
+        LoreItemStackMetadata loreItemStackMetadata = (LoreItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.LORE);
         CompoundBinaryTag displayCompoundBinaryTag = compoundBinaryTag.computeIfAbsent("display", s -> new CompoundBinaryTag());
         List<String> lore = loreItemStackMetadata.getMetadataValue();
         if (!lore.isEmpty()) {

@@ -2,10 +2,7 @@ package eu.mshade.enderman;
 
 import eu.mshade.enderframe.PlayerInfoBuilder;
 import eu.mshade.enderframe.UniqueId;
-import eu.mshade.enderframe.entity.Entity;
-import eu.mshade.enderframe.entity.EntityCategory;
-import eu.mshade.enderframe.entity.EntityType;
-import eu.mshade.enderframe.entity.Player;
+import eu.mshade.enderframe.entity.*;
 import eu.mshade.enderframe.inventory.ChestInventory;
 import eu.mshade.enderframe.inventory.Inventory;
 import eu.mshade.enderframe.inventory.InventoryKey;
@@ -32,6 +29,7 @@ import eu.mshade.enderframe.sound.SoundEffect;
 import eu.mshade.enderframe.title.Title;
 import eu.mshade.enderframe.title.TitleAction;
 import eu.mshade.enderframe.world.*;
+import eu.mshade.enderframe.world.Vector;
 import eu.mshade.enderframe.world.block.Block;
 import eu.mshade.enderframe.world.block.BlockTransformerRepository;
 import eu.mshade.enderframe.world.border.WorldBorder;
@@ -43,6 +41,7 @@ import eu.mshade.enderframe.world.chunk.Section;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderframe.wrapper.WrapperRepository;
+import eu.mshade.enderman.object.EndermanObjectTransformerRepository;
 import eu.mshade.enderman.packet.login.PacketOutEncryption;
 import eu.mshade.enderman.packet.login.PacketOutLoginSuccess;
 import eu.mshade.enderman.packet.play.*;
@@ -60,30 +59,29 @@ import io.netty.channel.Channel;
 
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EndermanSessionWrapper extends SessionWrapper {
 
-
-    private Wrapper<EntityType, Integer> entityTypeWrapper;
+    private Wrapper<EntityKey, Integer> entityTypeWrapper;
     private Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
     private Wrapper<InventoryKey, String> inventoryKeyWrapper;
     private Wrapper<InventoryKey, Integer> inventorySizeWrapper;
     private Wrapper<ParticleKey, Integer> particleKeyWrapper;
     private BlockTransformerRepository blockTransformerRepository;
+    private EndermanObjectTransformerRepository objectTransformerRepository;
+
     private UniqueId uniqueId = new UniqueId();
 
-    public EndermanSessionWrapper(Channel channel, WrapperRepository wrapperRepository, BlockTransformerRepository blockTransformerRepository) {
+    public EndermanSessionWrapper(Channel channel, WrapperRepository wrapperRepository, BlockTransformerRepository blockTransformerRepository, EndermanObjectTransformerRepository objectTransformerRepository) {
         super(channel);
         this.blockTransformerRepository = blockTransformerRepository;
         this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) wrapperRepository.get(ContextWrapper.MATERIAL_KEY);
         this.inventoryKeyWrapper = (Wrapper<InventoryKey, String>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY);
         this.inventorySizeWrapper = (Wrapper<InventoryKey, Integer>) wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE);
-        this.entityTypeWrapper = (Wrapper<EntityType, Integer>) wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE);
+        this.entityTypeWrapper = (Wrapper<EntityKey, Integer>) wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE);
         this.particleKeyWrapper = (Wrapper<ParticleKey, Integer>) wrapperRepository.get(EndermanContextWrapper.PARTICLE_TYPE);
+        this.objectTransformerRepository = objectTransformerRepository;
     }
 
     @Override
@@ -102,8 +100,8 @@ public class EndermanSessionWrapper extends SessionWrapper {
     public void sendJoinGame(World world, boolean reducedDebugInfo) {
         MetadataKeyValueBucket metadataKeyValueBucket = world.getMetadataKeyValueBucket();
 
-        Dimension dimension = metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIMENSION, Dimension.class);
-        Difficulty difficulty = metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIFFICULTY, Difficulty.class);
+        Dimension dimension = (Dimension) metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION).getMetadataValue();
+        Difficulty difficulty = (Difficulty) metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIFFICULTY).getMetadataValue();
 
         Player player = ProtocolPipeline.get().getPlayer(this.getChannel());
         sendPacket(new PacketOutJoinGame(player.getEntityId(), player.getGameMode(), dimension, difficulty, 0, world.getName(), reducedDebugInfo));
@@ -280,18 +278,20 @@ public class EndermanSessionWrapper extends SessionWrapper {
             if(entity instanceof Player) {
                 this.sendPacket(new PacketOutSpawnPlayer((Player)entity));
             } else {
-                Integer id = entityTypeWrapper.wrap(entity.getEntityType());
+                Integer id = entityTypeWrapper.wrap(entity.getEntityKey());
                 if (id == null)
                     continue;
 
-                EntityCategory category = getProtocol().getEntityMapper().getCategory(entity.getEntityType());
+                EntityCategory category = getProtocol().getEntityMapper().getCategory(entity.getEntityKey());
                 if (category == null)
                     continue;
 
                 if (category == EntityCategory.ENTITY) {
                     this.sendPacket(new PacketOutSpawnMob(id, entity));
                 } else {
-                    this.sendPacket(new PacketOutSpawnObject(id, entity));
+                    int data = objectTransformerRepository.transform(entity);
+                    this.sendPacket(new PacketOutSpawnObject(id, entity, data));
+                    this.sendMetadata(entity, entity.getMetadataKeyValueBucket().getMetadataKeys());
                 }
             }
             this.sendTeleport(entity);
@@ -306,6 +306,11 @@ public class EndermanSessionWrapper extends SessionWrapper {
 
     @Override
     public void sendMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
+        sendPacket(new PacketOutEntityMetadata(entity, Arrays.asList(entityMetadataKeys)));
+    }
+
+    @Override
+    public void sendMetadata(Entity entity, Collection<MetadataKey> entityMetadataKeys) {
         sendPacket(new PacketOutEntityMetadata(entity, entityMetadataKeys));
     }
 

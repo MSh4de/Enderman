@@ -12,14 +12,14 @@ class GuardianPropertiesMetadataWrapper: MetadataWrapper<Guardian> {
         val metadataKeyValueBucket = guardian.metadataKeyValueBucket
 
         val elderly = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_ELDERLY)?.metadataValue)?: false) as Boolean
-        val retractingSpikes = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_RETRACTING_SPIKES)?.metadataValue)?: false) as Boolean
+//        val retractingSpikes = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_RETRACTING_SPIKES)?.metadataValue)?: false) as Boolean
 
         var b = 0
         if (elderly)
-            b = b or 0x02
-
-        if (retractingSpikes)
             b = b or 0x04
+
+        /*if (retractingSpikes)
+            b = b or 0x04*/
 
         return IntegerMetadata(b)
     }

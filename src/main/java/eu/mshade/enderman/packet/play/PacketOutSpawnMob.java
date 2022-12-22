@@ -1,6 +1,7 @@
 package eu.mshade.enderman.packet.play;
 
 import eu.mshade.enderframe.entity.Entity;
+import eu.mshade.enderframe.metadata.MetadataKey;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
@@ -26,6 +27,9 @@ public class PacketOutSpawnMob implements PacketOut {
         protocolBuffer.writeShort((int) entity.getVelocity().getX());
         protocolBuffer.writeShort((int) entity.getVelocity().getY());
         protocolBuffer.writeShort((int) entity.getVelocity().getZ());
+        for (MetadataKey entityMetadataKey : protocolBuffer.getSupportedMetadataKeys(entity)) {
+            protocolBuffer.writeEntityMetadata(entity, entityMetadataKey);
+        }
         protocolBuffer.writeByte(0x7F);
     }
 

@@ -15,6 +15,8 @@ import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
 public class EndermanProtocolBuffer extends ProtocolBuffer {
 
     private static Logger LOGGER = LoggerFactory.getLogger(EndermanProtocolBuffer.class);
@@ -82,9 +84,15 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
     @Override
     public void writeEntityMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
         for (MetadataKey entityMetadataKey : entityMetadataKeys) {
+            if (!entity.getMetadataKeyValueBucket().hasMetadataKeyValue(entityMetadataKey))
+                continue;
+
             EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
-            MetadataWrapper<Entity> entityMetadataBuffer = entityMetadataBucket.getEntityMetadataBuffer(entityMetadataKey);
-            Metadata<?> metadata = entityMetadataBuffer.wrap(entity);
+            MetadataWrapper<Entity> entityMetadataWrapper = entityMetadataBucket.getEntityMetadataWrapper(entityMetadataKey);
+            if (entityMetadataWrapper == null)
+                continue;
+
+            Metadata<?> metadata = entityMetadataWrapper.wrap(entity);
             int i = (entityMetadataManager.getMetadataIndex(metadata.getMetadataType())) << 5 | entityMetadataBucket.getIndexEntityMetadata(entityMetadataKey);
             this.writeByte(i);
             MetadataBuffer<Metadata<?>> metadataBuffer = (MetadataBuffer<Metadata<?>>) entityMetadataManager.getMetadataBuffer(metadata.getMetadataType());
@@ -92,5 +100,9 @@ public class EndermanProtocolBuffer extends ProtocolBuffer {
         }
     }
 
-
+    @Override
+    public Collection<MetadataKey> getSupportedMetadataKeys(Entity entity) {
+        EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
+        return entityMetadataBucket.getEntityMetadataTypes();
+    }
 }

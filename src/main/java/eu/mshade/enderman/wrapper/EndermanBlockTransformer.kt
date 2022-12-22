@@ -8,12 +8,8 @@ class StairsBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val blockFace =
-            metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.FACE, BlockFace::class.java)
-                ?: BlockFace.NONE
-        val halfBlock = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.HALF, BlockHalf::class.java)
-            ?: BlockHalf.BOTTOM
-
+        val blockFace = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.FACE).metadataValue ?: BlockFace.NONE) as BlockFace
+        val halfBlock = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.HALF).metadataValue ?: BlockHalf.BOTTOM) as BlockHalf
 
         var blockFaceId = 0
         if (blockFace == BlockFace.NORTH) {
@@ -75,8 +71,8 @@ class LogBlockTransFormer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val logAxis = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.AXIS, BlockAxis::class.java)
-            ?: BlockAxis.NONE
+        val logAxis = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.AXIS).metadataValue ?: BlockAxis.NONE) as BlockAxis
+
 
         var value = 0
         if (logAxis == BlockAxis.X) {
@@ -119,14 +115,13 @@ class ButtonBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val blockFace = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.FACE, BlockFace::class.java)
-            ?: BlockFace.NONE
+
+        val blockFace = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.FACE).metadataValue ?: BlockFace.NONE) as BlockFace
 
         val powered =
             metadataKeyValueBucket.getMetadataKeyValue(
-                BlockMetadataType.POWERED,
-                PoweredBlockMetadata::class.java
-            )?.metadataValue ?: false
+                BlockMetadataType.POWERED
+            )?.metadataValue as? Boolean ?: false
 
         var value = when (blockFace) {
             BlockFace.EAST -> 1
@@ -175,16 +170,12 @@ class LeverBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val blockFace = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.FACE, BlockFace::class.java)
-            ?: BlockFace.NONE
+        val blockFace = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.FACE).metadataValue ?: BlockFace.NONE) as BlockFace
         val powered =
             metadataKeyValueBucket.getMetadataKeyValue(
-                BlockMetadataType.POWERED,
-                PoweredBlockMetadata::class.java
-            )?.metadataValue ?: false
-        val axis = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.AXIS, BlockAxis::class.java)
-            ?: BlockAxis.X
-
+                BlockMetadataType.POWERED
+            )?.metadataValue as? Boolean ?: false
+        val axis = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.AXIS).metadataValue ?: BlockAxis.X) as BlockAxis
 
         var value = when (blockFace) {
             BlockFace.EAST -> 1
@@ -250,8 +241,7 @@ class SlabBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val halfBlock = metadataKeyValueBucket.getValueOfMetadataKeyValue(BlockMetadataType.HALF, BlockHalf::class.java)
-            ?: BlockHalf.BOTTOM
+        val halfBlock = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.HALF).metadataValue ?: BlockHalf.BOTTOM) as BlockHalf
 
         val materialKey = materialWrapper.wrap(block.getMaterialKey())
         var value = materialKey!!.metadata
@@ -279,8 +269,8 @@ class SlabBlockTransformer : BlockTransformer() {
 class LeavesBlockTransformer: BlockTransformer(){
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val decayable = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.DECAYABLE, DecayableBlockMetadata::class.java)?.metadataValue ?: false
-        val checkDecay = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.CHECK_DECAY, CheckDecayBlockMetadata::class.java)?.metadataValue ?: false
+        val decayable = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.DECAYABLE)?.metadataValue as? Boolean ?: false
+        val checkDecay = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.CHECK_DECAY)?.metadataValue as? Boolean ?: false
 
 
         val materialKey = materialWrapper.wrap(block.getMaterialKey())
@@ -324,7 +314,7 @@ class DoubleSlabBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val seamless = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.SEAMLESS, SeamlessBlockMetadata::class.java)?.metadataValue ?: false
+        val seamless = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.SEAMLESS)?.metadataValue as? Boolean ?: false
 
         val materialKey = materialWrapper.wrap(block.getMaterialKey())
         var value = materialKey!!.metadata

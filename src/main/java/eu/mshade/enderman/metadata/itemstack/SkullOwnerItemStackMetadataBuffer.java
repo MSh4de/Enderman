@@ -18,7 +18,7 @@ public class SkullOwnerItemStackMetadataBuffer implements ItemStackMetadataBuffe
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        SkullOwnerItemStackMetadata skullOwnerItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.SKULL_OWNER, SkullOwnerItemStackMetadata.class);
+        SkullOwnerItemStackMetadata skullOwnerItemStackMetadata = (SkullOwnerItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.SKULL_OWNER);
         GameProfile gameProfile = skullOwnerItemStackMetadata.getMetadataValue();
 
         CompoundBinaryTag skullOwnerCompoundBinaryTag = new CompoundBinaryTag();

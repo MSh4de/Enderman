@@ -31,7 +31,7 @@ public class AttributeModifiersItemStackMetadataBuffer implements ItemStackMetad
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        AttributeModifiersItemStackMetadata metadataKeyValue = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.ATTRIBUTE_MODIFIERS, AttributeModifiersItemStackMetadata.class);
+        AttributeModifiersItemStackMetadata metadataKeyValue = (AttributeModifiersItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.ATTRIBUTE_MODIFIERS);
         List<ItemStackAttributeModifier> metadataValue = metadataKeyValue.getMetadataValue();
         if (metadataValue.isEmpty()) return;
         ListBinaryTag attributeModifiersListBinaryTag = new ListBinaryTag(BinaryTagType.COMPOUND);

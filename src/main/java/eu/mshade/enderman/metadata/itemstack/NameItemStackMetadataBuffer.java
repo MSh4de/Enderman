@@ -12,7 +12,7 @@ public class NameItemStackMetadataBuffer implements ItemStackMetadataBuffer {
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        NameItemStackMetadata nameItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.NAME, NameItemStackMetadata.class);
+        NameItemStackMetadata nameItemStackMetadata = (NameItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.NAME);
         CompoundBinaryTag displayCompoundBinaryTag = compoundBinaryTag.computeIfAbsent("display", s -> new CompoundBinaryTag());
         displayCompoundBinaryTag.putString("Name", nameItemStackMetadata.getMetadataValue().toLegacyText());
     }
