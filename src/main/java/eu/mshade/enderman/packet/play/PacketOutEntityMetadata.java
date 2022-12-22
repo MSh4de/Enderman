@@ -5,12 +5,14 @@ import eu.mshade.enderframe.metadata.MetadataKey;
 import eu.mshade.enderframe.protocol.PacketOut;
 import eu.mshade.enderframe.protocol.ProtocolBuffer;
 
+import java.util.Collection;
+
 public class PacketOutEntityMetadata implements PacketOut {
 
     private final Entity entity;
-    private final MetadataKey[] metadataKeys;
+    private final Collection<MetadataKey> metadataKeys;
 
-    public PacketOutEntityMetadata(Entity entity, MetadataKey... metadataKeys) {
+    public PacketOutEntityMetadata(Entity entity, Collection<MetadataKey> metadataKeys) {
         this.entity = entity;
         this.metadataKeys = metadataKeys;
     }
