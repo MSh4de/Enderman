@@ -1,8 +1,5 @@
 package eu.mshade.enderman.wrapper;
 
-import eu.mshade.enderframe.entity.EntityType;
-import eu.mshade.enderframe.wrapper.Wrapper;
-
 public class EndermanEntityTypeWrapper extends Wrapper<EntityType, Integer> {
 
     public EndermanEntityTypeWrapper() {

@@ -1,6 +1,5 @@
 package eu.mshade.enderman.metadata;
 
-import eu.mshade.enderframe.entity.EntityType;
 import eu.mshade.enderframe.item.ItemStack;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataManager;
 import eu.mshade.enderframe.metadata.MetadataType;

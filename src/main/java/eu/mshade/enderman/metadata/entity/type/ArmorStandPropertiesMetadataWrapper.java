@@ -1,6 +1,5 @@
 package eu.mshade.enderman.metadata.entity.type;
 
-import eu.mshade.enderframe.entity.ArmorStand;
 import eu.mshade.enderframe.entity.metadata.*;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;

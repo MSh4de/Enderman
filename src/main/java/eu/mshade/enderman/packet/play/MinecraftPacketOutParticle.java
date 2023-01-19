@@ -4,7 +4,6 @@ import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.particle.*;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
-import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class MinecraftPacketOutParticle implements MinecraftPacketOut {
 

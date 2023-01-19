@@ -7,7 +7,6 @@ import eu.mshade.enderframe.item.metadata.CanDestroyItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
-import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.mwork.binarytag.BinaryTag;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.StringBinaryTag;

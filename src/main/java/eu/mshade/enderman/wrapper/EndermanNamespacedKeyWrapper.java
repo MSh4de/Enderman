@@ -3,7 +3,6 @@ package eu.mshade.enderman.wrapper;
 import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
-import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class EndermanNamespacedKeyWrapper extends Wrapper<MaterialKey, NamespacedKey> {
 

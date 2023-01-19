@@ -8,7 +8,6 @@ import eu.mshade.enderframe.entity.Player
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
 import eu.mshade.enderframe.item.MaterialKey
-import eu.mshade.enderframe.metadata.entity.EntityMetadataKey
 import eu.mshade.enderframe.mojang.chat.TextComponent
 import eu.mshade.enderframe.mojang.chat.TextPosition
 import eu.mshade.enderframe.particle.Particle

@@ -2,7 +2,6 @@ package eu.mshade.enderman.wrapper;
 
 import eu.mshade.enderframe.inventory.InventoryKey;
 import eu.mshade.enderframe.inventory.InventoryType;
-import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class EndermanInventorySizeWrapper extends Wrapper<InventoryKey, Integer> {
 

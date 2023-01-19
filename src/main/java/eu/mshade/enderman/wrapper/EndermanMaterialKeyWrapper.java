@@ -2,7 +2,6 @@ package eu.mshade.enderman.wrapper;
 
 import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.item.MaterialKey;
-import eu.mshade.enderframe.wrapper.Wrapper;
 
 
 public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey> {

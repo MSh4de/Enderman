@@ -5,7 +5,6 @@ import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.attribute.AttributeKey;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
-import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderframe.wrapper.WrapperRepository;
 import eu.mshade.enderman.metadata.itemstack.*;
 import eu.mshade.enderman.wrapper.EndermanContextWrapper;
