@@ -9,6 +9,7 @@ import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.metadata.attribute.AttributeKey;
 import eu.mshade.enderframe.metadata.attribute.AttributeModifier;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag;
@@ -28,7 +29,7 @@ public class AttributeModifiersItemStackMetadataWrapper implements ItemStackMeta
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        AttributeModifiersItemStackMetadata metadataKeyValue = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.ATTRIBUTE_MODIFIERS, AttributeModifiersItemStackMetadata.class);
+        AttributeModifiersItemStackMetadata metadataKeyValue = (AttributeModifiersItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.ATTRIBUTE_MODIFIERS);
         List<ItemStackAttributeModifier> metadataValue = metadataKeyValue.getMetadataValue();
         if (metadataValue.isEmpty()) return;
         ListBinaryTag attributeModifiersListBinaryTag = new ListBinaryTag(BinaryTagType.COMPOUND);

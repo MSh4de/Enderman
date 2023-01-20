@@ -1,6 +1,7 @@
 package eu.mshade.enderman.wrapper;
 
 import eu.mshade.enderframe.item.EnchantmentType;
+import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class EndermanEnchantmentTypeWrapper extends Wrapper<EnchantmentType, Integer> {
 

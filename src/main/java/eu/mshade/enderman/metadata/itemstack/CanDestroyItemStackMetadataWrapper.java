@@ -7,6 +7,7 @@ import eu.mshade.enderframe.item.metadata.CanDestroyItemStackMetadata;
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket;
 import eu.mshade.enderframe.item.ItemStackMetadataKey;
 import eu.mshade.enderframe.mojang.NamespacedKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.mwork.binarytag.BinaryTag;
 import eu.mshade.mwork.binarytag.BinaryTagType;
 import eu.mshade.mwork.binarytag.StringBinaryTag;
@@ -27,7 +28,7 @@ public class CanDestroyItemStackMetadataWrapper implements ItemStackMetadataWrap
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        CanDestroyItemStackMetadata canDestroyItemStackMetadata = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_DESTROY, CanDestroyItemStackMetadata.class);
+        CanDestroyItemStackMetadata canDestroyItemStackMetadata = (CanDestroyItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.CAN_DESTROY);
         List<MaterialKey> materialKeys = canDestroyItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {

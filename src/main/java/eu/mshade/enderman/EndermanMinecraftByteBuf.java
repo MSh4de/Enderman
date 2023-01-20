@@ -4,17 +4,17 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.item.*;
 import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
-import eu.mshade.enderframe.metadata.entity.EntityMetadataKey;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.Wrapper;
-import eu.mshade.enderframe.wrapper.WrapperRepository;
-import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
+import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
 
 public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
@@ -24,11 +24,11 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
     private final EndermanItemStackManager itemStackManager;
     private final Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
 
-    public EndermanMinecraftByteBuf(EndermanEntityMetadataManager entityMetadataManager, EndermanItemStackManager itemStackManager, WrapperRepository wrapperRepository, ByteBuf byteBuf) {
+    public EndermanMinecraftByteBuf(EndermanMinecraftProtocol minecraftProtocol, ByteBuf byteBuf) {
         super(byteBuf);
-        this.entityMetadataManager = entityMetadataManager;
-        this.itemStackManager = itemStackManager;
-        this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) wrapperRepository.get(ContextWrapper.MATERIAL_KEY);
+        this.entityMetadataManager = minecraftProtocol.getEntityMetadataManager();
+        this.itemStackManager = minecraftProtocol.getItemStackManager();
+        this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) minecraftProtocol.getWrapperRepository().get(ContextWrapper.MATERIAL_KEY);
     }
 
 
@@ -81,11 +81,17 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
     }
 
     @Override
-    public void writeEntityMetadata(Entity entity, EntityMetadataKey... entityMetadataKeys) {
-        for (EntityMetadataKey entityMetadataKey : entityMetadataKeys) {
+    public void writeEntityMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
+        for (MetadataKey entityMetadataKey : entityMetadataKeys) {
+            if (!entity.getMetadataKeyValueBucket().hasMetadataKeyValue(entityMetadataKey))
+                continue;
+
             EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
-            MetadataWrapper<Entity> entityMetadataBuffer = entityMetadataBucket.getEntityMetadataBuffer(entityMetadataKey);
-            Metadata<?> metadata = entityMetadataBuffer.wrap(entity);
+            MetadataWrapper<Entity> entityMetadataWrapper = entityMetadataBucket.getEntityMetadataWrapper(entityMetadataKey);
+            if (entityMetadataWrapper == null)
+                continue;
+
+            Metadata<?> metadata = entityMetadataWrapper.wrap(entity);
             int i = (entityMetadataManager.getMetadataIndex(metadata.getMetadataType())) << 5 | entityMetadataBucket.getIndexEntityMetadata(entityMetadataKey);
             this.writeByte(i);
             MetadataBuffer<Metadata<?>> metadataBuffer = (MetadataBuffer<Metadata<?>>) entityMetadataManager.getMetadataBuffer(metadata.getMetadataType());
@@ -93,5 +99,9 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
         }
     }
 
-
+    @Override
+    public Collection<MetadataKey> getSupportedMetadataKeys(Entity entity) {
+        EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
+        return entityMetadataBucket.getEntityMetadataTypes();
+    }
 }

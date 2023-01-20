@@ -2,6 +2,7 @@ package eu.mshade.enderman.wrapper;
 
 import eu.mshade.enderframe.particle.ParticleType;
 import eu.mshade.enderframe.particle.ParticleKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class EndermanParticleWrapper extends Wrapper<ParticleKey, Integer> {
 

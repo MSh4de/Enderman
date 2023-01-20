@@ -2,6 +2,7 @@ package eu.mshade.enderman.wrapper;
 
 import eu.mshade.enderframe.item.Material;
 import eu.mshade.enderframe.item.MaterialKey;
+import eu.mshade.enderframe.wrapper.Wrapper;
 
 
 public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey> {
@@ -21,6 +22,7 @@ public class EndermanMaterialKeyWrapper extends Wrapper<MaterialKey, MaterialKey
         register(Material.POLISHED_DIORITE, MaterialKey.from(1, 4));
         register(Material.ANDESITE, MaterialKey.from(1, 5));
         register(Material.POLISHED_ANDESITE, MaterialKey.from(1, 6));
+
 
         register(Material.GRASS, MaterialKey.from(2));
 

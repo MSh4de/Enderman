@@ -1,9 +1,9 @@
 package eu.mshade.enderman.listener
 
 import eu.mshade.enderframe.EnderFrame
-import eu.mshade.enderframe.inventory.ChestInventory
 import eu.mshade.enderframe.inventory.ClickType
 import eu.mshade.enderframe.inventory.PlayerInventory
+import eu.mshade.enderframe.inventory.type.ChestInventory
 import eu.mshade.enderframe.packetevent.MinecraftPacketClickInventoryEvent
 import eu.mshade.enderframe.packetevent.MinecraftPacketCloseInventoryEvent
 import eu.mshade.enderman.packet.play.inventory.MinecraftPacketInClickInventory
@@ -18,7 +18,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
         val minecraftSession = event.getMinecraftSession()
         val player = minecraftSession.player
 
-        var clickType = ClickType.UNKNOWN
+        var clickType: ClickType? = null
         val button = event.button
         val mode = event.mode
         var slot = event.slot
@@ -29,7 +29,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
         val maxSizeClickedInventory = endermanInventorySizeWrapper.wrap(clickedInventory.inventoryKey)!!
 
         if (clickedInventory !is PlayerInventory) {
-            val maxSizeSlot = if(clickedInventory is ChestInventory) clickedInventory.getRow() * 9 else maxSizeClickedInventory
+            val maxSizeSlot = if(clickedInventory is ChestInventory) clickedInventory.rows * 9 else maxSizeClickedInventory
             if (slot >= 0 && slot >= maxSizeSlot) {
                 clickedInventory = player.getInventory()
                 val maxSizeSlotWithPlayerInventory = maxSizeSlot + (9 * 4)
@@ -46,47 +46,27 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
 
         val itemStack = event.itemStack
 
-        if (mode == 0) {
-            if (button == 0) {
-                clickType = ClickType.LEFT
-            } else if (button == 1) {
-                clickType = ClickType.RIGHT
+        clickType = when (mode) {
+            0 -> if (button == 0) ClickType.LEFT else ClickType.RIGHT
+            1 -> if (button == 0) ClickType.SHIFT_LEFT else ClickType.SHIFT_RIGHT
+            2 -> {
+                key = button
+                ClickType.NUMBER_KEY
             }
-        } else if (mode == 1) {
-            if (button == 0) {
-                clickType = ClickType.SHIFT_LEFT
-            } else if (button == 1) {
-                clickType = ClickType.SHIFT_RIGHT
+            3 -> if (button == 2) ClickType.MIDDLE else null
+            4 -> if (button == 0) ClickType.DROP else ClickType.CONTROL_DROP
+            5 -> when (button) {
+                0 -> ClickType.START_DRAG_LEFT
+                4 -> ClickType.START_DRAG_RIGHT
+                2 -> ClickType.END_DRAG_LEFT
+                6 -> ClickType.END_DRAG_RIGHT
+                8 -> ClickType.START_DRAG_MIDDLE
+                10 -> ClickType.END_DRAG_MIDDLE
+                1, 5, 9 -> ClickType.ADD_ITEM_FROM_DRAG
+                else -> null
             }
-        } else if (mode == 2) {
-            clickType = ClickType.NUMBER_KEY
-            key = button
-        } else if (mode == 3) {
-            if (button == 2) clickType = ClickType.MIDDLE
-        } else if (mode == 4) {
-            if (button == 0) {
-                clickType = ClickType.DROP
-            } else if (button == 1) {
-                clickType = ClickType.CONTROL_DROP
-            }
-        } else if (mode == 5) {
-            if (button == 0) {
-                clickType = ClickType.START_DRAG_LEFT
-            } else if (button == 4) {
-                clickType = ClickType.START_DRAG_RIGHT
-            } else if (button == 2) {
-                clickType = ClickType.END_DRAG_LEFT
-            } else if (button == 6) {
-                clickType = ClickType.END_DRAG_RIGHT
-            } else if (button == 8) {
-                clickType = ClickType.START_DRAG_MIDDLE
-            } else if (button == 10) {
-                clickType = ClickType.END_DRAG_MIDDLE
-            } else if (button == 1 || button == 5 || button == 9) {
-                clickType = ClickType.ADD_ITEM_FROM_DRAG
-            }
-        } else if (mode == 6) {
-            if (button == 0) clickType = ClickType.DOUBLE_CLICK
+            6 -> if (button == 0) ClickType.DOUBLE_CLICK else null
+            else -> null
         }
 
         EnderFrame.get().packetEventBus.publish(MinecraftPacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.id, slot, key))

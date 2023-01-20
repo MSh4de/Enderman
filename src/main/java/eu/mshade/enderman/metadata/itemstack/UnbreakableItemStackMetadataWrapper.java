@@ -13,7 +13,7 @@ public class UnbreakableItemStackMetadataWrapper implements ItemStackMetadataWra
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
         MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
-        Boolean v = metadataKeyValueBucket.getValueOfMetadataKeyValue(ItemStackMetadataKey.UNBREAKABLE, Boolean.class);
+        Boolean v = (Boolean) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.UNBREAKABLE).getMetadataValue();
         compoundBinaryTag.putBinaryTag("Unbreakable", new ByteBinaryTag(v));
     }
 

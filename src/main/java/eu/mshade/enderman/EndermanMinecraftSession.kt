@@ -2,16 +2,16 @@ package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
 import eu.mshade.enderframe.UniqueId
-import eu.mshade.enderframe.entity.Entity
-import eu.mshade.enderframe.entity.EntityType
-import eu.mshade.enderframe.entity.Player
+import eu.mshade.enderframe.entity.*
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
 import eu.mshade.enderframe.item.MaterialKey
+import eu.mshade.enderframe.metadata.MetadataKey
 import eu.mshade.enderframe.mojang.chat.TextComponent
 import eu.mshade.enderframe.mojang.chat.TextPosition
 import eu.mshade.enderframe.particle.Particle
 import eu.mshade.enderframe.particle.ParticleKey
+import eu.mshade.enderframe.protocol.MinecraftProtocol
 import eu.mshade.enderframe.protocol.MinecraftProtocolPipeline
 import eu.mshade.enderframe.protocol.MinecraftProtocolStatus
 import eu.mshade.enderframe.protocol.MinecraftSession
@@ -25,6 +25,7 @@ import eu.mshade.enderframe.sound.SoundEffect
 import eu.mshade.enderframe.title.Title
 import eu.mshade.enderframe.title.TitleAction
 import eu.mshade.enderframe.world.*
+import eu.mshade.enderframe.world.Vector
 import eu.mshade.enderframe.world.block.Block
 import eu.mshade.enderframe.world.block.BlockTransformerRepository
 import eu.mshade.enderframe.world.border.WorldBorder
@@ -35,6 +36,7 @@ import eu.mshade.enderframe.world.chunk.Section
 import eu.mshade.enderframe.wrapper.ContextWrapper
 import eu.mshade.enderframe.wrapper.Wrapper
 import eu.mshade.enderframe.wrapper.WrapperRepository
+import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
@@ -50,26 +52,33 @@ import eu.mshade.enderman.wrapper.EndermanContextWrapper
 import io.netty.channel.Channel
 import java.nio.ByteBuffer
 import java.security.PublicKey
+import java.util.*
+
 
 class EndermanMinecraftSession(
     channel: Channel,
-    wrapperRepository: WrapperRepository,
-    private val blockTransformerRepository: BlockTransformerRepository
+    minecraftProtocol: EndermanMinecraftProtocol
 ) : MinecraftSession(channel) {
-    private val entityTypeWrapper: Wrapper<EntityType?, Int?>?
+    private val entityTypeWrapper: Wrapper<EntityKey?, Int?>?
     private val materialKeyWrapper: Wrapper<MaterialKey?, MaterialKey?>?
     private val inventoryKeyWrapper: Wrapper<InventoryKey?, String?>?
     private val inventorySizeWrapper: Wrapper<InventoryKey?, Int?>?
     private val particleKeyWrapper: Wrapper<ParticleKey?, Int?>?
-    private val uniqueId = UniqueId()
+    private val objectTransformerRepository: EndermanObjectTransformerRepository
+    private val blockTransformerRepository: BlockTransformerRepository
 
     init {
+        val wrapperRepository = minecraftProtocol.wrapperRepository
+        objectTransformerRepository = minecraftProtocol.objectTransformerRepository
+        blockTransformerRepository = minecraftProtocol.blockTransformerRepository
+
+
         materialKeyWrapper = wrapperRepository.get(ContextWrapper.MATERIAL_KEY) as Wrapper<MaterialKey?, MaterialKey?>?
         inventoryKeyWrapper =
             wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY) as Wrapper<InventoryKey?, String?>?
         inventorySizeWrapper =
             wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE) as Wrapper<InventoryKey?, Int?>?
-        entityTypeWrapper = wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE) as Wrapper<EntityType?, Int?>?
+        entityTypeWrapper = wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE) as Wrapper<EntityKey?, Int?>?
         particleKeyWrapper = wrapperRepository.get(EndermanContextWrapper.PARTICLE_TYPE) as Wrapper<ParticleKey?, Int?>?
     }
 
@@ -85,20 +94,17 @@ class EndermanMinecraftSession(
 
     override fun sendJoinGame(world: World, reducedDebugInfo: Boolean) {
         val metadataKeyValueBucket = world.metadataKeyValueBucket
+
+        println(metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION))
+
         val dimension =
-            metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIMENSION, Dimension::class.java)
+            metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION).metadataValue as Dimension
         val difficulty =
-            metadataKeyValueBucket.getValueOfMetadataKeyValue(WorldMetadataType.DIFFICULTY, Difficulty::class.java)
+            metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIFFICULTY).metadataValue as Difficulty
         val player = MinecraftProtocolPipeline.get().getPlayer(getChannel())
         sendPacket(
             MinecraftPacketOutJoinGame(
-                player.entityId,
-                player.gameMode,
-                dimension,
-                difficulty,
-                0,
-                world.name,
-                reducedDebugInfo
+                player.entityId, player.gameMode, dimension, difficulty, 0, world.name, reducedDebugInfo
             )
         )
     }
@@ -121,12 +127,7 @@ class EndermanMinecraftSession(
     ) {
         sendPacket(
             MinecraftPacketOutPlayerAbilities(
-                invulnerable,
-                flying,
-                allowFlying,
-                instantBreak,
-                flyingSpeed,
-                walkSpeed
+                invulnerable, flying, allowFlying, instantBreak, flyingSpeed, walkSpeed
             )
         )
     }
@@ -171,11 +172,7 @@ class EndermanMinecraftSession(
     override fun teleport(location: Location) {
         sendPacket(
             MinecraftPacketOutPlayerPositionAndLook(
-                location.x,
-                location.y,
-                location.z,
-                location.yaw,
-                location.pitch
+                location.x, location.y, location.z, location.yaw, location.pitch
             )
         )
     }
@@ -190,14 +187,13 @@ class EndermanMinecraftSession(
         val compareBodyLocation = now.compareBodyLocation(before)
         val compareHeadRotation = now.compareHeadRotation(before)
         if (!compareBodyLocation) {
-            val teleport = (hasOverflow(floor(now.x * 32) - floor(before.x * 32))
-                    || hasOverflow(floor(now.y * 32) - floor(before.y * 32))
-                    || hasOverflow(floor(now.z * 32) - floor(before.z * 32)))
+            val teleport =
+                (hasOverflow(floor(now.x * 32) - floor(before.x * 32)) || hasOverflow(floor(now.y * 32) - floor(before.y * 32)) || hasOverflow(
+                    floor(now.z * 32) - floor(before.z * 32)
+                ))
             if (!teleport) {
                 if (!compareHeadRotation) this.sendMoveAndLook(entity, before, now) else this.sendMove(
-                    entity,
-                    before,
-                    now
+                    entity, before, now
                 )
             } else {
                 this.sendTeleport(entity, now)
@@ -271,8 +267,15 @@ class EndermanMinecraftSession(
             if (entity is Player) {
                 sendPacket(MinecraftPacketOutSpawnPlayer(entity))
             } else {
-                val id = entityTypeWrapper!!.wrap(entity.entityType) ?: continue
-                sendPacket(MinecraftPacketOutSpawnMob(id, entity))
+                val id = entityTypeWrapper!!.wrap(entity.entityKey) ?: continue
+                val category: EntityCategory = protocol.entityMapper.getCategory(entity.entityKey) ?: continue
+                if (category === EntityCategory.ENTITY) {
+                    sendPacket(MinecraftPacketOutSpawnEntity(id, entity))
+                } else {
+                    val data: Int = objectTransformerRepository.transform(entity)
+                    sendPacket(MinecraftPacketOutSpawnObject(id, entity, data))
+                    this.sendMetadata(entity, entity.metadataKeyValueBucket.metadataKeys)
+                }
             }
             this.sendTeleport(entity)
         }
@@ -282,9 +285,14 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutDestroyEntities(*entities))
     }
 
-    override fun sendMetadata(entity: Entity, vararg entityMetadataKeys: EntityMetadataKey) {
-        sendPacket(MinecraftPacketOutEntityMetadata(entity, *entityMetadataKeys))
+    override fun sendMetadata(entity: Entity, vararg entityMetadataKeys: MetadataKey) {
+        sendMetadata(entity, entityMetadataKeys.toList())
     }
+
+    override fun sendMetadata(entity: Entity, entityMetadataKeys: Collection<MetadataKey>) {
+        sendPacket(MinecraftPacketOutEntityMetadata(entity, entityMetadataKeys))
+    }
+
 
     override fun sendChunk(chunk: Chunk) {
         val sections: MutableList<Section> = ArrayList()
@@ -461,8 +469,7 @@ class EndermanMinecraftSession(
     override fun sendItemStack(inventory: Inventory, slot: Int, itemStack: ItemStack) {
         val id: Int
         id = if (inventory is PlayerInventory) {
-            0
-            /*            slot = PlayerInventory.accurateSlot(slot);*/
+            0/*            slot = PlayerInventory.accurateSlot(slot);*/
         } else {
             1
             //id = this.inventoryRepository.getIdOfInventory(inventory);
@@ -479,8 +486,7 @@ class EndermanMinecraftSession(
     }
 
     override fun sendUpdateScoreboard(
-        scoreboardObjective: ScoreboardObjective<*>?,
-        scoreboardObjectiveAction: ScoreboardObjectiveAction
+        scoreboardObjective: ScoreboardObjective<*>?, scoreboardObjectiveAction: ScoreboardObjectiveAction
     ) {
         sendPacket(MinecraftPacketOutUpdateScoreboard(scoreboardObjective, scoreboardObjectiveAction))
     }
@@ -503,6 +509,10 @@ class EndermanMinecraftSession(
 
     override fun sendParticle(particle: Particle) {
         sendPacket(MinecraftPacketOutParticle(materialKeyWrapper, particleKeyWrapper, particle))
+    }
+
+    override fun sendInventoryUpdate(block: Block?, vararg metadataKeys: MetadataKey?) {
+        TODO("Not yet implemented")
     }
 
     private fun hasOverflow(value: Int): Boolean {
