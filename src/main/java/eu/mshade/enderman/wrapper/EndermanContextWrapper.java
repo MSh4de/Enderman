@@ -1,6 +1,5 @@
 package eu.mshade.enderman.wrapper;
 
-import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.ContextWrapperKey;
 
 public class EndermanContextWrapper {
