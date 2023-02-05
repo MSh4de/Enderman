@@ -2,10 +2,10 @@ package eu.mshade.enderman
 
 import eu.mshade.enderframe.EnderFrame
 import eu.mshade.enderframe.entity.EntityMapper
-import eu.mshade.enderframe.item.MaterialCategory
 import eu.mshade.enderframe.packetevent.MinecraftPacketToggleFlyingEvent
 import eu.mshade.enderframe.protocol.*
 import eu.mshade.enderframe.protocol.packet.*
+import eu.mshade.enderframe.world.block.BlockTransformerController
 import eu.mshade.enderframe.wrapper.ContextWrapper
 import eu.mshade.enderman.listener.*
 import eu.mshade.enderman.metadata.EndermanEntityMapper
@@ -36,11 +36,12 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
     val entityMetadataManager: EndermanEntityMetadataManager
     val itemStackManager: EndermanItemStackManager
     private val entityMapper = EndermanEntityMapper()
-    val objectTransformerRepository = EndermanObjectTransformerRepository(this.getBlockTransformerRepository())
+    private val blockTransformerController: BlockTransformerController
+    val objectTransformerRepository: EndermanObjectTransformerRepository
 
     init {
-        val endermanMaterialKeyWrapper = EndermanMaterialKeyWrapper()
-        wrapperRepository.register(ContextWrapper.MATERIAL_KEY, endermanMaterialKeyWrapper)
+        val materialKeyWrapper = EndermanMaterialKeyWrapper()
+        wrapperRepository.register(ContextWrapper.MATERIAL_KEY, materialKeyWrapper)
         wrapperRepository.register(EndermanContextWrapper.INVENTORY_KEY, EndermanInventoryKeyWrapper())
         wrapperRepository.register(EndermanContextWrapper.INVENTORY_SIZE, EndermanInventorySizeWrapper())
         wrapperRepository.register(EndermanContextWrapper.ATTRIBUTE_KEY, EndermanAttributeKeyWrapper())
@@ -52,6 +53,10 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
 
         entityMetadataManager = EndermanEntityMetadataManager()
         itemStackManager = EndermanItemStackManager(getWrapperRepository())
+        blockTransformerController = BlockTransformerController(materialKeyWrapper)
+        objectTransformerRepository = EndermanObjectTransformerRepository(blockTransformerController)
+
+
 
         getEventBus().subscribe(MinecraftPacketInKeepAlive::class.java, MinecraftPacketInKeepAliveListener())
         getEventBus().subscribe(MinecraftPacketInLogin::class.java, MinecraftPacketInLoginListener())
@@ -82,26 +87,20 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
                 }
             })
 
-        getEventBus().subscribe(
-            MinecraftPacketInBlockPlacement::class.java,
-            MinecraftPacketInBlockPlacementListener()
-        )
+        getEventBus().subscribe(MinecraftPacketInBlockPlacement::class.java, MinecraftPacketInBlockPlacementListener())
+        getEventBus().subscribe(MinecraftPacketInPlayerDigging::class.java, MinecraftPacketInPlayerDiggingListener())
 
-        getEventBus().subscribe(
-            MinecraftPacketInPlayerDigging::class.java, MinecraftPacketInPlayerDiggingListener()
-        )
 
-        blockTransformerRepository.registerDefaultTransformer(CommonBlockTransformer())
 
-        blockTransformerRepository.registerMaterialWrapper(endermanMaterialKeyWrapper)
-        blockTransformerRepository.register(MaterialCategory.LOG, LogBlockTransFormer())
-        blockTransformerRepository.register(MaterialCategory.STAIRS, StairsBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.BUTTON, ButtonBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.LEVER, LeverBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.SLAB, SlabBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.LEAVES, LeavesBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.DOUBLE_SLAB, DoubleSlabBlockTransformer())
-        blockTransformerRepository.register(MaterialCategory.VINE, VineBlockTransformer())
+        //register all material  of minecraft 1.8
+        blockTransformerController.register(StairsBlockTransformer())
+        blockTransformerController.register(LogBlockTransFormer())
+        blockTransformerController.register(ButtonBlockTransformer())
+        blockTransformerController.register(LeverBlockTransformer())
+        blockTransformerController.register(SlabBlockTransformer())
+        blockTransformerController.register(LeavesBlockTransformer())
+        blockTransformerController.register(VineBlockTransformer())
+        blockTransformerController.register(CommonBlockTransformer())
 
 
         protocolRegistry.registerOut(MinecraftProtocolStatus.LOGIN, 0x00, MinecraftPacketOutDisconnect::class.java)
@@ -181,6 +180,10 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
 
     override fun getMinecraftProtocolVersion(): MinecraftProtocolVersion {
         return MinecraftProtocolVersion.V1_8
+    }
+
+    override fun getBlockTransformerController(): BlockTransformerController {
+        return blockTransformerController
     }
 
     override fun getEntityMapper(): EntityMapper {

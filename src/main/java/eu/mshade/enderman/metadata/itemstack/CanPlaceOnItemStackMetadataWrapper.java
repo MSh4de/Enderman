@@ -32,7 +32,7 @@ public class CanPlaceOnItemStackMetadataWrapper implements ItemStackMetadataWrap
         List<MaterialKey> materialKeys = canPlaceOnItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {
-            NamespacedKey namespacedKey = endermanNamespacedKeyWrapper.wrap(materialKey);
+            NamespacedKey namespacedKey = endermanNamespacedKeyWrapper.map(materialKey);
             if (namespacedKey != null) {
                 listBinaryTag.add(new StringBinaryTag(namespacedKey.toString()));
             }
@@ -50,7 +50,7 @@ public class CanPlaceOnItemStackMetadataWrapper implements ItemStackMetadataWrap
         CanPlaceOnItemStackMetadata canPlaceOnItemStackMetadata = new CanPlaceOnItemStackMetadata(new ArrayList<>());
         for (BinaryTag<?> binaryTag : canPlaceOn.getValue()) {
             NamespacedKey namespacedKey = NamespacedKey.fromString((String) binaryTag.getValue());
-            canPlaceOnItemStackMetadata.getMetadataValue().add(endermanNamespacedKeyWrapper.reverse(namespacedKey));
+            canPlaceOnItemStackMetadata.getMetadataValue().add(endermanNamespacedKeyWrapper.reverseMap(namespacedKey));
         }
         metadataKeyValueBucket.setMetadataKeyValue(canPlaceOnItemStackMetadata);
     }

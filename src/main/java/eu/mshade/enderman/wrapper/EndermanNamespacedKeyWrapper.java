@@ -9,16 +9,16 @@ public class EndermanNamespacedKeyWrapper extends Wrapper<MaterialKey, Namespace
 
     public EndermanNamespacedKeyWrapper() {
 
-        this.registerOutput(Material.STONE, NamespacedKey.minecraft("stone"));
+        this.registerMapping(Material.STONE, NamespacedKey.minecraft("stone"));
 
-        this.registerInput(Material.STONE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.GRANITE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.POLISHED_GRANITE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.DIORITE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.POLISHED_DIORITE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.ANDESITE, NamespacedKey.minecraft("stone"));
-        this.registerInput(Material.POLISHED_ANDESITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.STONE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.GRANITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.POLISHED_GRANITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.DIORITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.POLISHED_DIORITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.ANDESITE, NamespacedKey.minecraft("stone"));
+        this.registerReverseMapping(Material.POLISHED_ANDESITE, NamespacedKey.minecraft("stone"));
 
-        this.registerInput(Material.GRASS, NamespacedKey.minecraft("grass"));
+        this.registerReverseMapping(Material.GRASS_BLOCK, NamespacedKey.minecraft("grass"));
     }
 }

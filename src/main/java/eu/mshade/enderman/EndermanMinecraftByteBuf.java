@@ -35,7 +35,7 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
     @Override
     public void writeItemStack(ItemStack itemStack) {
         MaterialKey materialKey;
-        if (itemStack == null || (materialKey = materialKeyWrapper.wrap(itemStack.getMaterial())) == null) {
+        if (itemStack == null || (materialKey = materialKeyWrapper.map(itemStack.getMaterial())) == null) {
             writeShort(-1);
             return;
         }
@@ -48,7 +48,7 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
         }
         writeShort(materialKey.getId());
         writeByte(itemStack.getAmount() & 255);
-        if (materialKey.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)) {
+        if (materialKey.inMaterialCategories(MaterialCategory.DURABILITY)) {
             writeShort(itemStack.getDurability());
         } else {
             writeShort(materialKey.getMetadata());
@@ -64,12 +64,12 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
         byte count = readByte();
         int durability = readShort();
-        MaterialKey parent = materialKeyWrapper.reverse(MaterialKey.from(id));
+        MaterialKey parent = materialKeyWrapper.reverseMap(MaterialKey.from(id));
         MaterialKey materialKey;
-        if (parent != null && parent.inMaterialCategoryKey(MaterialCategory.ARMOR, MaterialCategory.TOOLS)) {
+        if (parent != null && parent.inMaterialCategories(MaterialCategory.DURABILITY)) {
             materialKey = parent;
         } else {
-            materialKey = materialKeyWrapper.reverse(MaterialKey.from(id, durability));
+            materialKey = materialKeyWrapper.reverseMap(MaterialKey.from(id, durability));
         }
         ItemStack itemStack = new ItemStack(materialKey, count, durability);
         CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();

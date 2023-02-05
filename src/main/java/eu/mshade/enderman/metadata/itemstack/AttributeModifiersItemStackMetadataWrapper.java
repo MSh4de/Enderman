@@ -34,12 +34,12 @@ public class AttributeModifiersItemStackMetadataWrapper implements ItemStackMeta
         if (metadataValue.isEmpty()) return;
         ListBinaryTag attributeModifiersListBinaryTag = new ListBinaryTag(BinaryTagType.COMPOUND);
         for (ItemStackAttributeModifier itemStackAttributeModifier : metadataValue) {
-            String attributeName = endermanAttributeKeyWrapper.wrap(itemStackAttributeModifier.getAttributeKey());
+            String attributeName = endermanAttributeKeyWrapper.map(itemStackAttributeModifier.getAttributeKey());
             if (attributeName != null) {
                 CompoundBinaryTag attributeModifierCompoundBinaryTag = new CompoundBinaryTag();
                 attributeModifierCompoundBinaryTag.putString("AttributeName", attributeName);
                 attributeModifierCompoundBinaryTag.putString("Name", itemStackAttributeModifier.getName());
-                attributeModifierCompoundBinaryTag.putString("Slot", endermanEquipmentSlotWrapper.wrap(itemStackAttributeModifier.getEquipmentSlot()));
+                attributeModifierCompoundBinaryTag.putString("Slot", endermanEquipmentSlotWrapper.map(itemStackAttributeModifier.getEquipmentSlot()));
                 AttributeModifier attributeModifier = itemStackAttributeModifier.getAttributeModifier();
                 attributeModifierCompoundBinaryTag.putByte("Operation", attributeModifier.getAttributeOperation().ordinal());
                 attributeModifierCompoundBinaryTag.putDouble("Amount", attributeModifier.getAmount());

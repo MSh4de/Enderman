@@ -5,11 +5,10 @@ import eu.mshade.enderframe.entity.EntityKey
 import eu.mshade.enderframe.entity.EntityType
 import eu.mshade.enderframe.entity.ItemFrame
 import eu.mshade.enderframe.entity.metadata.EntityMetadataKey
-import eu.mshade.enderframe.entity.metadata.OwnerEntityMetadata
 import eu.mshade.enderframe.item.ItemStack
 import eu.mshade.enderframe.world.block.BlockFace
 import eu.mshade.enderframe.world.block.BlockMetadataType
-import eu.mshade.enderframe.world.block.BlockTransformerRepository
+import eu.mshade.enderframe.world.block.BlockTransformerController
 import java.util.UUID
 
 interface EndermanObjectTransformer {
@@ -17,13 +16,13 @@ interface EndermanObjectTransformer {
     fun transform(entity: Entity): Int
 }
 
-class EndermanObjectTransformerRepository(private val blockTransformerRepository: BlockTransformerRepository) {
+class EndermanObjectTransformerRepository(blockTransformerController: BlockTransformerController) {
 
     private val transformerByEntityType = mutableMapOf<EntityKey, EndermanObjectTransformer>()
 
     init {
         register(EntityType.ITEM_FRAME, ItemFrameObjectTransformer())
-        register(EntityType.FALLING_BLOCK, FallingBlockObjectTransformer(blockTransformerRepository))
+        register(EntityType.FALLING_BLOCK, FallingBlockObjectTransformer(blockTransformerController))
         register(EntityType.FISHING_HOOK, FishingHookObjectTransformer())
 
         val projectileObjectTransformer = ProjectileObjectTransformer()
@@ -66,11 +65,12 @@ class ItemFrameObjectTransformer : EndermanObjectTransformer {
     }
 }
 
-class FallingBlockObjectTransformer(private val blockTransformerRepository: BlockTransformerRepository) : EndermanObjectTransformer {
+class FallingBlockObjectTransformer(private val blockTransformerController: BlockTransformerController) : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
         val item = (entity.metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.ITEM).metadataValue?: 0) as ItemStack
-        val material = blockTransformerRepository.transform(item.material.toBlock())
+        val material = blockTransformerController.transform(item.material.toBlock())
+        material ?: return 0
 
         return material.id shl 4 or (material.metadata and 15)
     }

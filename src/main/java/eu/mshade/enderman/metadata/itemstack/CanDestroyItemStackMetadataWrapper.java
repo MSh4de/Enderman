@@ -32,7 +32,7 @@ public class CanDestroyItemStackMetadataWrapper implements ItemStackMetadataWrap
         List<MaterialKey> materialKeys = canDestroyItemStackMetadata.getMetadataValue();
         ListBinaryTag listBinaryTag = new ListBinaryTag(BinaryTagType.STRING);
         materialKeys.forEach(materialKey -> {
-            NamespacedKey namespacedKey = namespacedKeyWrapper.wrap(materialKey);
+            NamespacedKey namespacedKey = namespacedKeyWrapper.map(materialKey);
             if (namespacedKey != null) {
                 listBinaryTag.add(new StringBinaryTag(namespacedKey.toString()));
             }
@@ -49,7 +49,7 @@ public class CanDestroyItemStackMetadataWrapper implements ItemStackMetadataWrap
         CanDestroyItemStackMetadata canDestroyItemStackMetadata = new CanDestroyItemStackMetadata(new ArrayList<>());
         for (BinaryTag<?> binaryTag : canDestroy.getValue()) {
             NamespacedKey namespacedKey = NamespacedKey.fromString((String) binaryTag.getValue());
-            canDestroyItemStackMetadata.getMetadataValue().add(namespacedKeyWrapper.reverse(namespacedKey));
+            canDestroyItemStackMetadata.getMetadataValue().add(namespacedKeyWrapper.reverseMap(namespacedKey));
         }
         metadataKeyValueBucket.setMetadataKeyValue(canDestroyItemStackMetadata);
     }
