@@ -344,7 +344,6 @@ class SlabBlockTransformer : BlockTransformer() {
 
 class LeavesBlockTransformer : BlockTransformer() {
 
-
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
         val decayable =
