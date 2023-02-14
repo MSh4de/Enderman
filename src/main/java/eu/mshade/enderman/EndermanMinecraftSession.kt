@@ -15,6 +15,7 @@ import eu.mshade.enderframe.protocol.MinecraftProtocolStatus
 import eu.mshade.enderframe.protocol.MinecraftSession
 import eu.mshade.enderframe.protocol.packet.*
 import eu.mshade.enderframe.scoreboard.Scoreboard
+import eu.mshade.enderframe.scoreboard.ScoreboardLine
 import eu.mshade.enderframe.scoreboard.ScoreboardMode
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective
 import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction
@@ -483,18 +484,18 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutSetItemStack(slot, id, itemStack))
     }
 
-    override fun sendDisplayScoreboard(scoreboard: Scoreboard<*>?) {
+    override fun sendDisplayScoreboard(scoreboard: Scoreboard?) {
         sendPacket(MinecraftPacketOutDisplayScoreboard(scoreboard))
     }
 
-    override fun sendScoreboardObjective(scoreboard: Scoreboard<*>?, scoreboardMode: ScoreboardMode) {
-        sendPacket(MinecraftPacketOutScoreboardObjective(scoreboard, scoreboardMode))
+    override fun sendScoreboard(scoreboard: Scoreboard, mode: ScoreboardMode) {
+        sendPacket(MinecraftPacketOutScoreboardObjective(scoreboard, mode))
     }
 
-    override fun sendUpdateScoreboard(
-        scoreboardObjective: ScoreboardObjective<*>?, scoreboardObjectiveAction: ScoreboardObjectiveAction
+    override fun sendUpdateScoreboardLine(
+        scoreboardLine: ScoreboardLine, scoreboardObjectiveAction: ScoreboardObjectiveAction
     ) {
-        sendPacket(MinecraftPacketOutUpdateScoreboard(scoreboardObjective, scoreboardObjectiveAction))
+        sendPacket(MinecraftPacketOutUpdateScoreboard(scoreboardLine, scoreboardObjectiveAction))
     }
 
     override fun sendTeams(team: Team) {
