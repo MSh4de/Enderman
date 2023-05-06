@@ -18,10 +18,10 @@ public class MinecraftPacketOutInventoryItems implements MinecraftPacketOut {
     @Override
     public void serialize(MinecraftByteBuf minecraftByteBuf) {
         minecraftByteBuf.writeByte(id);
-        int length = (inventory instanceof PlayerInventory ? 45 : inventory.getItemStacks().length);
+        int length = (inventory instanceof PlayerInventory ? 45 : inventory.itemStacks.length);
         minecraftByteBuf.writeShort(length);
         for (int i = 0; i < length; i++) {
-            minecraftByteBuf.writeItemStack(inventory.getItemStacks()[i]);
+            minecraftByteBuf.writeItemStack(inventory.itemStacks[i]);
         }
     }
 }

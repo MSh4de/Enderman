@@ -23,7 +23,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(11,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.HEAD_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -32,7 +32,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(12,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.BODY_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -41,7 +41,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(13,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.LEFT_ARM_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -50,7 +50,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(14,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.RIGHT_ARM_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -59,7 +59,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(15,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.LEFT_LEG_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -68,7 +68,7 @@ class ArmorStandMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 RotationMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.RIGHT_LEG_ROTATION
                     ).metadataValue as Rotation
                 )
@@ -83,7 +83,7 @@ class BoatMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(17,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.TIME_SINCE_LAST_HIT
                     ).metadataValue as Int
                 )
@@ -92,7 +92,7 @@ class BoatMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(18,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.FORWARD_DIRECTION
                     ).metadataValue as Int
                 )
@@ -101,7 +101,7 @@ class BoatMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(19,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.DAMAGE_TAKEN
                     ).metadataValue as Float
                 )
@@ -122,7 +122,7 @@ class FurnaceMinecartMetadataBucket : MinecartMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_POWERED
                     ).metadataValue as Int
                 )
@@ -142,7 +142,7 @@ class ArrowMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CRITICAL
                     ).metadataValue as Boolean
                 )
@@ -168,7 +168,7 @@ class EnderCrystalMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(8,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.HEALTH
                     ).metadataValue as Int
                 )

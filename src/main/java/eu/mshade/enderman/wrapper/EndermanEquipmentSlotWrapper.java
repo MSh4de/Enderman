@@ -11,7 +11,7 @@ public class EndermanEquipmentSlotWrapper extends Wrapper<EquipmentSlot, String>
         this.register(EquipmentSlot.BOOTS,"feet");
         this.register(EquipmentSlot.LEGGINGS,"legs");
         this.register(EquipmentSlot.CHEST_PLATE,"torso");
-        this.register(EquipmentSlot.HEAD,"head");
+        this.register(EquipmentSlot.HELMET,"head");
 
     }
 }

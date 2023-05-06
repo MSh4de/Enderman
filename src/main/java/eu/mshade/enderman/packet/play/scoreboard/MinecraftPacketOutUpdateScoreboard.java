@@ -4,25 +4,27 @@ import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.entity.Player;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
-import eu.mshade.enderframe.scoreboard.EntityScoreboard;
-import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective;
-import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction;
+import eu.mshade.enderframe.scoreboard.Scoreboard;
+import eu.mshade.enderframe.scoreboard.ScoreboardLine;
+import eu.mshade.enderframe.scoreboard.ScoreboardLineAction;
 
 public class MinecraftPacketOutUpdateScoreboard implements MinecraftPacketOut {
 
-    private final ScoreboardObjective<?> scoreboardObjective;
-    private final ScoreboardObjectiveAction scoreboardObjectiveAction;
+    private final Scoreboard scoreboard;
+    private final ScoreboardLine scoreboardLine;
+    private final ScoreboardLineAction scoreboardLineAction;
 
-    public MinecraftPacketOutUpdateScoreboard(ScoreboardObjective<?> scoreboardObjective, ScoreboardObjectiveAction scoreboardObjectiveAction) {
-        this.scoreboardObjective = scoreboardObjective;
-        this.scoreboardObjectiveAction = scoreboardObjectiveAction;
+    public MinecraftPacketOutUpdateScoreboard(Scoreboard scoreboard, ScoreboardLine scoreboardLine, ScoreboardLineAction scoreboardLineAction) {
+        this.scoreboard = scoreboard;
+        this.scoreboardLine = scoreboardLine;
+        this.scoreboardLineAction = scoreboardLineAction;
     }
 
     @Override
     public void serialize(MinecraftByteBuf minecraftByteBuf) {
-        String objectiveName;
+        String objectiveName = scoreboardLine.getValue();
 
-        if (scoreboardObjective.getScoreboard() instanceof EntityScoreboard) {
+/*        if (scoreboardObjective.getScoreboard() instanceof EntityScoreboard) {
             if (scoreboardObjective.getObjective() instanceof Player player) {
                 objectiveName = player.getName();
             } else {
@@ -31,18 +33,18 @@ public class MinecraftPacketOutUpdateScoreboard implements MinecraftPacketOut {
             }
         } else {
             objectiveName = (String) scoreboardObjective.getObjective();
-        }
+        }*/
 
         if (objectiveName.length() > 40) {
             throw new IndexOutOfBoundsException(objectiveName + " is bigger than 40 letters");
         }
 
         minecraftByteBuf.writeString(objectiveName);
-        minecraftByteBuf.writeVarInt(scoreboardObjectiveAction.ordinal());
-        minecraftByteBuf.writeString(scoreboardObjective.getScoreboard().getScoreboardId());
+        minecraftByteBuf.writeVarInt(scoreboardLineAction.getAction());
+        minecraftByteBuf.writeString(scoreboard.getId());
 
-        if (scoreboardObjectiveAction == ScoreboardObjectiveAction.CREATE_OR_UPDATE) {
-            minecraftByteBuf.writeVarInt(scoreboardObjective.getObjectiveValue());
+        if (scoreboardLineAction == ScoreboardLineAction.CHANGE) {
+            minecraftByteBuf.writeVarInt(scoreboardLine.getScore());
         }
     }
 }

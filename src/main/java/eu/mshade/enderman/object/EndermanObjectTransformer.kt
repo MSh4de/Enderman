@@ -60,7 +60,7 @@ class ItemFrameObjectTransformer : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
         entity as ItemFrame
-        val blockFace = (entity.metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.FACE).metadataValue ?: BlockFace.DOWN) as BlockFace
+        val blockFace = (entity.metadata.getMetadataKeyValue(BlockMetadataType.FACE).metadataValue ?: BlockFace.DOWN) as BlockFace
         return idFromOrientation[blockFace] ?: 0
     }
 }
@@ -68,7 +68,7 @@ class ItemFrameObjectTransformer : EndermanObjectTransformer {
 class FallingBlockObjectTransformer(private val blockTransformerController: BlockTransformerController) : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
-        val item = (entity.metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.ITEM).metadataValue?: 0) as ItemStack
+        val item = (entity.metadata.getMetadataKeyValue(EntityMetadataKey.ITEM).metadataValue?: 0) as ItemStack
         val material = blockTransformerController.transform(item.material.toBlock())
         material ?: return 0
 
@@ -79,20 +79,20 @@ class FallingBlockObjectTransformer(private val blockTransformerController: Bloc
 class FishingHookObjectTransformer : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
-        val ownerUuid = entity.metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as UUID
-        val owner = entity.location.world.getEntityByUuid(ownerUuid)
+        val ownerUuid = entity.metadata.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as UUID
+        val owner = entity.getLocation().world.getEntityByUuid(ownerUuid)
 
-        return owner.entityId
+        return owner.getEntityId()
     }
 }
 
 class ProjectileObjectTransformer : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
-        val ownerUuid = entity.metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as? UUID
+        val ownerUuid = entity.metadata.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as? UUID
         //Todo
-        val owner = entity.location.world.getEntityByUuid(ownerUuid)
+        val owner = entity.getLocation().world.getEntityByUuid(ownerUuid)
 
-        return owner.entityId
+        return owner.getEntityId()
     }
 }

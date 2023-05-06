@@ -9,6 +9,6 @@ public class MinecraftPacketInKeepAliveListener implements EventListener<Minecra
 
     @Override
     public void onEvent(MinecraftPacketInKeepAlive event) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new MinecraftPacketKeepAliveEvent(event.getMinecraftSession(), event.getThreshold()));
+        EnderFrame.get().getPacketEvents().publishAsync(new MinecraftPacketKeepAliveEvent(event.getMinecraftSession(), event.getThreshold()));
     }
 }

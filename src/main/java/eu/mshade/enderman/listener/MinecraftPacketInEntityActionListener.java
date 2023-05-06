@@ -8,6 +8,6 @@ import eu.mshade.mwork.event.EventListener;
 public class MinecraftPacketInEntityActionListener implements EventListener<MinecraftPacketInEntityAction> {
     @Override
     public void onEvent(MinecraftPacketInEntityAction event) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new MinecraftPacketEntityActionEvent(event.getMinecraftSession().getPlayer(), event.getActionType(), event.getActionParameter()));
+        EnderFrame.get().getPacketEvents().publishAsync(new MinecraftPacketEntityActionEvent(event.getMinecraftSession().getPlayer(), event.getActionType(), event.getActionParameter()));
     }
 }

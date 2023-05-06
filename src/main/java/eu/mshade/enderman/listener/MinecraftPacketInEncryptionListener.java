@@ -9,6 +9,6 @@ public class MinecraftPacketInEncryptionListener implements EventListener<Minecr
 
     @Override
     public void onEvent(MinecraftPacketInEncryption event) {
-        EnderFrame.get().getPacketEventBus().publish(new MinecraftPacketEncryptionEvent(event.getMinecraftSession(), event.getSharedSecret(), event.getVerifyToken()));
+        EnderFrame.get().getPacketEvents().publish(new MinecraftPacketEncryptionEvent(event.getMinecraftSession(), event.getSharedSecret(), event.getVerifyToken()));
     }
 }

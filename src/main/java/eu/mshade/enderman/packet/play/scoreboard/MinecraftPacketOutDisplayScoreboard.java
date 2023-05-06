@@ -14,12 +14,18 @@ public class MinecraftPacketOutDisplayScoreboard implements MinecraftPacketOut {
 
     @Override
     public void serialize(MinecraftByteBuf minecraftByteBuf) {
-        minecraftByteBuf.writeByte(scoreboard.getScoreboardPosition().getPosition());
+        try {
+            minecraftByteBuf.writeByte(scoreboard.getScoreboardPosition().getPosition());
 
-        if (scoreboard.getScoreboardId().length() > 16) {
-            throw new IndexOutOfBoundsException(scoreboard.getScoreboardId() + " is bigger than 16 letters");
+            if (scoreboard.getId().length() > 16) {
+                throw new IndexOutOfBoundsException(scoreboard.getId() + " is bigger than 16 letters");
+            }
+
+            minecraftByteBuf.writeString(scoreboard.getId());
+
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
-        minecraftByteBuf.writeString(scoreboard.getScoreboardId());
     }
 }

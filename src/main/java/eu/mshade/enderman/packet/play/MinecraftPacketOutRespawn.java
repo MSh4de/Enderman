@@ -15,7 +15,7 @@ public class MinecraftPacketOutRespawn implements MinecraftPacketOut {
 
     public MinecraftPacketOutRespawn(GameMode gameMode, World world) {
         this.gameMode = gameMode;
-        MetadataKeyValueBucket metadataKeyValueBucket = world.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = world.getMetadatas();
 
         Dimension dimension = (Dimension) metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION).getMetadataValue();
         Difficulty difficulty = (Difficulty) metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIFFICULTY).getMetadataValue();

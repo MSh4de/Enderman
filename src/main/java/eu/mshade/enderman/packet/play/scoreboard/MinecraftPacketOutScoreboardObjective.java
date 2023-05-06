@@ -3,29 +3,30 @@ package eu.mshade.enderman.packet.play.scoreboard;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.scoreboard.Scoreboard;
-import eu.mshade.enderframe.scoreboard.ScoreboardMode;
+import eu.mshade.enderframe.scoreboard.ScoreboardAction;
 
 public class MinecraftPacketOutScoreboardObjective implements MinecraftPacketOut {
 
     private final Scoreboard scoreboard;
-    private final ScoreboardMode scoreboardMode;
+    private final ScoreboardAction scoreboardAction;
 
-    public MinecraftPacketOutScoreboardObjective(Scoreboard scoreboard, ScoreboardMode scoreboardMode) {
+    public MinecraftPacketOutScoreboardObjective(Scoreboard scoreboard, ScoreboardAction scoreboardAction) {
         this.scoreboard = scoreboard;
-        this.scoreboardMode = scoreboardMode;
+        this.scoreboardAction = scoreboardAction;
     }
 
     @Override
     public void serialize(MinecraftByteBuf minecraftByteBuf) {
-        minecraftByteBuf.writeString(scoreboard.getScoreboardId());
-        minecraftByteBuf.writeByte(scoreboardMode.getMode());
+        minecraftByteBuf.writeString(scoreboard.getId());
+        minecraftByteBuf.writeByte(scoreboardAction.getMode());
 
-        if (scoreboardMode == ScoreboardMode.CREATE || scoreboardMode == ScoreboardMode.UPDATE_DISPLAY_TEXT) {
-            if (scoreboard.getScoreboardName().toLegacyText().length() > 32) {
-                throw new IndexOutOfBoundsException(scoreboard.getScoreboardName().toLegacyText() + " is bigger than 32 letters");
+        if (scoreboardAction == ScoreboardAction.CREATE || scoreboardAction == ScoreboardAction.UPDATE_DISPLAY_TEXT) {
+            String text = scoreboard.getTitle().toLegacyText();
+            if (text.length() > 32) {
+                throw new IndexOutOfBoundsException(text + " is bigger than 32 letters");
             }
 
-            minecraftByteBuf.writeString(scoreboard.getScoreboardName().toLegacyText());
+            minecraftByteBuf.writeString(text);
             minecraftByteBuf.writeString(scoreboard.getScoreboardType().getType());
         }
     }

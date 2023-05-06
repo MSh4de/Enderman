@@ -15,7 +15,7 @@ class BatMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_HANGING
                     ).metadataValue as Boolean
                 )
@@ -30,7 +30,7 @@ class ChickenMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_HANGING
                     ).metadataValue as Boolean
                 )
@@ -49,7 +49,7 @@ class HorseMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(19,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.VARIANT
                     ).metadataValue as Int
                 )
@@ -64,7 +64,7 @@ class HorseMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(21,
             { entity: Entity ->
                 StringMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.OWNER
                     ).metadataValue as String
                 )
@@ -74,7 +74,7 @@ class HorseMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(22,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.ARMOR
                     ).metadataValue as Int
                 )
@@ -88,7 +88,7 @@ class OcelotMetadataBucket: TameableEntityMetadataBucket() {
         registerEntityMetadata(18,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.VARIANT
                     ).metadataValue as Int
                 )
@@ -102,7 +102,7 @@ class PigMetadataBucket: AgeableEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.SADDLE
                     ).metadataValue as Boolean
                 )
@@ -117,7 +117,7 @@ class RabbitMetadataBucket: AgeableEntityMetadataBucket() {
         registerEntityMetadata(18,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.VARIANT
                     ).metadataValue as Int
                 )
@@ -143,7 +143,7 @@ class VillagerMetadataBucket: AgeableEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.VARIANT
                     ).metadataValue as Int
                 )

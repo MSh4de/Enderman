@@ -23,10 +23,13 @@ import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerLook
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerPosition
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerPositionAndLook
 import eu.mshade.enderman.packet.play.player.MinecraftPacketInClientStatus
+import eu.mshade.enderman.packet.play.player.MinecraftPacketInHeldItemChange
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreboard
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutTeams
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScoreboard
+import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
+import eu.mshade.enderman.packet.play.world.MinecraftPacketOutTimeUpdate
 import eu.mshade.enderman.wrapper.*
 import eu.mshade.mwork.event.EventListener
 import io.netty.buffer.ByteBuf
@@ -78,7 +81,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
             object : EventListener<MinecraftPacketInPlayerAbilities> {
                 override fun onEvent(event: MinecraftPacketInPlayerAbilities) {
                     val player = event.getMinecraftSession().player
-                    EnderFrame.get().packetEventBus.publish(
+                    EnderFrame.get().packetEvents.publish(
                         MinecraftPacketToggleFlyingEvent(
                             player,
                             event.isAllowFlying
@@ -89,6 +92,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
 
         getEventBus().subscribe(MinecraftPacketInBlockPlacement::class.java, MinecraftPacketInBlockPlacementListener())
         getEventBus().subscribe(MinecraftPacketInPlayerDigging::class.java, MinecraftPacketInPlayerDiggingListener())
+        getEventBus().subscribe(MinecraftPacketInHeldItemChange::class.java, MinecraftPacketInHeldItemChangeListener())
 
 
 
@@ -119,6 +123,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x06, MinecraftPacketInPlayerPositionAndLook::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x07, MinecraftPacketInPlayerDigging::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x08, MinecraftPacketInBlockPlacement::class.java)
+        protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x09, MinecraftPacketInHeldItemChange::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0B, MinecraftPacketInEntityAction::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x13, MinecraftPacketInPlayerAbilities::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x15, MinecraftPacketInClientSettings::class.java)
@@ -130,6 +135,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x00, MinecraftPacketOutKeepAlive::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x01, MinecraftPacketOutJoinGame::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x02, MinecraftPacketOutChatMessage::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x03, MinecraftPacketOutTimeUpdate::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x04, MinecraftPacketOutEntityEquipment::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x05, MinecraftPacketOutSpawnPosition::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x07, MinecraftPacketOutRespawn::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x08, MinecraftPacketOutPlayerPositionAndLook::class.java)
@@ -150,6 +157,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x38, MinecraftPacketOutPlayerInfo::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x39, MinecraftPacketOutPlayerAbilities::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x40, MinecraftPacketOutDisconnect::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x41, MinecraftPacketOutServerDifficulty::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x46, MinecraftPacketOutSetCompression::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x47, MinecraftPacketOutPlayerList::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x2F, MinecraftPacketOutSetItemStack::class.java)
@@ -168,6 +176,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x33, MinecraftPacketOutUpdateSign::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x2A, MinecraftPacketOutParticle::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketOutSpawnObject::class.java)
+
     }
 
     override fun getProtocolBuffer(byteBuf: ByteBuf): MinecraftByteBuf {

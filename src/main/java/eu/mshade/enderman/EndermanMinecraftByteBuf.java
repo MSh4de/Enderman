@@ -83,7 +83,7 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
     @Override
     public void writeEntityMetadata(Entity entity, MetadataKey... entityMetadataKeys) {
         for (MetadataKey entityMetadataKey : entityMetadataKeys) {
-            if (!entity.getMetadataKeyValueBucket().hasMetadataKeyValue(entityMetadataKey))
+            if (!entity.getMetadata().hasMetadataKeyValue(entityMetadataKey))
                 continue;
 
             EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);

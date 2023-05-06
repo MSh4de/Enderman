@@ -9,7 +9,7 @@ import eu.mshade.enderframe.metadata.type.ByteMetadata
 class ArmorStandPropertiesMetadataWrapper : MetadataWrapper<ArmorStand> {
 
     override fun wrap(armorStand: ArmorStand): Metadata<Byte> {
-        val metadataKeyValueBucket = armorStand.metadataKeyValueBucket
+        val metadataKeyValueBucket = armorStand.metadata
         var b = 0
 
         val small = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.SMALL_ARMOR_STAND)?.metadataValue)?: false) as Boolean

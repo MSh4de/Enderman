@@ -15,7 +15,7 @@ class EndermanMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(18,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.SCREAMING
                     ).metadataValue as Boolean
                 )
@@ -30,7 +30,7 @@ class IronGolemMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_PLAYER_CREATED
                     ).metadataValue as Boolean
                 )
@@ -45,7 +45,7 @@ open class SpiderMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CLIMBING
                     ).metadataValue as Boolean
                 )
@@ -59,14 +59,14 @@ class WolfMetadataBucket: TameableEntityMetadataBucket() {
     init {
         registerEntityMetadata(16,
             { entity: Entity ->
-                ByteMetadata(if ((entity.metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_ANGRY).metadataValue?: false) as Boolean) 0x02 else 0x00)
+                ByteMetadata(if ((entity.metadata.getMetadataKeyValue(EntityMetadataKey.IS_ANGRY).metadataValue?: false) as Boolean) 0x02 else 0x00)
             }, EntityMetadataKey.IS_ANGRY
         )
 
         registerEntityMetadata(18,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.HEALTH
                     ).metadataValue as Float
                 )
@@ -76,7 +76,7 @@ class WolfMetadataBucket: TameableEntityMetadataBucket() {
         registerEntityMetadata(19,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.BEGGING
                     ).metadataValue as Boolean
                 )
@@ -86,7 +86,7 @@ class WolfMetadataBucket: TameableEntityMetadataBucket() {
         registerEntityMetadata(20,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.COLLAR_COLOR
                     ).metadataValue as Int)
             }, EntityMetadataKey.COLLAR_COLOR

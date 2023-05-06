@@ -7,6 +7,6 @@ import eu.mshade.mwork.event.EventListener
 
 class MinecraftPacketInClientStatusListener: EventListener<MinecraftPacketInClientStatus> {
     override fun onEvent(event: MinecraftPacketInClientStatus) {
-        EnderFrame.get().packetEventBus.publish(MinecraftPacketClientStatusEvent(event.getMinecraftSession().player, event.clientStatus))
+        EnderFrame.get().packetEvents.publish(MinecraftPacketClientStatusEvent(event.getMinecraftSession().player, event.clientStatus))
     }
 }

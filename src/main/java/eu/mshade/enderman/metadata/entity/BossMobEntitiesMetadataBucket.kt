@@ -10,7 +10,7 @@ class WitherMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(20,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.INVULNERABLE_TIME
                     ).metadataValue as Int
                 )

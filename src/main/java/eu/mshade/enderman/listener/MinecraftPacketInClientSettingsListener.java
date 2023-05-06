@@ -9,7 +9,7 @@ public class MinecraftPacketInClientSettingsListener implements EventListener<Mi
 
     @Override
     public void onEvent(MinecraftPacketInClientSettings event) {
-        EnderFrame.get().getPacketEventBus().publishAsync(
+        EnderFrame.get().getPacketEvents().publishAsync(
                 new MinecraftPacketClientSettingsEvent(event.getMinecraftSession().getPlayer(), event.getLocale(), event.getViewDistance(), event.getChatMode(),
                         event.isChatColors(), event.getSkinParts()));
     }

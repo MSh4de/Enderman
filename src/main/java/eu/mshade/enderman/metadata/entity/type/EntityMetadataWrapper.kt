@@ -1,7 +1,6 @@
 package eu.mshade.enderman.metadata.entity.type
 
 import eu.mshade.enderframe.entity.Entity
-import eu.mshade.enderframe.entity.Tameable
 import eu.mshade.enderframe.entity.metadata.*
 import eu.mshade.enderframe.metadata.Metadata
 import eu.mshade.enderframe.metadata.MetadataKeyValueBucket
@@ -11,7 +10,7 @@ import eu.mshade.enderframe.metadata.type.ByteMetadata
 class PropertiesMetadataWrapper: MetadataWrapper<Entity> {
 
     override fun wrap(entity: Entity): Metadata<*> {
-        val metadataKeyValueBucket: MetadataKeyValueBucket = entity.metadataKeyValueBucket
+        val metadataKeyValueBucket: MetadataKeyValueBucket = entity.metadata
         var b = 0
 
         val onFire = metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.ON_FIRE)?.metadataValue
@@ -42,7 +41,7 @@ class PropertiesMetadataWrapper: MetadataWrapper<Entity> {
 
 class TameablePropertiesMetadataWrapper: MetadataWrapper<Entity> {
     override fun wrap(entity: Entity): Metadata<*> {
-        val metadataKeyValueBucket = entity.metadataKeyValueBucket
+        val metadataKeyValueBucket = entity.metadata
         var b = 0
 
         val sitting = metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.SITTING)?.metadataValue

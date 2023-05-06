@@ -26,7 +26,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
 
         var clickedInventory = if (player.openedInventory != null) player.openedInventory else player.inventory
 
-        val maxSizeClickedInventory = endermanInventorySizeWrapper.map(clickedInventory.inventoryKey)!!
+        val maxSizeClickedInventory = endermanInventorySizeWrapper.map(clickedInventory!!.inventoryKey)!!
 
         if (clickedInventory !is PlayerInventory) {
             val maxSizeSlot = if(clickedInventory is ChestInventory) clickedInventory.rows * 9 else maxSizeClickedInventory
@@ -69,7 +69,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
             else -> null
         }
 
-        EnderFrame.get().packetEventBus.publish(MinecraftPacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.id, slot, key))
+        EnderFrame.get().packetEvents.publish(MinecraftPacketClickInventoryEvent(player, clickedInventory, clickType, itemStack, event.id, slot, key))
     }
 
 }
@@ -78,7 +78,7 @@ class MinecraftPacketInCloseInventoryListener: EventListener<MinecraftPacketInCl
     override fun onEvent(event: MinecraftPacketInCloseInventory) {
         val player = event.getMinecraftSession().player
         val inventory = if (player.openedInventory != null) player.openedInventory else player.inventory
-        EnderFrame.get().packetEventBus.publish(MinecraftPacketCloseInventoryEvent(player, inventory)
+        EnderFrame.get().packetEvents.publish(MinecraftPacketCloseInventoryEvent(player, inventory)
         )
     }
 }
@@ -88,7 +88,7 @@ class MinecraftPacketInCreativeClickInventoryListener: EventListener<MinecraftPa
     override fun onEvent(event: MinecraftPacketInCreativeClickInventory) {
         val player = event.getMinecraftSession().player
         val slot = PlayerInventory.indexFromAccurateSlot(event.slot)
-        EnderFrame.get().packetEventBus.publish(MinecraftPacketClickInventoryEvent(player, player.inventory, ClickType.CREATIVE, event.itemStack, 0, slot, 0))
+        EnderFrame.get().packetEvents.publish(MinecraftPacketClickInventoryEvent(player, player.inventory, ClickType.CREATIVE, event.itemStack, 0, slot, 0))
     }
 
 }

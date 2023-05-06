@@ -16,7 +16,7 @@ open class DefaultEntityMetadataBucket : EntityMetadataBucket() {
         registerEntityMetadata(1,
             { entity: Entity ->
                 ShortMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.AIR_TICKS
                     ).metadataValue as Short
                 )
@@ -41,7 +41,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(2,
             { entity: Entity ->
                 StringMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CUSTOM_NAME
                     ).metadataValue as String
                 )
@@ -50,7 +50,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(3,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CUSTOM_NAME_VISIBLE
                     ).metadataValue as Boolean
                 )
@@ -59,7 +59,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(6,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.HEALTH
                     ).metadataValue as Float
                 )
@@ -68,7 +68,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(7,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.POTION_EFFECT_COLOR
                     ).metadataValue as Int
                 )
@@ -77,7 +77,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(8,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.POTION_EFFECT_AMBIENT
                     ).metadataValue as Boolean
                 )
@@ -86,7 +86,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(9,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.NUMBER_OF_ARROWS_IN_ENTITY
                     ).metadataValue as Int
                 )
@@ -95,7 +95,7 @@ open class LivingEntityMetadataBucket : DefaultEntityMetadataBucket() {
         registerEntityMetadata(15,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.WHETHER_ARTIFICIAL_INTELLIGENCE
                     ).metadataValue as Boolean
                 )
@@ -110,7 +110,7 @@ open class AgeableEntityMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(12,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.AGE
                     ).metadataValue as Int
                 )
@@ -130,7 +130,7 @@ open class TameableEntityMetadataBucket: AgeableEntityMetadataBucket() {
         registerEntityMetadata(17,
             { entity: Entity ->
                 StringMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.OWNER
                     ).metadataValue as String
                 )

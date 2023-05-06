@@ -9,7 +9,7 @@ public class MinecraftPacketInChatMessageListener implements EventListener<Minec
 
     @Override
     public void onEvent(MinecraftPacketInChatMessage event) {
-        EnderFrame.get().getPacketEventBus().publishAsync(new MinecraftPacketChatMessageEvent(event.getMinecraftSession().getPlayer(), event.getMessage()));
+        EnderFrame.get().getPacketEvents().publishAsync(new MinecraftPacketChatMessageEvent(event.getMinecraftSession().getPlayer(), event.getMessage()));
     }
 
 }

@@ -11,7 +11,7 @@ import eu.mshade.enderframe.metadata.type.IntegerMetadata
 class HorseBehavioursPropertiesMetadataWrapper: MetadataWrapper<Horse> {
 
     override fun wrap(horse: Horse): Metadata<*> {
-        val metadataKeyValueBucket = horse.metadataKeyValueBucket
+        val metadataKeyValueBucket = horse.metadata
         var b = 0
 
         val tamed = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.TAMED)?.metadataValue)?: false) as Boolean
@@ -50,7 +50,7 @@ class HorseBehavioursPropertiesMetadataWrapper: MetadataWrapper<Horse> {
 class HorseStylePropertiesMetadataWrapper: MetadataWrapper<Horse> {
 
     override fun wrap(horse: Horse): Metadata<*> {
-        val metadataKeyValueBucket = horse.metadataKeyValueBucket
+        val metadataKeyValueBucket = horse.metadata
 
         val color = (metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.HORSE_COLOR)?.metadataValue)?: 0
         val style = (metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.STYLE)?.metadataValue)?: 0
@@ -66,7 +66,7 @@ class HorseStylePropertiesMetadataWrapper: MetadataWrapper<Horse> {
 class SheepPropertiesMetadataWrapper: MetadataWrapper<Sheep> {
 
     override fun wrap(sheep: Sheep): Metadata<*> {
-        val metadataBucket = sheep.metadataKeyValueBucket
+        val metadataBucket = sheep.metadata
 
         val color = (metadataBucket.getMetadataKeyValue(EntityMetadataKey.COLOR)?.metadataValue?: 0) as Int
         val sheared = (metadataBucket.getMetadataKeyValue(EntityMetadataKey.IS_SHEARED)?.metadataValue?: false) as Boolean

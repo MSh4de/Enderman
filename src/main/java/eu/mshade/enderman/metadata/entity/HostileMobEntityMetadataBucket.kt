@@ -12,7 +12,7 @@ class BlazeMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.ON_FIRE
                     ).metadataValue as Boolean
                 )
@@ -27,7 +27,7 @@ class CreeperMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CREEPER_STATE
                     ).metadataValue as Boolean
                 )
@@ -37,7 +37,7 @@ class CreeperMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(17,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_POWERED
                     ).metadataValue as Boolean
                 )
@@ -52,7 +52,7 @@ class GhastMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_ATTACKING
                     ).metadataValue as Boolean
                 )
@@ -71,7 +71,7 @@ class GuardianMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(17,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.TARGET_ENTITY_ID
                     ).metadataValue as Int
                 )
@@ -88,7 +88,7 @@ class SkeletonMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(13,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.VARIANT
                     ).metadataValue as Int
                 )
@@ -103,7 +103,7 @@ open class SlimeMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.SIZE
                     ).metadataValue as Int
                 )
@@ -118,7 +118,7 @@ class WitchMetadataBucket: LivingEntityMetadataBucket() {
         registerEntityMetadata(21,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_AGGRESSIVE
                     ).metadataValue as Boolean
                 )
@@ -133,7 +133,7 @@ open class ZombieMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(12,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.CHILD
                     ).metadataValue as Boolean
                 )
@@ -142,7 +142,7 @@ open class ZombieMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(13,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_VILLAGER
                     ).metadataValue as Boolean
                 )
@@ -151,7 +151,7 @@ open class ZombieMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(14,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.IS_CONVERTING
                     ).metadataValue as Boolean
                 )

@@ -9,7 +9,7 @@ import eu.mshade.enderframe.metadata.type.IntegerMetadata
 class GuardianPropertiesMetadataWrapper: MetadataWrapper<Guardian> {
 
     override fun wrap(guardian: Guardian): Metadata<*> {
-        val metadataKeyValueBucket = guardian.metadataKeyValueBucket
+        val metadataKeyValueBucket = guardian.metadata
 
         val elderly = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_ELDERLY)?.metadataValue)?: false) as Boolean
 //        val retractingSpikes = ((metadataKeyValueBucket.getMetadataKeyValue(EntityMetadataKey.IS_RETRACTING_SPIKES)?.metadataValue)?: false) as Boolean

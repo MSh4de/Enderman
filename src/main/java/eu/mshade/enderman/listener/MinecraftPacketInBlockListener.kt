@@ -10,7 +10,7 @@ import eu.mshade.mwork.event.EventListener
 class MinecraftPacketInBlockPlacementListener : EventListener<MinecraftPacketInBlockPlacement> {
 
     override fun onEvent(event: MinecraftPacketInBlockPlacement) {
-        EnderFrame.get().packetEventBus.publish(
+        EnderFrame.get().packetEvents.publish(
             MinecraftPacketBlockPlaceEvent(
                 event.getMinecraftSession().player,
                 event.blockPosition,
@@ -27,7 +27,7 @@ class MinecraftPacketInPlayerDiggingListener : EventListener<MinecraftPacketInPl
     override fun onEvent(event: MinecraftPacketInPlayerDigging) {
         val player = event.getMinecraftSession().player
 
-        EnderFrame.get().packetEventBus.publish(
+        EnderFrame.get().packetEvents.publish(
             MinecraftPacketPlayerDiggingEvent(
                 player,
                 event.blockPosition,

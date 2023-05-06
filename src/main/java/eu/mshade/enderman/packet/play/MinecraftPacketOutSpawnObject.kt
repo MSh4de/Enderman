@@ -8,17 +8,17 @@ import eu.mshade.enderframe.protocol.MinecraftPacketOut
 class MinecraftPacketOutSpawnObject(private val entityId: Int, val entity: Entity, private val data: Int): MinecraftPacketOut {
 
     override fun serialize(protocolBuffer: MinecraftByteBuf) {
-        protocolBuffer.writeVarInt(entity.entityId)
+        protocolBuffer.writeVarInt(entity.getEntityId())
         protocolBuffer.writeByte(entityId)
-        protocolBuffer.writeInt(entity.location.blockX * 32)
-        protocolBuffer.writeInt(entity.location.blockY * 32)
-        protocolBuffer.writeInt(entity.location.blockZ * 32)
-        protocolBuffer.writeByte((entity.location.yaw * 256 / 360).toInt())
-        protocolBuffer.writeByte((entity.location.pitch * 256 / 360).toInt())
+        protocolBuffer.writeInt(entity.getLocation().blockX * 32)
+        protocolBuffer.writeInt(entity.getLocation().blockY * 32)
+        protocolBuffer.writeInt(entity.getLocation().blockZ * 32)
+        protocolBuffer.writeByte((entity.getLocation().yaw * 256 / 360).toInt())
+        protocolBuffer.writeByte((entity.getLocation().pitch * 256 / 360).toInt())
 
         protocolBuffer.writeInt(data)
 
-        val velocity = entity.velocity
+        val velocity = entity.getVelocity()
 
         if (data > 0.0) {
             protocolBuffer.writeShort((velocity.x * 8000).toInt())

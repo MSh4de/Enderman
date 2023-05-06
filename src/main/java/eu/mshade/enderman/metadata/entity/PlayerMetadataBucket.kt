@@ -12,7 +12,7 @@ class PlayerMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(10,
             { entity: Entity ->
                 ByteMetadata(
-                    (entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    (entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.SKIN_PART
                     ).metadataValue as SkinPart).toByte()
                 )
@@ -21,7 +21,7 @@ class PlayerMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(16,
             { entity: Entity ->
                 ByteMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.HIDE_CAPE
                     ).metadataValue as Boolean
                 )
@@ -30,7 +30,7 @@ class PlayerMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(17,
             { entity: Entity ->
                 FloatMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.ADDITIONAL_HEARTS
                     ).metadataValue as Float
                 )
@@ -39,7 +39,7 @@ class PlayerMetadataBucket : LivingEntityMetadataBucket() {
         registerEntityMetadata(18,
             { entity: Entity ->
                 IntegerMetadata(
-                    entity.metadataKeyValueBucket.getMetadataKeyValue(
+                    entity.metadata.getMetadataKeyValue(
                         EntityMetadataKey.SCORE
                     ).metadataValue as Int
                 )

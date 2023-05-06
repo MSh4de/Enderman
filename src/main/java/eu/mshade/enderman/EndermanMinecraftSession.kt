@@ -16,9 +16,8 @@ import eu.mshade.enderframe.protocol.MinecraftSession
 import eu.mshade.enderframe.protocol.packet.*
 import eu.mshade.enderframe.scoreboard.Scoreboard
 import eu.mshade.enderframe.scoreboard.ScoreboardLine
-import eu.mshade.enderframe.scoreboard.ScoreboardMode
-import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjective
-import eu.mshade.enderframe.scoreboard.objective.ScoreboardObjectiveAction
+import eu.mshade.enderframe.scoreboard.ScoreboardAction
+import eu.mshade.enderframe.scoreboard.ScoreboardLineAction
 import eu.mshade.enderframe.scoreboard.team.Team
 import eu.mshade.enderframe.sound.SoundEffect
 import eu.mshade.enderframe.title.Title
@@ -38,14 +37,12 @@ import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
-import eu.mshade.enderman.packet.play.inventory.MinecraftPacketOutCloseInventory
-import eu.mshade.enderman.packet.play.inventory.MinecraftPacketOutInventoryItems
-import eu.mshade.enderman.packet.play.inventory.MinecraftPacketOutOpenInventory
-import eu.mshade.enderman.packet.play.inventory.MinecraftPacketOutSetItemStack
+import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreboard
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutTeams
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScoreboard
+import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
 import eu.mshade.enderman.wrapper.EndermanContextWrapper
 import io.netty.channel.Channel
 import java.nio.ByteBuffer
@@ -86,25 +83,27 @@ class EndermanMinecraftSession(
     }
 
     override fun sendLoginSuccess() {
-        sendPacket(MinecraftPacketOutLoginSuccess(getGameProfile()))
+        sendPacket(MinecraftPacketOutLoginSuccess(gameProfile))
         toggleProtocolStatus(MinecraftProtocolStatus.PLAY)
     }
 
     override fun sendJoinGame(world: World, reducedDebugInfo: Boolean) {
-        val metadataKeyValueBucket = world.metadataKeyValueBucket
-
-        println(metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION))
+        val metadataKeyValueBucket = world.metadatas
 
         val dimension =
             metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIMENSION).metadataValue as Dimension
         val difficulty =
             metadataKeyValueBucket.getMetadataKeyValue(WorldMetadataType.DIFFICULTY).metadataValue as Difficulty
-        val player = MinecraftProtocolPipeline.get().getPlayer(getChannel())
+        val player = MinecraftProtocolPipeline.get().getPlayer(channel)
         sendPacket(
             MinecraftPacketOutJoinGame(
-                player.entityId, player.gameMode, dimension, difficulty, 0, world.name, reducedDebugInfo
+                player.getEntityId(), player.gameMode, dimension, difficulty, 0, world.name, reducedDebugInfo
             )
         )
+    }
+
+    override fun sendServerDifficulty(difficulty: Difficulty) {
+        sendPacket(MinecraftPacketOutServerDifficulty(difficulty))
     }
 
     override fun sendHeaderAndFooter(header: String, footer: String) {
@@ -135,7 +134,7 @@ class EndermanMinecraftSession(
     }
 
     override fun sendEncryption(publicKey: PublicKey) {
-        sendPacket(MinecraftPacketOutEncryption(getSessionId(), publicKey, getVerifyToken()))
+        sendPacket(MinecraftPacketOutEncryption(sessionId, publicKey, verifyToken))
     }
 
     override fun sendPlayerInfo(playerInfoBuilder: PlayerInfoBuilder) {
@@ -176,8 +175,8 @@ class EndermanMinecraftSession(
     }
 
     override fun sendUpdateLocation(entity: Entity) {
-        val now = entity.location
-        val before = entity.beforeLocation
+        val now = entity.getLocation()
+        val before = entity.getBeforeLocation()
         sendUpdateLocation(entity, before, now)
     }
 
@@ -204,21 +203,21 @@ class EndermanMinecraftSession(
     }
 
     override fun sendTeleport(entity: Entity) {
-        sendTeleport(entity, entity.location)
+        sendTeleport(entity, entity.getLocation())
     }
 
     override fun sendTeleport(entity: Entity, location: Location) {
-        val x = floor(entity.location.x * 32)
-        val y = floor(entity.location.y * 32)
-        val z = floor(entity.location.z * 32)
-        val yaw = (entity.location.yaw * 256.0f / 360.0f).toInt()
-        val pitch = (entity.location.pitch * 256.0f / 360.0f).toInt()
+        val x = floor(entity.getLocation().x * 32)
+        val y = floor(entity.getLocation().y * 32)
+        val z = floor(entity.getLocation().z * 32)
+        val yaw = (entity.getLocation().yaw * 256.0f / 360.0f).toInt()
+        val pitch = (entity.getLocation().pitch * 256.0f / 360.0f).toInt()
         sendPacket(MinecraftPacketOutEntityTeleport(entity, x, y, z, yaw, pitch, false))
     }
 
     override fun sendMove(entity: Entity) {
-        val now = entity.location
-        val before = entity.beforeLocation
+        val now = entity.getLocation()
+        val before = entity.getBeforeLocation()
         sendMove(entity, before, now)
     }
 
@@ -230,8 +229,8 @@ class EndermanMinecraftSession(
     }
 
     override fun sendMoveAndLook(entity: Entity) {
-        val now = entity.location
-        val before = entity.beforeLocation
+        val now = entity.getLocation()
+        val before = entity.getBeforeLocation()
         sendMoveAndLook(entity, before, now)
     }
 
@@ -245,7 +244,7 @@ class EndermanMinecraftSession(
     }
 
     override fun sendLook(entity: Entity) {
-        sendLook(entity, entity.location)
+        sendLook(entity, entity.getLocation())
     }
 
     override fun sendLook(entity: Entity, location: Location) {
@@ -253,7 +252,15 @@ class EndermanMinecraftSession(
     }
 
     override fun sendHeadLook(entity: Entity) {
-        sendHeadLook(entity, entity.location)
+        sendHeadLook(entity, entity.getLocation())
+    }
+
+    override fun sendEquipment(entity: Entity, equipmentSlot: EquipmentSlot, itemStack: ItemStack?) {
+        var slot = equipmentSlot.ordinal
+        if (equipmentSlot.ordinal > 0) {
+            slot = equipmentSlot.ordinal - 1
+        }
+        sendPacket(MinecraftPacketOutEntityEquipment(entity, slot, itemStack))
     }
 
     override fun sendHeadLook(entity: Entity, location: Location) {
@@ -272,7 +279,7 @@ class EndermanMinecraftSession(
                 } else {
                     val data: Int = objectTransformerRepository.transform(entity)
                     sendPacket(MinecraftPacketOutSpawnObject(id, entity, data))
-                    this.sendMetadata(entity, entity.metadataKeyValueBucket.metadataKeys)
+                    this.sendMetadata(entity, entity.metadata.metadataKeys)
                 }
             }
             this.sendTeleport(entity)
@@ -471,6 +478,7 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutInventoryItems(id, inventory))
     }
 
+
     override fun sendItemStack(inventory: Inventory, slot: Int, itemStack: ItemStack?) {
         val id: Int
         id = if (inventory is PlayerInventory) {
@@ -484,18 +492,18 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutSetItemStack(slot, id, itemStack))
     }
 
-    override fun sendDisplayScoreboard(scoreboard: Scoreboard?) {
+    override fun sendDisplayScoreboard(scoreboard: Scoreboard) {
         sendPacket(MinecraftPacketOutDisplayScoreboard(scoreboard))
     }
 
-    override fun sendScoreboard(scoreboard: Scoreboard, mode: ScoreboardMode) {
+    override fun sendScoreboard(scoreboard: Scoreboard, mode: ScoreboardAction) {
         sendPacket(MinecraftPacketOutScoreboardObjective(scoreboard, mode))
     }
 
     override fun sendUpdateScoreboardLine(
-        scoreboardLine: ScoreboardLine, scoreboardObjectiveAction: ScoreboardObjectiveAction
+        scoreboard: Scoreboard, scoreboardLine: ScoreboardLine, scoreboardLineAction: ScoreboardLineAction
     ) {
-        sendPacket(MinecraftPacketOutUpdateScoreboard(scoreboardLine, scoreboardObjectiveAction))
+        sendPacket(MinecraftPacketOutUpdateScoreboard(scoreboard, scoreboardLine, scoreboardLineAction))
     }
 
     override fun sendTeams(team: Team) {
@@ -518,7 +526,7 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutParticle(materialKeyWrapper, particleKeyWrapper, particle))
     }
 
-    override fun sendInventoryUpdate(block: Block?, vararg metadataKeys: MetadataKey?) {
+    override fun sendInventoryUpdate(block: Block, vararg metadataKeys: MetadataKey) {
         TODO("Not yet implemented")
     }
 

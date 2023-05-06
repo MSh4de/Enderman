@@ -288,7 +288,7 @@ class SlabBlockTransformer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: Wrapper<MaterialKey, MaterialKey>): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val slabType = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.SLAB_TYPE).metadataValue as? SlabType ?: SlabType.BOTTOM
+        val slabType = metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.SLAB_TYPE)?.metadataValue as? SlabType ?: SlabType.BOTTOM
 
         val materialKey: MaterialKey
         var value = 0
@@ -325,7 +325,7 @@ class SlabBlockTransformer : BlockTransformer() {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
 
         //check if it is a double slab
-        if (id in setOf(43, 125, 181, 204)) {
+        if (setOf(43, 125, 181, 204).contains(id)) {
             val seamless = metadata and 8 == 8
             metadataKeyValueBucket.setMetadataKeyValue(SeamlessBlockMetadata(seamless))
         } else {

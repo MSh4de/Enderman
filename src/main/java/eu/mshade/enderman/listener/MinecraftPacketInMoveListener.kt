@@ -14,7 +14,7 @@ import eu.mshade.mwork.event.EventListener
 class MinecraftPacketInPlayerGroundListener :
     EventListener<MinecraftPacketInPlayerGround> {
     override fun onEvent(event: MinecraftPacketInPlayerGround) {
-        EnderFrame.get().packetEventBus.publishAsync(
+        EnderFrame.get().packetEvents.publishAsync(
             DefaultMinecraftPacketGroundEvent(
                 event.getMinecraftSession().player,
                 event.isOnGround
@@ -26,7 +26,7 @@ class MinecraftPacketInPlayerGroundListener :
 class MinecraftPacketInPlayerLookListener :
     EventListener<MinecraftPacketInPlayerLook> {
     override fun onEvent(event: MinecraftPacketInPlayerLook) {
-        EnderFrame.get().packetEventBus.publishAsync(
+        EnderFrame.get().packetEvents.publishAsync(
             DefaultMinecraftPacketLookEvent(
                 event.getMinecraftSession().player,
                 event.yaw,
@@ -40,7 +40,7 @@ class MinecraftPacketInPlayerLookListener :
 class MinecraftPacketInPlayerPositionAndLookListener :
     EventListener<MinecraftPacketInPlayerPositionAndLook> {
     override fun onEvent(event: MinecraftPacketInPlayerPositionAndLook) {
-        EnderFrame.get().packetEventBus.publishAsync(
+        EnderFrame.get().packetEvents.publishAsync(
             DefaultMinecraftPacketMoveAndLookEvent(
                 event.getMinecraftSession().player,
                 event.x,
@@ -57,7 +57,7 @@ class MinecraftPacketInPlayerPositionAndLookListener :
 class MinecraftPacketInPlayerPositionListener :
     EventListener<MinecraftPacketInPlayerPosition> {
     override fun onEvent(event: MinecraftPacketInPlayerPosition) {
-        EnderFrame.get().packetEventBus.publishAsync(
+        EnderFrame.get().packetEvents.publishAsync(
             DefaultMinecraftPacketMoveEvent(
                 event.getMinecraftSession().player,
                 event.x,
