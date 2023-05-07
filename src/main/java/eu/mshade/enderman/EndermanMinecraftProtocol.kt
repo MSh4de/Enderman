@@ -17,6 +17,7 @@ import eu.mshade.enderman.packet.login.MinecraftPacketInLogin
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
+import eu.mshade.enderman.packet.play.animation.MinecraftPacketInAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutBlockBreak
 import eu.mshade.enderman.packet.play.inventory.*
@@ -77,6 +78,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         getEventBus().subscribe(MinecraftPacketInClientStatus::class.java, MinecraftPacketInClientStatusListener())
         getEventBus().subscribe(MinecraftPacketInCloseInventory::class.java, MinecraftPacketInCloseInventoryListener())
         getEventBus().subscribe(MinecraftPacketInCreativeClickInventory::class.java, MinecraftPacketInCreativeClickInventoryListener())
+        getEventBus().subscribe(MinecraftPacketInAnimation::class.java, MinecraftPacketInAnimationListener())
+
 
         getEventBus().subscribe(
             MinecraftPacketInPlayerAbilities::class.java,
@@ -126,6 +129,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x07, MinecraftPacketInPlayerDigging::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x08, MinecraftPacketInBlockPlacement::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x09, MinecraftPacketInHeldItemChange::class.java)
+        protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0A, MinecraftPacketInAnimation::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0B, MinecraftPacketInEntityAction::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x13, MinecraftPacketInPlayerAbilities::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x15, MinecraftPacketInClientSettings::class.java)

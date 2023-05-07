@@ -1,6 +1,7 @@
 package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
+import eu.mshade.enderframe.animation.AnimationType
 import eu.mshade.enderframe.entity.*
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
@@ -38,6 +39,7 @@ import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
+import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreboard
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
@@ -531,6 +533,10 @@ class EndermanMinecraftSession(
 
     override fun sendInventoryUpdate(block: Block, vararg metadataKeys: MetadataKey) {
         TODO("Not yet implemented")
+    }
+
+    override fun sendAnimation(player: Player, animationType: AnimationType) {
+        sendPacket(MinecraftPacketOutAnimation(player, animationType))
     }
 
     private fun hasOverflow(value: Int): Boolean {
