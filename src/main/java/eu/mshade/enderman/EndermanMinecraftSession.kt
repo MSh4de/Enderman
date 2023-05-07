@@ -32,6 +32,7 @@ import eu.mshade.enderframe.world.chunk.Chunk
 import eu.mshade.enderframe.world.chunk.EmptySection
 import eu.mshade.enderframe.world.chunk.Section
 import eu.mshade.enderframe.wrapper.ContextWrapper
+import eu.mshade.enderframe.wrapper.MaterialWrapperContext
 import eu.mshade.enderframe.wrapper.Wrapper
 import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
@@ -44,6 +45,7 @@ import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutTeams
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScoreboard
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
 import eu.mshade.enderman.wrapper.EndermanContextWrapper
+import eu.mshade.enderman.wrapper.EndermanMaterialKeyWrapper
 import io.netty.channel.Channel
 import java.nio.ByteBuffer
 import java.security.PublicKey
@@ -55,7 +57,7 @@ class EndermanMinecraftSession(
     minecraftProtocol: EndermanMinecraftProtocol
 ) : MinecraftSession(channel) {
     private val entityTypeWrapper: Wrapper<EntityKey?, Int?>?
-    private val materialKeyWrapper: Wrapper<MaterialKey?, MaterialKey?>?
+    private val materialKeyWrapper: EndermanMaterialKeyWrapper?
     private val inventoryKeyWrapper: Wrapper<InventoryKey?, String?>?
     private val inventorySizeWrapper: Wrapper<InventoryKey?, Int?>?
     private val particleKeyWrapper: Wrapper<ParticleKey?, Int?>?
@@ -68,7 +70,7 @@ class EndermanMinecraftSession(
         blockTransformerController = minecraftProtocol.blockTransformerController
 
 
-        materialKeyWrapper = wrapperRepository.get(ContextWrapper.MATERIAL_KEY) as Wrapper<MaterialKey?, MaterialKey?>?
+        materialKeyWrapper = wrapperRepository.get(ContextWrapper.MATERIAL_KEY) as EndermanMaterialKeyWrapper
         inventoryKeyWrapper =
             wrapperRepository.get(EndermanContextWrapper.INVENTORY_KEY) as Wrapper<InventoryKey?, String?>?
         inventorySizeWrapper =
@@ -256,6 +258,7 @@ class EndermanMinecraftSession(
     }
 
     override fun sendEquipment(entity: Entity, equipmentSlot: EquipmentSlot, itemStack: ItemStack?) {
+        if (equipmentSlot == EquipmentSlot.OFF_HAND) return
         var slot = equipmentSlot.ordinal
         if (equipmentSlot.ordinal > 0) {
             slot = equipmentSlot.ordinal - 1
@@ -429,7 +432,7 @@ class EndermanMinecraftSession(
     }
 
     override fun sendBlockChange(blockPosition: Vector, materialKey: MaterialKey) {
-        sendPacket(MinecraftPacketOutBlockChange(blockPosition, materialKeyWrapper!!.map(materialKey)))
+        sendPacket(MinecraftPacketOutBlockChange(blockPosition, materialKeyWrapper!!.map(MaterialWrapperContext.BLOCK, materialKey)))
     }
 
     override fun sendBlockChange(blockPosition: Vector, block: Block) {

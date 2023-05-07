@@ -2,10 +2,13 @@ package eu.mshade.enderman.wrapper
 
 import eu.mshade.enderframe.item.Material
 import eu.mshade.enderframe.item.MaterialKey
+import eu.mshade.enderframe.wrapper.ContextualWrapper
+import eu.mshade.enderframe.wrapper.MaterialKeyWrapper
+import eu.mshade.enderframe.wrapper.MaterialWrapperContext
 import eu.mshade.enderframe.wrapper.Wrapper
 import eu.mshade.enderman.EndermanMaterial
 
-class EndermanMaterialKeyWrapper : Wrapper<MaterialKey, MaterialKey>() {
+class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
     /**
      * Class for wrapping a MaterialKey for protocol 1.8.9
      */
@@ -88,5 +91,32 @@ class EndermanMaterialKeyWrapper : Wrapper<MaterialKey, MaterialKey>() {
         register(Material.GREEN_WOOL, MaterialKey.from(35, 13))
         register(Material.RED_WOOL, MaterialKey.from(35, 14))
         register(Material.BLACK_WOOL, MaterialKey.from(35, 15))
+
+        //register armor
+        register(Material.LEATHER_HELMET, MaterialKey.from(298))
+        register(Material.LEATHER_CHESTPLATE, MaterialKey.from(299))
+        register(Material.LEATHER_LEGGINGS, MaterialKey.from(300))
+        register(Material.LEATHER_BOOTS, MaterialKey.from(301))
+
+        register(Material.CHAINMAIL_HELMET, MaterialKey.from(302))
+        register(Material.CHAINMAIL_CHESTPLATE, MaterialKey.from(303))
+        register(Material.CHAINMAIL_LEGGINGS, MaterialKey.from(304))
+        register(Material.CHAINMAIL_BOOTS, MaterialKey.from(305))
+
+        register(Material.IRON_HELMET, MaterialKey.from(306))
+        register(Material.IRON_CHESTPLATE, MaterialKey.from(307))
+        register(Material.IRON_LEGGINGS, MaterialKey.from(308))
+        register(Material.IRON_BOOTS, MaterialKey.from(309))
+
+        register(Material.GOLDEN_HELMET, MaterialKey.from(314))
+        register(Material.GOLDEN_CHESTPLATE, MaterialKey.from(315))
+        register(Material.GOLDEN_LEGGINGS, MaterialKey.from(316))
+        register(Material.GOLDEN_BOOTS, MaterialKey.from(317))
+
+        register(Material.DIAMOND_HELMET, MaterialKey.from(310))
+        register(Material.DIAMOND_CHESTPLATE, MaterialKey.from(311))
+        register(Material.DIAMOND_LEGGINGS, MaterialKey.from(312))
+        register(Material.DIAMOND_BOOTS, MaterialKey.from(313))
     }
+
 }

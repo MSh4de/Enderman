@@ -10,6 +10,7 @@ import eu.mshade.mwork.event.EventListener
 class MinecraftPacketInBlockPlacementListener : EventListener<MinecraftPacketInBlockPlacement> {
 
     override fun onEvent(event: MinecraftPacketInBlockPlacement) {
+
         EnderFrame.get().packetEvents.publish(
             MinecraftPacketBlockPlaceEvent(
                 event.getMinecraftSession().player,

@@ -4,15 +4,17 @@ import eu.mshade.enderframe.item.MaterialKey;
 import eu.mshade.enderframe.particle.*;
 import eu.mshade.enderframe.protocol.MinecraftPacketOut;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
+import eu.mshade.enderframe.wrapper.MaterialKeyWrapper;
+import eu.mshade.enderframe.wrapper.MaterialWrapperContext;
 import eu.mshade.enderframe.wrapper.Wrapper;
 
 public class MinecraftPacketOutParticle implements MinecraftPacketOut {
 
-    private final Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
+    private final MaterialKeyWrapper materialKeyWrapper;
     private final Wrapper<ParticleKey, Integer> particleKeyWrapper;
     private final Particle particle;
 
-    public MinecraftPacketOutParticle(Wrapper<MaterialKey, MaterialKey> materialKeyWrapper, Wrapper<ParticleKey, Integer> particleKeyWrapper, Particle particle) {
+    public MinecraftPacketOutParticle(MaterialKeyWrapper materialKeyWrapper, Wrapper<ParticleKey, Integer> particleKeyWrapper, Particle particle) {
         this.materialKeyWrapper = materialKeyWrapper;
         this.particleKeyWrapper = particleKeyWrapper;
         this.particle = particle;
@@ -36,20 +38,20 @@ public class MinecraftPacketOutParticle implements MinecraftPacketOut {
         minecraftByteBuf.writeInt(particle.getParticleCount());
 
         if (particle instanceof ParticleIconCrack particleIconCrack) {
-            MaterialKey materialKey = materialKeyWrapper.map(particleIconCrack.getMaterial());
+            MaterialKey materialKey = materialKeyWrapper.map(MaterialWrapperContext.BLOCK, particleIconCrack.getMaterial());
 
             if (materialKey == null) return;
 
             minecraftByteBuf.writeVarInt(materialKey.getId());
             minecraftByteBuf.writeVarInt(particleIconCrack.getMetadata());
         } else if (particle instanceof ParticleBlockCrack particleBlockCrack) {
-            MaterialKey materialKey = materialKeyWrapper.map(particleBlockCrack.getMaterial());
+            MaterialKey materialKey = materialKeyWrapper.map(MaterialWrapperContext.BLOCK, particleBlockCrack.getMaterial());
 
             if (materialKey == null) return;
 
             minecraftByteBuf.writeVarInt(materialKey.getId() + (particleBlockCrack.getMetadata() << 12));
         } else if (particle instanceof ParticleBlockDust particleBlockDust) {
-            MaterialKey materialKey = materialKeyWrapper.map(particleBlockDust.getMaterial());
+            MaterialKey materialKey = materialKeyWrapper.map(MaterialWrapperContext.BLOCK, particleBlockDust.getMaterial());
 
             if (materialKey == null) return;
 
