@@ -17,6 +17,8 @@ import eu.mshade.enderman.packet.login.MinecraftPacketInLogin
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
+import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
+import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutBlockBreak
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerGround
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerLook
@@ -139,6 +141,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x04, MinecraftPacketOutEntityEquipment::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x05, MinecraftPacketOutSpawnPosition::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x07, MinecraftPacketOutRespawn::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0B, MinecraftPacketOutAnimation::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x08, MinecraftPacketOutPlayerPositionAndLook::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0C, MinecraftPacketOutSpawnPlayer::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0F, MinecraftPacketOutSpawnEntity::class.java)
@@ -154,6 +157,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x20, MinecraftPacketOutEntityProperties::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x21, MinecraftPacketOutChunkData::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x23, MinecraftPacketOutBlockChange::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketOutBlockBreak::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x38, MinecraftPacketOutPlayerInfo::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x39, MinecraftPacketOutPlayerAbilities::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x40, MinecraftPacketOutDisconnect::class.java)
