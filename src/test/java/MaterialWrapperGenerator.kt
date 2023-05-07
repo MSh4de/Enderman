@@ -9,8 +9,8 @@ fun main() {
     val materialGeneratorRegistry = MaterialGeneratorRegistry()
     materialGeneratorRegistry.registerMaterialGenerator(listOf("wool", "carpet", "stained_glass", "stained_glass_pane", "concrete", "concrete_powder", "stained_hardened_clay"), ColorMaterialGenerator())
 
-    materialGeneratorRegistry.registerMaterialReplacer("hardened_clay", "TERRACOTTA")
-    materialGeneratorRegistry.registerMaterialReplacer("stained_hardened_clay", "TERRACOTTA")
+    materialGeneratorRegistry.registerMaterialReplacer("hardened_clay", "terracotta")
+    materialGeneratorRegistry.registerMaterialReplacer("stained_hardened_clay", "terracotta")
 
     val materialRegistered = mutableListOf<MaterialGeneratorResult>()
 
@@ -22,18 +22,35 @@ fun main() {
         val variations = jsonBlock["variations"]
         val materialGenerator = materialGeneratorRegistry.getMaterialGenerator(name)
 
+        var displayName = name
+        if (materialGeneratorRegistry.getMaterialReplacer(name) != null) {
+            displayName = materialGeneratorRegistry.getMaterialReplacer(name)
+        }
+
         if (variations != null) {
             if (materialGenerator != null) {
-                val results = materialGenerator.generateVariations(id, name.uppercase(), variations)
+                val results = materialGenerator.generateVariations(id, displayName.uppercase(), variations)
                 for (result in results) {
                     materialRegistered.add(result)
                 }
+            }else{
+
+                for (variation in variations) {
+                    val meta = variation["metadata"].asInt()
+                    val variationName = variation["displayName"].asText()
+                    materialRegistered.add(MaterialGeneratorResult(minecraftFormat(variationName.uppercase()), id, meta))
+                }
+
             }
         } else {
-
-
-
-            materialGenerator?.generateVariations(id, name.uppercase(), null)?.forEach(materialRegistered::add)
+            if (materialGenerator != null) {
+                val result = materialGenerator.generateVariations(id, displayName.uppercase(), null)
+                result.forEach {
+                    materialRegistered.add(it)
+                }
+            }else{
+                materialRegistered.add(MaterialGeneratorResult(displayName.uppercase(), id, 0))
+            }
         }
     }
 
@@ -41,5 +58,9 @@ fun main() {
         println("material registered: $it")
     }
 
+}
+
+fun minecraftFormat(name: String): String {
+    return name.replace(" ", "_").uppercase()
 }
 

@@ -15,6 +15,7 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
     init {
         //list minecraft materials id
         register(Material.AIR, MaterialKey.from(0))
+
         register(Material.STONE, MaterialKey.from(1, 0))
         register(Material.GRANITE, MaterialKey.from(1, 1))
         register(Material.POLISHED_GRANITE, MaterialKey.from(1, 2))
@@ -22,7 +23,9 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(Material.POLISHED_DIORITE, MaterialKey.from(1, 4))
         register(Material.ANDESITE, MaterialKey.from(1, 5))
         register(Material.POLISHED_ANDESITE, MaterialKey.from(1, 6))
+
         register(Material.GRASS_BLOCK, MaterialKey.from(2))
+
         register(Material.DIRT, MaterialKey.from(3))
         register(Material.COARSE_DIRT, MaterialKey.from(3, 1))
         register(Material.PODZOL, MaterialKey.from(3, 2))
@@ -41,7 +44,10 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(Material.JUNGLE_SAPLING, MaterialKey.from(6, 3))
         register(Material.ACACIA_SAPLING, MaterialKey.from(6, 4))
         register(Material.DARK_OAK_SAPLING, MaterialKey.from(6, 5))
-        
+
+        register(Material.BEDROCK, MaterialKey.from(7))
+
+
 
         //register slab
         register(Material.STONE_SLAB, MaterialKey.from(44, 0))

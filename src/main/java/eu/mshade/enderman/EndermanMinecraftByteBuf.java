@@ -6,6 +6,8 @@ import eu.mshade.enderframe.metadata.*;
 import eu.mshade.enderframe.metadata.entity.EntityMetadataBucket;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
+import eu.mshade.enderframe.wrapper.MaterialKeyWrapper;
+import eu.mshade.enderframe.wrapper.MaterialWrapperContext;
 import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.enderman.metadata.EndermanItemStackManager;
@@ -22,20 +24,20 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
     private final EndermanEntityMetadataManager entityMetadataManager;
     private final EndermanItemStackManager itemStackManager;
-    private final Wrapper<MaterialKey, MaterialKey> materialKeyWrapper;
+    private final MaterialKeyWrapper materialKeyWrapper;
 
     public EndermanMinecraftByteBuf(EndermanMinecraftProtocol minecraftProtocol, ByteBuf byteBuf) {
         super(byteBuf);
         this.entityMetadataManager = minecraftProtocol.getEntityMetadataManager();
         this.itemStackManager = minecraftProtocol.getItemStackManager();
-        this.materialKeyWrapper = (Wrapper<MaterialKey, MaterialKey>) minecraftProtocol.getWrapperRepository().get(ContextWrapper.MATERIAL_KEY);
+        this.materialKeyWrapper = (MaterialKeyWrapper) minecraftProtocol.getWrapperRepository().get(ContextWrapper.MATERIAL_KEY);
     }
 
 
     @Override
     public void writeItemStack(ItemStack itemStack) {
         MaterialKey materialKey;
-        if (itemStack == null || (materialKey = materialKeyWrapper.map(itemStack.getMaterial())) == null) {
+        if (itemStack == null || (materialKey = materialKeyWrapper.map(MaterialWrapperContext.ITEM, itemStack.getMaterial())) == null) {
             writeShort(-1);
             return;
         }
@@ -64,12 +66,12 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
         byte count = readByte();
         int durability = readShort();
-        MaterialKey parent = materialKeyWrapper.reverseMap(MaterialKey.from(id));
+        MaterialKey parent = materialKeyWrapper.reverseMap(MaterialWrapperContext.ITEM, MaterialKey.from(id));
         MaterialKey materialKey;
         if (parent != null && parent.inMaterialCategories(MaterialCategory.DURABILITY)) {
             materialKey = parent;
         } else {
-            materialKey = materialKeyWrapper.reverseMap(MaterialKey.from(id, durability));
+            materialKey = materialKeyWrapper.reverseMap(MaterialWrapperContext.ITEM, MaterialKey.from(id, durability));
         }
         ItemStack itemStack = new ItemStack(materialKey, count, durability);
         CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
