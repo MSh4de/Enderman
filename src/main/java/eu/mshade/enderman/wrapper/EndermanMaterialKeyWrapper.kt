@@ -27,19 +27,21 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(Material.COARSE_DIRT, MaterialKey.from(3, 1))
         register(Material.PODZOL, MaterialKey.from(3, 2))
         register(Material.COBBLESTONE, MaterialKey.from(4))
+
         register(Material.OAK_PLANKS, MaterialKey.from(5))
         register(Material.SPRUCE_PLANKS, MaterialKey.from(5, 1))
         register(Material.BIRCH_PLANKS, MaterialKey.from(5, 2))
         register(Material.JUNGLE_PLANKS, MaterialKey.from(5, 3))
         register(Material.ACACIA_PLANKS, MaterialKey.from(5, 4))
         register(Material.DARK_OAK_PLANKS, MaterialKey.from(5, 5))
+
         register(Material.OAK_SAPLING, MaterialKey.from(6))
         register(Material.SPRUCE_SAPLING, MaterialKey.from(6, 1))
         register(Material.BIRCH_SAPLING, MaterialKey.from(6, 2))
         register(Material.JUNGLE_SAPLING, MaterialKey.from(6, 3))
         register(Material.ACACIA_SAPLING, MaterialKey.from(6, 4))
         register(Material.DARK_OAK_SAPLING, MaterialKey.from(6, 5))
-
+        
 
         //register slab
         register(Material.STONE_SLAB, MaterialKey.from(44, 0))
@@ -93,30 +95,31 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(Material.BLACK_WOOL, MaterialKey.from(35, 15))
 
         //register armor
-        register(Material.LEATHER_HELMET, MaterialKey.from(298))
-        register(Material.LEATHER_CHESTPLATE, MaterialKey.from(299))
-        register(Material.LEATHER_LEGGINGS, MaterialKey.from(300))
-        register(Material.LEATHER_BOOTS, MaterialKey.from(301))
+        register(MaterialWrapperContext.ITEM, Material.LEATHER_HELMET, MaterialKey.from(298))
+        register(MaterialWrapperContext.ITEM, Material.LEATHER_CHESTPLATE, MaterialKey.from(299))
+        register(MaterialWrapperContext.ITEM, Material.LEATHER_LEGGINGS, MaterialKey.from(300))
+        register(MaterialWrapperContext.ITEM, Material.LEATHER_BOOTS, MaterialKey.from(301))
 
-        register(Material.CHAINMAIL_HELMET, MaterialKey.from(302))
-        register(Material.CHAINMAIL_CHESTPLATE, MaterialKey.from(303))
-        register(Material.CHAINMAIL_LEGGINGS, MaterialKey.from(304))
-        register(Material.CHAINMAIL_BOOTS, MaterialKey.from(305))
+        register(MaterialWrapperContext.ITEM, Material.CHAINMAIL_HELMET, MaterialKey.from(302))
+        register(MaterialWrapperContext.ITEM, Material.CHAINMAIL_CHESTPLATE, MaterialKey.from(303))
+        register(MaterialWrapperContext.ITEM, Material.CHAINMAIL_LEGGINGS, MaterialKey.from(304))
+        register(MaterialWrapperContext.ITEM, Material.CHAINMAIL_BOOTS, MaterialKey.from(305))
 
-        register(Material.IRON_HELMET, MaterialKey.from(306))
-        register(Material.IRON_CHESTPLATE, MaterialKey.from(307))
-        register(Material.IRON_LEGGINGS, MaterialKey.from(308))
-        register(Material.IRON_BOOTS, MaterialKey.from(309))
+        register(MaterialWrapperContext.ITEM, Material.IRON_HELMET, MaterialKey.from(306))
+        register(MaterialWrapperContext.ITEM, Material.IRON_CHESTPLATE, MaterialKey.from(307))
+        register(MaterialWrapperContext.ITEM, Material.IRON_LEGGINGS, MaterialKey.from(308))
+        register(MaterialWrapperContext.ITEM, Material.IRON_BOOTS, MaterialKey.from(309))
 
-        register(Material.GOLDEN_HELMET, MaterialKey.from(314))
-        register(Material.GOLDEN_CHESTPLATE, MaterialKey.from(315))
-        register(Material.GOLDEN_LEGGINGS, MaterialKey.from(316))
-        register(Material.GOLDEN_BOOTS, MaterialKey.from(317))
+        register(MaterialWrapperContext.ITEM, Material.GOLDEN_HELMET, MaterialKey.from(314))
+        register(MaterialWrapperContext.ITEM, Material.GOLDEN_CHESTPLATE, MaterialKey.from(315))
+        register(MaterialWrapperContext.ITEM, Material.GOLDEN_LEGGINGS, MaterialKey.from(316))
+        register(MaterialWrapperContext.ITEM, Material.GOLDEN_BOOTS, MaterialKey.from(317))
 
-        register(Material.DIAMOND_HELMET, MaterialKey.from(310))
-        register(Material.DIAMOND_CHESTPLATE, MaterialKey.from(311))
-        register(Material.DIAMOND_LEGGINGS, MaterialKey.from(312))
-        register(Material.DIAMOND_BOOTS, MaterialKey.from(313))
+        register(MaterialWrapperContext.ITEM, Material.DIAMOND_HELMET, MaterialKey.from(310))
+        register(MaterialWrapperContext.ITEM, Material.DIAMOND_CHESTPLATE, MaterialKey.from(311))
+        register(MaterialWrapperContext.ITEM, Material.DIAMOND_LEGGINGS, MaterialKey.from(312))
+        register(MaterialWrapperContext.ITEM, Material.DIAMOND_BOOTS, MaterialKey.from(313))
+
     }
 
 }
