@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.util.*
 
 fun main() {
     val mapper = ObjectMapper()
@@ -10,4 +11,9 @@ fun main() {
 
     }
 
+}
+
+
+fun formatName(name: String): String {
+    return name.replace(" ", "_").uppercase()
 }
