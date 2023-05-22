@@ -106,7 +106,6 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         blockTransformerController.register(SlabBlockTransformer())
         blockTransformerController.register(LeavesBlockTransformer())
         blockTransformerController.register(VineBlockTransformer())
-        blockTransformerController.register(CommonBlockTransformer())
 
 
         protocolRegistry.registerOut(MinecraftProtocolStatus.LOGIN, 0x00, MinecraftPacketOutDisconnect::class.java)

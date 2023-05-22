@@ -4,6 +4,10 @@ class MaterialGeneratorRegistry {
 
     private val materialGenerators = HashMap<String, MaterialGenerator>()
     private val materialReplacer = HashMap<String, String>()
+    private val variationReplacer = HashMap<String, String>()
+    private val materialBlackListByName = mutableSetOf<String>()
+    private val materialBlackListById = mutableSetOf<Int>()
+
 
     fun registerMaterialGenerator(name: String, materialGenerator: MaterialGenerator) {
         materialGenerators[name] = materialGenerator
@@ -27,6 +31,37 @@ class MaterialGeneratorRegistry {
         return materialReplacer[name]
     }
 
+    fun registerVariationReplacer(name: String, replacer: String) {
+        variationReplacer[name] = replacer
+    }
+
+    fun getVariationReplacer(name: String): String? {
+        return variationReplacer[name]
+    }
+
+    fun registerMaterialBlackList(vararg names: String) {
+        materialBlackListByName.addAll(names)
+    }
+
+    fun isMaterialBlackListed(name: String): Boolean {
+        return materialBlackListByName.contains(name)
+    }
+
+    fun registerMaterialBlackList(vararg ids: Int) {
+        ids.forEach {
+            materialBlackListById.add(it)
+        }
+    }
+
+    fun isMaterialBlackListed(id: Int): Boolean {
+        return materialBlackListById.contains(id)
+    }
+
+    fun getMaterialVariations(): Collection<String> {
+        return variationReplacer.keys
+    }
+
+
 }
 
 
@@ -36,4 +71,4 @@ interface MaterialGenerator {
 
 }
 
-data class MaterialGeneratorResult(val name: String, val id: Int, val meta: Int)
+data class MaterialGeneratorResult(var name: String, val id: Int, val meta: Int)

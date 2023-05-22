@@ -8,7 +8,6 @@ import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.wrapper.ContextWrapper;
 import eu.mshade.enderframe.wrapper.MaterialKeyWrapper;
 import eu.mshade.enderframe.wrapper.MaterialWrapperContext;
-import eu.mshade.enderframe.wrapper.Wrapper;
 import eu.mshade.enderman.metadata.EndermanEntityMetadataManager;
 import eu.mshade.enderman.metadata.EndermanItemStackManager;
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag;
@@ -50,7 +49,8 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
         }
         writeShort(materialKey.getId());
         writeByte(itemStack.getAmount() & 255);
-        if (materialKey.inMaterialCategories(MaterialCategory.DURABILITY)) {
+        writeShort(itemStack.getDurability());
+        if (materialKey.getMaxDurability() != 0) {
             writeShort(itemStack.getDurability());
         } else {
             writeShort(materialKey.getMetadata());
@@ -66,14 +66,18 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
 
         byte count = readByte();
         int durability = readShort();
+        ItemStack itemStack;
         MaterialKey parent = materialKeyWrapper.reverseMap(MaterialWrapperContext.ITEM, MaterialKey.from(id));
         MaterialKey materialKey;
-        if (parent != null && parent.inMaterialCategories(MaterialCategory.DURABILITY)) {
+
+        if (parent != null && parent.getMaxDurability() != 0) {
             materialKey = parent;
+            itemStack = new ItemStack(materialKey, count, durability);
         } else {
             materialKey = materialKeyWrapper.reverseMap(MaterialWrapperContext.ITEM, MaterialKey.from(id, durability));
+            itemStack = new ItemStack(materialKey, count);
         }
-        ItemStack itemStack = new ItemStack(materialKey, count, durability);
+
         CompoundBinaryTag compoundBinaryTag = readCompoundBinaryTag();
         for (ItemStackMetadataWrapper itemStackMetadataWrapper : itemStackManager.getItemStackMetadataBuffers()) {
             itemStackMetadataWrapper.read(compoundBinaryTag, itemStack);
@@ -89,7 +93,7 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
                 continue;
 
             EntityMetadataBucket entityMetadataBucket = entityMetadataManager.getEntityMetadataBucket(entity);
-            MetadataWrapper<Entity> entityMetadataWrapper = entityMetadataBucket.getEntityMetadataWrapper(entityMetadataKey);
+            MetadataWrapper<Entity> entityMetadataWrapper = (MetadataWrapper<Entity>) entityMetadataBucket.getEntityMetadataWrapper(entityMetadataKey);
             if (entityMetadataWrapper == null)
                 continue;
 

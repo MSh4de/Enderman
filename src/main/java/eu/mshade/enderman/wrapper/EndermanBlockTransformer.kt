@@ -1,13 +1,12 @@
 package eu.mshade.enderman.wrapper
 
 import eu.mshade.enderframe.item.Material
-import eu.mshade.enderframe.item.MaterialCategory
-import eu.mshade.enderframe.item.MaterialCategoryKey
+import eu.mshade.enderframe.item.MaterialTag
+import eu.mshade.enderframe.item.MaterialTagKey
 import eu.mshade.enderframe.item.MaterialKey
 import eu.mshade.enderframe.world.block.*
 import eu.mshade.enderframe.wrapper.MaterialKeyWrapper
 import eu.mshade.enderframe.wrapper.MaterialWrapperContext
-import eu.mshade.enderframe.wrapper.Wrapper
 import eu.mshade.enderman.EndermanMaterial
 
 class StairsBlockTransformer : BlockTransformer() {
@@ -72,10 +71,10 @@ class StairsBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.STAIRS
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        val name = materialKey.namespacedKey.key
+        return name.endsWith("_stairs")
     }
-
 
 }
 
@@ -83,7 +82,7 @@ class LogBlockTransFormer : BlockTransformer() {
 
     override fun transform(block: Block, materialWrapper: MaterialKeyWrapper): MaterialKey {
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
-        val logAxis = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.AXIS).metadataValue
+        val logAxis = (metadataKeyValueBucket.getMetadataKeyValue(BlockMetadataType.AXIS)?.metadataValue
             ?: BlockAxis.NONE) as BlockAxis
 
 
@@ -105,7 +104,7 @@ class LogBlockTransFormer : BlockTransformer() {
         val metadata = materialKey.metadata
         val metadataWithOutAxis = metadata and 0x3
         val wrap = materialWrapper.reverseMap(MaterialWrapperContext.BLOCK, MaterialKey.from(materialKey.id, metadataWithOutAxis))
-        val block = wrap!!.toBlock()
+        val block = wrap?.toBlock()?: return null
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
 
         var logAxis = BlockAxis.NONE
@@ -122,8 +121,9 @@ class LogBlockTransFormer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.LOG
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        val name = materialKey.namespacedKey.key
+        return name.endsWith("_wood")
     }
 
 }
@@ -182,8 +182,9 @@ class ButtonBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.BUTTON
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        val name = materialKey.namespacedKey.key
+        return name.endsWith("_button")
     }
 
 }
@@ -258,8 +259,8 @@ class LeverBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.LEVER
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        return materialKey == Material.LEVER
     }
 
 
@@ -323,7 +324,7 @@ class SlabBlockTransformer : BlockTransformer() {
         val id = materialKey.id
         val metadata = materialKey.metadata
         val wrap = materialWrapper.reverseMap(MaterialWrapperContext.BLOCK, MaterialKey.from(id, metadata and 7))
-        val block = wrap!!.toBlock()
+        val block = wrap?.toBlock()?: return null
         val metadataKeyValueBucket = block.getMetadataKeyValueBucket()
 
         //check if it is a double slab
@@ -338,8 +339,9 @@ class SlabBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.SLAB
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        val name = materialKey.namespacedKey.key
+        return name.endsWith("_slab") && !name.startsWith("double_")
     }
 
 }
@@ -389,8 +391,9 @@ class LeavesBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.LEAVES
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        val name = materialKey.namespacedKey.key
+        return name.endsWith("_leaves")
     }
 
 }
@@ -439,26 +442,8 @@ class VineBlockTransformer : BlockTransformer() {
         return block
     }
 
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.VINE
-    }
-
-}
-
-
-class CommonBlockTransformer : BlockTransformer() {
-
-    override fun transform(block: Block, materialWrapper: MaterialKeyWrapper): MaterialKey {
-        return materialWrapper.map(MaterialWrapperContext.BLOCK, block.getMaterialKey())!!
-    }
-
-    override fun transform(materialKey: MaterialKey, materialWrapper: MaterialKeyWrapper): Block? {
-        val reverse = materialWrapper.reverseMap(MaterialWrapperContext.BLOCK, materialKey) ?: return null
-        return Block(reverse)
-    }
-
-    override fun getTag(): MaterialCategoryKey {
-        return MaterialCategory.DEFAULT
+    override fun canTransform(materialKey: MaterialKey): Boolean {
+        return materialKey == Material.VINE
     }
 
 }
