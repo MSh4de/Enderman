@@ -2,17 +2,17 @@ package eu.mshade.enderman.wrapper
 
 import eu.mshade.enderframe.item.Material
 import eu.mshade.enderframe.item.MaterialKey
-import eu.mshade.enderframe.wrapper.ContextualWrapper
 import eu.mshade.enderframe.wrapper.MaterialKeyWrapper
 import eu.mshade.enderframe.wrapper.MaterialWrapperContext
-import eu.mshade.enderframe.wrapper.Wrapper
-import eu.mshade.enderman.EndermanMaterial
 
 class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
     /**
      * Class for wrapping a MaterialKey for protocol 1.8.9
      */
     init {
+        registerReverseMapping(MaterialWrapperContext.BLOCK, Material.DEAD_BUSH, MaterialKey.from(32, 0))
+        registerReverseMapping(MaterialWrapperContext.BLOCK, Material.REDSTONE_LAMP, MaterialKey.from(124, 0))
+
         //list minecraft materials id
         register(Material.STONE, MaterialKey.from(1, 0))
         register(Material.GRANITE, MaterialKey.from(1, 1))
@@ -385,7 +385,7 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(MaterialWrapperContext.ITEM, Material.MINECART, MaterialKey.from(328, 0))
         register(MaterialWrapperContext.ITEM, Material.SADDLE, MaterialKey.from(329, 0))
         register(MaterialWrapperContext.ITEM, Material.IRON_DOOR, MaterialKey.from(330, 0))
-        register(MaterialWrapperContext.ITEM, Material.REDSTONE, MaterialKey.from(331, 0))
+        register(MaterialWrapperContext.ITEM, Material.REDSTONE_WIRE, MaterialKey.from(331, 0))
         register(MaterialWrapperContext.ITEM, Material.SNOWBALL, MaterialKey.from(332, 0))
         register(MaterialWrapperContext.ITEM, Material.OAK_BOAT, MaterialKey.from(333, 0))
         register(MaterialWrapperContext.ITEM, Material.LEATHER, MaterialKey.from(334, 0))
@@ -484,6 +484,20 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(MaterialWrapperContext.ITEM, Material.WRITTEN_BOOK, MaterialKey.from(387, 0))
         register(MaterialWrapperContext.ITEM, Material.EMERALD, MaterialKey.from(388, 0))
         register(MaterialWrapperContext.ITEM, Material.ITEM_FRAME, MaterialKey.from(389, 0))
+        register(MaterialWrapperContext.ITEM, Material.FLOWER_POT, MaterialKey.from(390, 0))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_POPPY, MaterialKey.from(390, 1))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_DANDELION, MaterialKey.from(390, 2))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_OAK_SAPLING, MaterialKey.from(390, 3))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_SPRUCE_SAPLING, MaterialKey.from(390, 4))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_BIRCH_SAPLING, MaterialKey.from(390, 5))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_JUNGLE_SAPLING, MaterialKey.from(390, 6))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_RED_MUSHROOM, MaterialKey.from(390, 7))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_BROWN_MUSHROOM, MaterialKey.from(390, 8))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_CACTUS, MaterialKey.from(390, 9))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_DEAD_BUSH, MaterialKey.from(390, 10))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_FERN, MaterialKey.from(390, 11))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_ACACIA_SAPLING, MaterialKey.from(390, 12))
+        register(MaterialWrapperContext.ITEM, Material.POTTED_DARK_OAK_SAPLING, MaterialKey.from(390, 13))
         register(MaterialWrapperContext.ITEM, Material.CARROT, MaterialKey.from(391, 0))
         register(MaterialWrapperContext.ITEM, Material.POTATO, MaterialKey.from(392, 0))
         register(MaterialWrapperContext.ITEM, Material.BAKED_POTATO, MaterialKey.from(393, 0))
@@ -557,6 +571,7 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(MaterialWrapperContext.BLOCK, Material.IRON_DOOR, MaterialKey.from(71, 0))
         register(MaterialWrapperContext.BLOCK, Material.SUGAR_CANE, MaterialKey.from(83, 0))
         register(MaterialWrapperContext.BLOCK, Material.CAKE, MaterialKey.from(92, 0))
+        register(MaterialWrapperContext.BLOCK, Material.REPEATER, MaterialKey.from(93, 0))
         register(MaterialWrapperContext.BLOCK, Material.PUMPKIN_STEM, MaterialKey.from(104, 0))
         register(MaterialWrapperContext.BLOCK, Material.MELON_STEM, MaterialKey.from(105, 0))
         register(MaterialWrapperContext.BLOCK, Material.NETHER_WART, MaterialKey.from(115, 0))
@@ -571,6 +586,20 @@ class EndermanMaterialKeyWrapper : MaterialKeyWrapper() {
         register(MaterialWrapperContext.BLOCK, Material.DOUBLE_DARK_OAK_SLAB, MaterialKey.from(125, 5))
         register(MaterialWrapperContext.BLOCK, Material.COCOA, MaterialKey.from(127, 0))
         register(MaterialWrapperContext.BLOCK, Material.TRIPWIRE, MaterialKey.from(132, 0))
+        register(MaterialWrapperContext.BLOCK, Material.FLOWER_POT, MaterialKey.from(140, 0))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_POPPY, MaterialKey.from(140, 1))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_DANDELION, MaterialKey.from(140, 2))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_OAK_SAPLING, MaterialKey.from(140, 3))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_SPRUCE_SAPLING, MaterialKey.from(140, 4))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_BIRCH_SAPLING, MaterialKey.from(140, 5))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_JUNGLE_SAPLING, MaterialKey.from(140, 6))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_RED_MUSHROOM, MaterialKey.from(140, 7))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_BROWN_MUSHROOM, MaterialKey.from(140, 8))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_CACTUS, MaterialKey.from(140, 9))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_DEAD_BUSH, MaterialKey.from(140, 10))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_FERN, MaterialKey.from(140, 11))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_ACACIA_SAPLING, MaterialKey.from(140, 12))
+        register(MaterialWrapperContext.BLOCK, Material.POTTED_DARK_OAK_SAPLING, MaterialKey.from(140, 13))
         register(MaterialWrapperContext.BLOCK, Material.CARROTS, MaterialKey.from(141, 0))
         register(MaterialWrapperContext.BLOCK, Material.POTATOES, MaterialKey.from(142, 0))
         register(MaterialWrapperContext.BLOCK, Material.SKELETON_SKULL, MaterialKey.from(144, 0))

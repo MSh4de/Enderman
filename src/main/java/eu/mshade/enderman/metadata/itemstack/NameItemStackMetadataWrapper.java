@@ -11,7 +11,7 @@ public class NameItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         NameItemStackMetadata nameItemStackMetadata = (NameItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.NAME);
         CompoundBinaryTag displayCompoundBinaryTag = compoundBinaryTag.computeIfAbsent("display", s -> new CompoundBinaryTag());
         displayCompoundBinaryTag.putString("Name", nameItemStackMetadata.getMetadataValue().toLegacyText());
@@ -19,7 +19,7 @@ public class NameItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void read(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         if (!compoundBinaryTag.containsKey("display")) return;
         CompoundBinaryTag displayCompoundBinaryTag = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("display");
         if (!displayCompoundBinaryTag.containsKey("Name")) return;

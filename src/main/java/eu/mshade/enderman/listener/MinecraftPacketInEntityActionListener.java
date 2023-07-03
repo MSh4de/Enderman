@@ -2,7 +2,7 @@ package eu.mshade.enderman.listener;
 
 import eu.mshade.enderframe.EnderFrame;
 import eu.mshade.enderframe.packetevent.MinecraftPacketEntityActionEvent;
-import eu.mshade.enderman.packet.play.MinecraftPacketInEntityAction;
+import eu.mshade.enderman.packet.play.entity.MinecraftPacketInEntityAction;
 import eu.mshade.mwork.event.EventListener;
 
 public class MinecraftPacketInEntityActionListener implements EventListener<MinecraftPacketInEntityAction> {

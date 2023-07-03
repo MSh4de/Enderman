@@ -41,7 +41,7 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
             return;
         }
         CompoundBinaryTag compoundBinaryTag = new CompoundBinaryTag();
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         for (MetadataKeyValue<?> metadataKeyValue : metadataKeyValueBucket.getMetadataKeyValues()) {
             if (itemStackManager.hasBuffer(metadataKeyValue.getMetadataKey())) {
                 itemStackManager.getItemStackMetadataBuffer(metadataKeyValue.getMetadataKey()).write(compoundBinaryTag, itemStack);
@@ -49,7 +49,6 @@ public class EndermanMinecraftByteBuf extends MinecraftByteBuf {
         }
         writeShort(materialKey.getId());
         writeByte(itemStack.getAmount() & 255);
-        writeShort(itemStack.getDurability());
         if (materialKey.getMaxDurability() != 0) {
             writeShort(itemStack.getDurability());
         } else {

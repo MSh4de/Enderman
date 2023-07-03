@@ -1,4 +1,4 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.entity;
 
 import eu.mshade.enderframe.entity.Entity;
 import eu.mshade.enderframe.metadata.MetadataKey;

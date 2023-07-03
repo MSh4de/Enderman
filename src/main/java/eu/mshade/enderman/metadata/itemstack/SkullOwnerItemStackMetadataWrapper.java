@@ -17,7 +17,7 @@ public class SkullOwnerItemStackMetadataWrapper implements ItemStackMetadataWrap
 
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         SkullOwnerItemStackMetadata skullOwnerItemStackMetadata = (SkullOwnerItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.SKULL_OWNER);
         GameProfile gameProfile = skullOwnerItemStackMetadata.getMetadataValue();
 
@@ -43,7 +43,7 @@ public class SkullOwnerItemStackMetadataWrapper implements ItemStackMetadataWrap
 
     @Override
     public void read(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         if (!compoundBinaryTag.containsKey("SkullOwner")) return;
         CompoundBinaryTag skullOwner = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("SkullOwner");
         if (!skullOwner.containsKey("Properties")) return;

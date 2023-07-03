@@ -12,5 +12,7 @@ public class EndermanContextWrapper {
     public static ContextWrapperKey ENTITY_TYPE = ContextWrapperKey.Companion.from("ENTITY_TYPE");
     public static ContextWrapperKey NAMESPACED_KEY = ContextWrapperKey.Companion.from("NAMESPACED_KEY");
     public static ContextWrapperKey PARTICLE_TYPE = ContextWrapperKey.Companion.from("PARTICLE_TYPE");
+    public static ContextWrapperKey EFFECT_TYPE = ContextWrapperKey.Companion.from("EFFECT_TYPE");
+    public static ContextWrapperKey MAP_CURSOR_TYPE = ContextWrapperKey.Companion.from("MAP_CURSOR_TYPE");
 
 }

@@ -101,7 +101,12 @@ fun main() {
     materialGeneratorRegistry.registerMaterialGenerator("leaves", LimitVariationMaterialGenerator(4))
     materialGeneratorRegistry.registerMaterialGenerator("double_plant", LimitVariationMaterialGenerator(5))
     materialGeneratorRegistry.registerMaterialGenerator("flower_pot", SplitNameMaterialGenerator {_, name ->
-        return@SplitNameMaterialGenerator "POTTED_${minecraftFormat(name).endsWith("FLOWER_POT", true)}"
+        val minecraftFormat = minecraftFormat(name)
+        if (minecraftFormat == "EMPTY_FLOWER_POT"){
+            return@SplitNameMaterialGenerator "FLOWER_POT"
+        }
+
+        return@SplitNameMaterialGenerator "POTTED_${minecraftFormat.substringBefore("_FLOWER_POT")}"
     })
 
 
@@ -139,6 +144,8 @@ fun main() {
     materialGeneratorRegistry.registerMaterialReplacer("waterlily", "lily_pad")
     materialGeneratorRegistry.registerMaterialReplacer("slime", "slime_block")
     materialGeneratorRegistry.registerMaterialReplacer("reeds", "sugar_cane")
+    materialGeneratorRegistry.registerMaterialReplacer("unpowered_repeater", "repeater")
+    materialGeneratorRegistry.registerMaterialReplacer("redstone", "redstone_wire")
 
 
     materialGeneratorRegistry.registerVariationReplacer("head", "player_head")
@@ -153,7 +160,7 @@ fun main() {
 
 
     materialGeneratorRegistry.registerMaterialBlackList("dead_bush")
-    materialGeneratorRegistry.registerMaterialBlackList(32, 36, 75)
+    materialGeneratorRegistry.registerMaterialBlackList(32, 36, 75, 94)
 
 
     val blockRegistered = mutableSetOf<MaterialGeneratorResult>()

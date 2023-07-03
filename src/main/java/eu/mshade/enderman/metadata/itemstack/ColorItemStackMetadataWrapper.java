@@ -12,7 +12,7 @@ public class ColorItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void write(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         ColorItemStackMetadata metadataKeyValue = (ColorItemStackMetadata) metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.COLOR);
         Color color = metadataKeyValue.getMetadataValue();
         CompoundBinaryTag displayCompoundBinaryTag = compoundBinaryTag.computeIfAbsent("display", s -> new CompoundBinaryTag());
@@ -21,7 +21,7 @@ public class ColorItemStackMetadataWrapper implements ItemStackMetadataWrapper {
 
     @Override
     public void read(CompoundBinaryTag compoundBinaryTag, ItemStack itemStack) {
-        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadataKeyValueBucket();
+        MetadataKeyValueBucket metadataKeyValueBucket = itemStack.getMetadatas();
         if (!compoundBinaryTag.containsKey("display")) return;
         CompoundBinaryTag display = (CompoundBinaryTag) compoundBinaryTag.getBinaryTag("display");
         if (!display.containsKey("color")) return;

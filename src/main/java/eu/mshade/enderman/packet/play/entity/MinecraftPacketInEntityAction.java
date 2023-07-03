@@ -1,6 +1,6 @@
-package eu.mshade.enderman.packet.play;
+package eu.mshade.enderman.packet.play.entity;
 
-import eu.mshade.enderframe.metadata.ActionType;
+import eu.mshade.enderframe.entity.ActionType;
 import eu.mshade.enderframe.protocol.MinecraftPacketIn;
 import eu.mshade.enderframe.protocol.MinecraftByteBuf;
 import eu.mshade.enderframe.protocol.MinecraftSession;

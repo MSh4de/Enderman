@@ -1,6 +1,9 @@
 package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
+import eu.mshade.enderframe.attribute.AttributeKey
+import eu.mshade.enderframe.effect.Effect
+import eu.mshade.enderframe.effect.EffectKey
 import eu.mshade.enderframe.entity.*
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
@@ -38,6 +41,7 @@ import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
+import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreboard
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
@@ -61,6 +65,8 @@ class EndermanMinecraftSession(
     private val inventoryKeyWrapper: Wrapper<InventoryKey?, String?>?
     private val inventorySizeWrapper: Wrapper<InventoryKey?, Int?>?
     private val particleKeyWrapper: Wrapper<ParticleKey?, Int?>?
+    private val attributeKeyWrapper: Wrapper<AttributeKey?, String?>?
+    private val effectKeyWrapper: Wrapper<EffectKey?, Int?>?
     private val objectTransformerRepository: EndermanObjectTransformerRepository
     private val blockTransformerController: BlockTransformerController
 
@@ -77,6 +83,10 @@ class EndermanMinecraftSession(
             wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE) as Wrapper<InventoryKey?, Int?>?
         entityTypeWrapper = wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE) as Wrapper<EntityKey?, Int?>?
         particleKeyWrapper = wrapperRepository.get(EndermanContextWrapper.PARTICLE_TYPE) as Wrapper<ParticleKey?, Int?>?
+
+        attributeKeyWrapper =
+            wrapperRepository.get(EndermanContextWrapper.ATTRIBUTE_KEY) as Wrapper<AttributeKey?, String?>?
+        effectKeyWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<EffectKey?, Int?>?
     }
 
     override fun sendCompression(threshold: Int) {
@@ -214,7 +224,17 @@ class EndermanMinecraftSession(
         val z = floor(entity.getLocation().z * 32)
         val yaw = (entity.getLocation().yaw * 256.0f / 360.0f).toInt()
         val pitch = (entity.getLocation().pitch * 256.0f / 360.0f).toInt()
-        sendPacket(MinecraftPacketOutEntityTeleport(entity, x, y, z, yaw, pitch, false))
+        sendPacket(
+            MinecraftPacketOutEntityTeleport(
+                entity,
+                x,
+                y,
+                z,
+                yaw,
+                pitch,
+                false
+            )
+        )
     }
 
     override fun sendMove(entity: Entity) {
@@ -227,7 +247,14 @@ class EndermanMinecraftSession(
         val x = (floor(now.x * 32) - floor(before.x * 32)).toByte()
         val y = (floor(now.y * 32) - floor(before.y * 32)).toByte()
         val z = (floor(now.z * 32) - floor(before.z * 32)).toByte()
-        sendPacket(MinecraftPacketOutEntityRelativeMove(entity, x, y, z))
+        sendPacket(
+            MinecraftPacketOutEntityRelativeMove(
+                entity,
+                x,
+                y,
+                z
+            )
+        )
     }
 
     override fun sendMoveAndLook(entity: Entity) {
@@ -242,7 +269,16 @@ class EndermanMinecraftSession(
         val z = (floor(now.z * 32) - floor(before.z * 32)).toByte()
         val yaw = (now.yaw * 256 / 360).toInt()
         val pitch = (now.pitch * 256 / 360).toInt()
-        sendPacket(MinecraftPacketOutEntityLookRelativeMove(entity, x, y, z, yaw, pitch))
+        sendPacket(
+            MinecraftPacketOutEntityLookRelativeMove(
+                entity,
+                x,
+                y,
+                z,
+                yaw,
+                pitch
+            )
+        )
     }
 
     override fun sendLook(entity: Entity) {
@@ -250,7 +286,12 @@ class EndermanMinecraftSession(
     }
 
     override fun sendLook(entity: Entity, location: Location) {
-        sendPacket(MinecraftPacketOutEntityLook(entity, location))
+        sendPacket(
+            MinecraftPacketOutEntityLook(
+                entity,
+                location
+            )
+        )
     }
 
     override fun sendHeadLook(entity: Entity) {
@@ -267,7 +308,12 @@ class EndermanMinecraftSession(
     }
 
     override fun sendHeadLook(entity: Entity, location: Location) {
-        sendPacket(MinecraftPacketOutEntityHeadLook(entity, location))
+        sendPacket(
+            MinecraftPacketOutEntityHeadLook(
+                entity,
+                location
+            )
+        )
     }
 
     override fun sendEntity(vararg entities: Entity) {
@@ -298,7 +344,38 @@ class EndermanMinecraftSession(
     }
 
     override fun sendMetadata(entity: Entity, entityMetadataKeys: Collection<MetadataKey>) {
-        sendPacket(MinecraftPacketOutEntityMetadata(entity, entityMetadataKeys))
+        sendPacket(
+            MinecraftPacketOutEntityMetadata(
+                entity,
+                entityMetadataKeys
+            )
+        )
+    }
+
+    override fun sendEntityProperties(entity: Entity){
+
+        val properties = mutableListOf<EndermanAttributeProperty>()
+
+        for (property in entity.getProperties()) {
+            val attribute = attributeKeyWrapper?.map(property.attribute) ?: continue
+            properties.add(EndermanAttributeProperty(attribute, property.value, property.getAttributeModifiers()))
+        }
+
+        sendPacket(MinecraftPacketOutEntityProperties(entity, properties))
+    }
+
+    override fun sendEntityEffect(entity: Entity, vararg effects: Effect) {
+        for (effect in effects) {
+            val type = effectKeyWrapper?.map(effect.type) ?: continue
+            sendPacket(MinecraftPacketOutEntityEffect(entity, EndermanEffect(type, effect.amplifier, effect.duration, effect.particle)))
+        }
+    }
+
+    override fun sendRemoveEntityEffect(entity: Entity, vararg effectTypes: EffectKey){
+        for (effectType in effectTypes) {
+            val type = effectKeyWrapper?.map(effectType) ?: continue
+            sendPacket(MinecraftPacketOutRemoveEntityEffect(entity, type))
+        }
     }
 
 
@@ -320,9 +397,9 @@ class EndermanMinecraftSession(
         for (section in sections) {
             val palette = section.palette
             val wrappedPalette: MutableMap<Int, MaterialKey> = HashMap()
-            for ((key, value) in palette.blockById) {
-                blockTransformerController.transform(value)?.let {
-                    wrappedPalette[key] = it
+            for (paletteEntry in palette.getBlocks()) {
+                blockTransformerController.transform(paletteEntry.block)?.let {
+                    wrappedPalette[paletteEntry.id] = it
                 }
             }
             for (i in 0..4095) {
@@ -358,9 +435,9 @@ class EndermanMinecraftSession(
         val byteBuffer = ByteBuffer.allocate(capacity)
         val palette = section.palette
         val wrappedPalette: MutableMap<Int, MaterialKey> = HashMap()
-        for ((key, value) in palette.blockById) {
-            blockTransformerController.transform(value)?.let { materialKey ->
-                wrappedPalette[key] = materialKey
+        for (paletteEntry in palette.getBlocks()) {
+            blockTransformerController.transform(paletteEntry.block)?.let {
+                wrappedPalette[paletteEntry.id] = it
             }
         }
         for (i in 0..4095) {
@@ -402,9 +479,9 @@ class EndermanMinecraftSession(
         for (section in sections) {
             val palette = section.palette
             val wrappedPalette: MutableMap<Int, MaterialKey> = HashMap()
-            for ((key, value) in palette.blockById) {
-                blockTransformerController.transform(value)?.let {
-                    wrappedPalette[key] = it
+            for (paletteEntry in palette.getBlocks()) {
+                blockTransformerController.transform(paletteEntry.block)?.let {
+                    wrappedPalette[paletteEntry.id] = it
                 }
             }
             for (i in 0..4095) {
@@ -483,15 +560,12 @@ class EndermanMinecraftSession(
 
 
     override fun sendItemStack(inventory: Inventory, slot: Int, itemStack: ItemStack?) {
-        val id: Int
-        id = if (inventory is PlayerInventory) {
-            0/*            slot = PlayerInventory.accurateSlot(slot);*/
-        } else {
-            1
-            //id = this.inventoryRepository.getIdOfInventory(inventory);
+        var id = 0
+        if (inventory !is PlayerInventory) {
+            id = 1
         }
 
-
+        println("Sending itemstack $itemStack")
         sendPacket(MinecraftPacketOutSetItemStack(slot, id, itemStack))
     }
 

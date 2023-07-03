@@ -82,17 +82,17 @@ class FishingHookObjectTransformer : EndermanObjectTransformer {
         val ownerUuid = entity.metadata.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as UUID
         val owner = entity.getLocation().world.getEntityByUuid(ownerUuid)
 
-        return owner.getEntityId()
+        return owner?.getEntityId() ?: 0
     }
 }
 
 class ProjectileObjectTransformer : EndermanObjectTransformer {
 
     override fun transform(entity: Entity): Int {
-        val ownerUuid = entity.metadata.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as? UUID
+        val ownerUuid = entity.metadata.getMetadataKeyValue(EntityMetadataKey.OWNER).metadataValue as? UUID?: return 0
         //Todo
         val owner = entity.getLocation().world.getEntityByUuid(ownerUuid)
 
-        return owner.getEntityId()
+        return owner?.getEntityId() ?: 0
     }
 }

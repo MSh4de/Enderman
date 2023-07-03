@@ -2,8 +2,8 @@ package eu.mshade.enderman.listener
 
 import eu.mshade.enderframe.EnderFrame
 import eu.mshade.enderframe.inventory.ClickType
+import eu.mshade.enderframe.inventory.InventoryType
 import eu.mshade.enderframe.inventory.PlayerInventory
-import eu.mshade.enderframe.inventory.type.ChestInventory
 import eu.mshade.enderframe.packetevent.MinecraftPacketClickInventoryEvent
 import eu.mshade.enderframe.packetevent.MinecraftPacketCloseInventoryEvent
 import eu.mshade.enderman.packet.play.inventory.MinecraftPacketInClickInventory
@@ -18,7 +18,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
         val minecraftSession = event.getMinecraftSession()
         val player = minecraftSession.player
 
-        var clickType: ClickType? = null
+        val clickType: ClickType?
         val button = event.button
         val mode = event.mode
         var slot = event.slot
@@ -29,7 +29,7 @@ class MinecraftPacketInClickInventoryListener(private val endermanInventorySizeW
         val maxSizeClickedInventory = endermanInventorySizeWrapper.map(clickedInventory!!.inventoryKey)!!
 
         if (clickedInventory !is PlayerInventory) {
-            val maxSizeSlot = if(clickedInventory is ChestInventory) clickedInventory.rows * 9 else maxSizeClickedInventory
+            val maxSizeSlot = if(clickedInventory.inventoryKey == InventoryType.CHEST) clickedInventory.size else maxSizeClickedInventory
             if (slot >= 0 && slot >= maxSizeSlot) {
                 clickedInventory = player.inventory
                 val maxSizeSlotWithPlayerInventory = maxSizeSlot + (9 * 4)

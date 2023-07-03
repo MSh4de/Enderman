@@ -1,17 +1,13 @@
 package eu.mshade.enderman.metadata.itemstack
 
-import eu.mshade.enderframe.item.FireworkExplosion
-import eu.mshade.enderframe.item.FireworkType
-import eu.mshade.enderframe.item.ItemStack
-import eu.mshade.enderframe.item.ItemStackMetadataWrapper
+import eu.mshade.enderframe.item.*
 import eu.mshade.enderframe.item.metadata.FireworkExplosionItemStackMetadata
-import eu.mshade.enderframe.metadata.itemstack.ItemStackMetadataKey
 import eu.mshade.enderframe.mojang.Color
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag
 
 class FireworkExplosionItemStackMetadataBuffer : ItemStackMetadataWrapper {
     override fun write(compoundBinaryTag: CompoundBinaryTag, itemStack: ItemStack) {
-        val metadataKeyValueBucket = itemStack.metadataKeyValueBucket
+        val metadataKeyValueBucket = itemStack.metadatas
         val metadataKeyValue = metadataKeyValueBucket.getMetadataKeyValue(ItemStackMetadataKey.EXPLOSION) as FireworkExplosionItemStackMetadata
         val explosion: FireworkExplosion = metadataKeyValue.metadataValue
 
@@ -32,7 +28,7 @@ class FireworkExplosionItemStackMetadataBuffer : ItemStackMetadataWrapper {
     }
 
     override fun read(compoundBinaryTag: CompoundBinaryTag, itemStack: ItemStack) {
-        val metadataKeyValueBucket = itemStack.metadataKeyValueBucket
+        val metadataKeyValueBucket = itemStack.metadatas
         if(!compoundBinaryTag.containsKey("Explosion")) return
         val explosionTag = compoundBinaryTag.getBinaryTag("Explosion") as CompoundBinaryTag
 

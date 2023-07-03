@@ -1,8 +1,6 @@
 package eu.mshade.enderman
 
-import eu.mshade.enderframe.EnderFrame
 import eu.mshade.enderframe.entity.EntityMapper
-import eu.mshade.enderframe.packetevent.MinecraftPacketToggleFlyingEvent
 import eu.mshade.enderframe.protocol.*
 import eu.mshade.enderframe.protocol.packet.*
 import eu.mshade.enderframe.world.block.BlockTransformerController
@@ -19,6 +17,7 @@ import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutBlockBreak
+import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerGround
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerLook
@@ -33,7 +32,6 @@ import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScorebo
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutTimeUpdate
 import eu.mshade.enderman.wrapper.*
-import eu.mshade.mwork.event.EventListener
 import io.netty.buffer.ByteBuf
 import io.netty.channel.Channel
 
@@ -55,13 +53,13 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         wrapperRepository.register(EndermanContextWrapper.ENTITY_TYPE, EndermanEntityTypeWrapper())
         wrapperRepository.register(EndermanContextWrapper.NAMESPACED_KEY, EndermanNamespacedKeyWrapper())
         wrapperRepository.register(EndermanContextWrapper.PARTICLE_TYPE, EndermanParticleWrapper())
+        wrapperRepository.register(EndermanContextWrapper.EFFECT_TYPE, EndermanEffectKeyWrapper())
+        wrapperRepository.register(EndermanContextWrapper.MAP_CURSOR_TYPE, EndermanMapCursorKeyWrapper())
 
         entityMetadataManager = EndermanEntityMetadataManager()
         itemStackManager = EndermanItemStackManager(getWrapperRepository())
         blockTransformerController = BlockTransformerController(materialKeyWrapper)
         objectTransformerRepository = EndermanObjectTransformerRepository(blockTransformerController)
-
-
 
         getEventBus().subscribe(MinecraftPacketInKeepAlive::class.java, MinecraftPacketInKeepAliveListener())
         getEventBus().subscribe(MinecraftPacketInLogin::class.java, MinecraftPacketInLoginListener())
@@ -77,20 +75,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         getEventBus().subscribe(MinecraftPacketInClientStatus::class.java, MinecraftPacketInClientStatusListener())
         getEventBus().subscribe(MinecraftPacketInCloseInventory::class.java, MinecraftPacketInCloseInventoryListener())
         getEventBus().subscribe(MinecraftPacketInCreativeClickInventory::class.java, MinecraftPacketInCreativeClickInventoryListener())
+        getEventBus().subscribe(MinecraftPacketInPlayerAbilities::class.java, MinecraftPacketInPlayerAbilitiesListener())
 
-        getEventBus().subscribe(
-            MinecraftPacketInPlayerAbilities::class.java,
-            object : EventListener<MinecraftPacketInPlayerAbilities> {
-                override fun onEvent(event: MinecraftPacketInPlayerAbilities) {
-                    val player = event.getMinecraftSession().player
-                    EnderFrame.get().packetEvents.publish(
-                        MinecraftPacketToggleFlyingEvent(
-                            player,
-                            event.isAllowFlying
-                        )
-                    )
-                }
-            })
 
         getEventBus().subscribe(MinecraftPacketInBlockPlacement::class.java, MinecraftPacketInBlockPlacementListener())
         getEventBus().subscribe(MinecraftPacketInPlayerDigging::class.java, MinecraftPacketInPlayerDiggingListener())
@@ -106,6 +92,12 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         blockTransformerController.register(SlabBlockTransformer())
         blockTransformerController.register(LeavesBlockTransformer())
         blockTransformerController.register(VineBlockTransformer())
+        blockTransformerController.register(BedBlockTransformer())
+        blockTransformerController.register(ChestTransformer())
+        blockTransformerController.register(DoubleSlabBlockTransformer())
+        blockTransformerController.register(RedstoneLampTransformer())
+        blockTransformerController.register(RedstoneWireBlockTransformer())
+        blockTransformerController.register(RepeatersBlockTransformer())
 
 
         protocolRegistry.registerOut(MinecraftProtocolStatus.LOGIN, 0x00, MinecraftPacketOutDisconnect::class.java)
@@ -153,6 +145,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x18, MinecraftPacketOutEntityTeleport::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x19, MinecraftPacketOutEntityHeadLook::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x1C, MinecraftPacketOutEntityMetadata::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x1D, MinecraftPacketOutEntityEffect::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x1E, MinecraftPacketOutRemoveEntityEffect::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x20, MinecraftPacketOutEntityProperties::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x21, MinecraftPacketOutChunkData::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x23, MinecraftPacketOutBlockChange::class.java)
@@ -179,7 +173,6 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x33, MinecraftPacketOutUpdateSign::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x2A, MinecraftPacketOutParticle::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketOutSpawnObject::class.java)
-
     }
 
     override fun getProtocolBuffer(byteBuf: ByteBuf): MinecraftByteBuf {
