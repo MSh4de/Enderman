@@ -2,6 +2,7 @@ package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
 import eu.mshade.enderframe.animation.AnimationType
+import eu.mshade.enderframe.world.effect.WorldEffectType
 import eu.mshade.enderframe.entity.*
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
@@ -16,8 +17,8 @@ import eu.mshade.enderframe.protocol.MinecraftProtocolStatus
 import eu.mshade.enderframe.protocol.MinecraftSession
 import eu.mshade.enderframe.protocol.packet.*
 import eu.mshade.enderframe.scoreboard.Scoreboard
-import eu.mshade.enderframe.scoreboard.ScoreboardLine
 import eu.mshade.enderframe.scoreboard.ScoreboardAction
+import eu.mshade.enderframe.scoreboard.ScoreboardLine
 import eu.mshade.enderframe.scoreboard.ScoreboardLineAction
 import eu.mshade.enderframe.scoreboard.team.Team
 import eu.mshade.enderframe.sound.SoundEffect
@@ -32,6 +33,7 @@ import eu.mshade.enderframe.world.border.WorldBorderAction
 import eu.mshade.enderframe.world.chunk.Chunk
 import eu.mshade.enderframe.world.chunk.EmptySection
 import eu.mshade.enderframe.world.chunk.Section
+import eu.mshade.enderframe.world.effect.WorldEffectKey
 import eu.mshade.enderframe.wrapper.ContextWrapper
 import eu.mshade.enderframe.wrapper.MaterialWrapperContext
 import eu.mshade.enderframe.wrapper.Wrapper
@@ -63,6 +65,7 @@ class EndermanMinecraftSession(
     private val inventoryKeyWrapper: Wrapper<InventoryKey?, String?>?
     private val inventorySizeWrapper: Wrapper<InventoryKey?, Int?>?
     private val particleKeyWrapper: Wrapper<ParticleKey?, Int?>?
+    private val worldEffectWrapper: Wrapper<WorldEffectKey, Int>?
     private val objectTransformerRepository: EndermanObjectTransformerRepository
     private val blockTransformerController: BlockTransformerController
 
@@ -79,6 +82,7 @@ class EndermanMinecraftSession(
             wrapperRepository.get(EndermanContextWrapper.INVENTORY_SIZE) as Wrapper<InventoryKey?, Int?>?
         entityTypeWrapper = wrapperRepository.get(EndermanContextWrapper.ENTITY_TYPE) as Wrapper<EntityKey?, Int?>?
         particleKeyWrapper = wrapperRepository.get(EndermanContextWrapper.PARTICLE_TYPE) as Wrapper<ParticleKey?, Int?>?
+        worldEffectWrapper = wrapperRepository.get(EndermanContextWrapper.WORLD_EFFECT) as Wrapper<WorldEffectKey, Int>?
     }
 
     override fun sendCompression(threshold: Int) {
@@ -537,6 +541,13 @@ class EndermanMinecraftSession(
 
     override fun sendAnimation(player: Player, animationType: AnimationType) {
         sendPacket(MinecraftPacketOutAnimation(player, animationType))
+    }
+
+    override fun sendWorldEffect(worldEffect: WorldEffectKey, location: Vector, material: MaterialKey, relativeVolume: Boolean) {
+        val worldEffectWrappedId = worldEffectWrapper?.map(worldEffect) ?: return
+        val materialWrapped = materialKeyWrapper?.map(MaterialWrapperContext.BLOCK, material) ?: return
+
+        sendPacket(MinecraftPacketOutWorldEffect(worldEffectWrappedId, location, materialWrapped.getId() + (materialWrapped.getMetadata() shl 12), relativeVolume))
     }
 
     private fun hasOverflow(value: Int): Boolean {

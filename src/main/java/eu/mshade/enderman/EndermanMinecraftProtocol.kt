@@ -56,6 +56,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         wrapperRepository.register(EndermanContextWrapper.ENTITY_TYPE, EndermanEntityTypeWrapper())
         wrapperRepository.register(EndermanContextWrapper.NAMESPACED_KEY, EndermanNamespacedKeyWrapper())
         wrapperRepository.register(EndermanContextWrapper.PARTICLE_TYPE, EndermanParticleWrapper())
+        wrapperRepository.register(EndermanContextWrapper.WORLD_EFFECT, EndermanWorldEffectWrapper())
+
 
         entityMetadataManager = EndermanEntityMetadataManager()
         itemStackManager = EndermanItemStackManager(getWrapperRepository())
@@ -162,6 +164,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x21, MinecraftPacketOutChunkData::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x23, MinecraftPacketOutBlockChange::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketOutBlockBreak::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x28, MinecraftPacketOutWorldEffect::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x38, MinecraftPacketOutPlayerInfo::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x39, MinecraftPacketOutPlayerAbilities::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x40, MinecraftPacketOutDisconnect::class.java)
