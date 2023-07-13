@@ -43,13 +43,13 @@ public class MinecraftPacketOutParticle implements MinecraftPacketOut {
             if (materialKey == null) return;
 
             minecraftByteBuf.writeVarInt(materialKey.getId());
-            minecraftByteBuf.writeVarInt(particleIconCrack.getMetadata());
+            minecraftByteBuf.writeVarInt(materialKey.getMetadata());
         } else if (particle instanceof ParticleBlockCrack particleBlockCrack) {
             MaterialKey materialKey = materialKeyWrapper.map(MaterialWrapperContext.BLOCK, particleBlockCrack.getMaterial());
 
             if (materialKey == null) return;
 
-            minecraftByteBuf.writeVarInt(materialKey.getId() + (particleBlockCrack.getMetadata() << 12));
+            minecraftByteBuf.writeVarInt(materialKey.getId() + (materialKey.getMetadata() << 12));
         } else if (particle instanceof ParticleBlockDust particleBlockDust) {
             MaterialKey materialKey = materialKeyWrapper.map(MaterialWrapperContext.BLOCK, particleBlockDust.getMaterial());
 

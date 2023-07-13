@@ -22,7 +22,7 @@ class EndermanItemStackManager(wrapperRepository: WrapperRepository) : ItemStack
             wrapperRepository.get(EndermanContextWrapper.EQUIPMENT_SLOT) as Wrapper<EquipmentSlot, String>?
         val namespacedKeyWrapper =
             wrapperRepository.get(EndermanContextWrapper.NAMESPACED_KEY) as Wrapper<MaterialKey, NamespacedKey>?
-        val effectTypeWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<PotionEffectKey, Int>?
+        val effectTypeWrapper = wrapperRepository.get(EndermanContextWrapper.POTION_EFFECT_TYPE) as Wrapper<PotionEffectKey, Int>?
         val cursorTypeWrapper =
             wrapperRepository.get(EndermanContextWrapper.MAP_CURSOR_TYPE) as Wrapper<MapCursorKey, Int>?
 
