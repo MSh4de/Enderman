@@ -1,7 +1,7 @@
 package eu.mshade.enderman.metadata.itemstack
 
-import eu.mshade.enderframe.effect.Effect
-import eu.mshade.enderframe.effect.EffectKey
+import eu.mshade.enderframe.effect.PotionEffect
+import eu.mshade.enderframe.effect.PotionEffectKey
 import eu.mshade.enderframe.item.ItemStack
 import eu.mshade.enderframe.item.ItemStackMetadataKey
 import eu.mshade.enderframe.item.ItemStackMetadataWrapper
@@ -11,7 +11,7 @@ import eu.mshade.mwork.binarytag.BinaryTagType
 import eu.mshade.mwork.binarytag.entity.CompoundBinaryTag
 import eu.mshade.mwork.binarytag.entity.ListBinaryTag
 
-class CustomPotionEffectsItemStackMetadataWrapper(val effectWrapper: Wrapper<EffectKey, Int>?) : ItemStackMetadataWrapper {
+class CustomPotionEffectsItemStackMetadataWrapper(val effectWrapper: Wrapper<PotionEffectKey, Int>?) : ItemStackMetadataWrapper {
 
     override fun write(compoundBinaryTag: CompoundBinaryTag, itemStack: ItemStack) {
         val metadataKeyValueBucket = itemStack.metadatas
@@ -39,7 +39,7 @@ class CustomPotionEffectsItemStackMetadataWrapper(val effectWrapper: Wrapper<Eff
         val metadatas = itemStack.metadatas
         if (!compoundBinaryTag.containsKey("CustomPotionEffects")) return
         val effectsTag = compoundBinaryTag.getBinaryTag("CustomPotionEffects") as ListBinaryTag
-        val effects = mutableListOf<Effect>()
+        val potionEffects = mutableListOf<PotionEffect>()
         for (effectTag in effectsTag.value) {
             if (effectTag !is CompoundBinaryTag) continue
             if (!effectTag.containsKey("Id")) continue
@@ -49,10 +49,10 @@ class CustomPotionEffectsItemStackMetadataWrapper(val effectWrapper: Wrapper<Eff
             val duration = effectTag.getInt("Duration")
             val ambient = effectTag.getByte("Ambient") == 1.toByte()
             val particle = effectTag.getByte("ShowParticles") == 1.toByte()
-            effects.add(Effect(effectType, amplifier, duration, ambient, particle))
+            potionEffects.add(PotionEffect(effectType, amplifier, duration, ambient, particle))
         }
 
-        metadatas.setMetadataKeyValue(CustomPotionEffectsItemStackMetadata(effects))
+        metadatas.setMetadataKeyValue(CustomPotionEffectsItemStackMetadata(potionEffects))
     }
 
 }

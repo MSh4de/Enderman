@@ -1,36 +1,35 @@
 package eu.mshade.enderman.wrapper
 
-import eu.mshade.enderframe.effect.Effect
-import eu.mshade.enderframe.effect.EffectKey
-import eu.mshade.enderframe.effect.EffectType
+import eu.mshade.enderframe.effect.PotionEffectKey
+import eu.mshade.enderframe.effect.PotionEffectType
 import eu.mshade.enderframe.wrapper.Wrapper
 
-class EndermanEffectKeyWrapper : Wrapper<EffectKey, Int>() {
+class EndermanEffectKeyWrapper : Wrapper<PotionEffectKey, Int>() {
 
     init {
-        register(EffectType.SPEED, 1)
-        register(EffectType.SLOWNESS, 2)
-        register(EffectType.HASTE, 3)
-        register(EffectType.MINING_FATIGUE, 4)
-        register(EffectType.STRENGTH, 5)
-        register(EffectType.INSTANT_HEALTH, 6)
-        register(EffectType.INSTANT_DAMAGE, 7)
-        register(EffectType.JUMP_BOOST, 8)
-        register(EffectType.NAUSEA, 9)
-        register(EffectType.REGENERATION, 10)
-        register(EffectType.RESISTANCE, 11)
-        register(EffectType.FIRE_RESISTANCE, 12)
-        register(EffectType.WATER_BREATHING, 13)
-        register(EffectType.INVISIBILITY, 14)
-        register(EffectType.BLINDNESS, 15)
-        register(EffectType.NIGHT_VISION, 16)
-        register(EffectType.HUNGER, 17)
-        register(EffectType.WEAKNESS, 18)
-        register(EffectType.POISON, 19)
-        register(EffectType.WITHER, 20)
-        register(EffectType.HEALTH_BOOST, 21)
-        register(EffectType.ABSORPTION, 22)
-        register(EffectType.SATURATION, 23)
+        register(PotionEffectType.SPEED, 1)
+        register(PotionEffectType.SLOWNESS, 2)
+        register(PotionEffectType.HASTE, 3)
+        register(PotionEffectType.MINING_FATIGUE, 4)
+        register(PotionEffectType.STRENGTH, 5)
+        register(PotionEffectType.INSTANT_HEALTH, 6)
+        register(PotionEffectType.INSTANT_DAMAGE, 7)
+        register(PotionEffectType.JUMP_BOOST, 8)
+        register(PotionEffectType.NAUSEA, 9)
+        register(PotionEffectType.REGENERATION, 10)
+        register(PotionEffectType.RESISTANCE, 11)
+        register(PotionEffectType.FIRE_RESISTANCE, 12)
+        register(PotionEffectType.WATER_BREATHING, 13)
+        register(PotionEffectType.INVISIBILITY, 14)
+        register(PotionEffectType.BLINDNESS, 15)
+        register(PotionEffectType.NIGHT_VISION, 16)
+        register(PotionEffectType.HUNGER, 17)
+        register(PotionEffectType.WEAKNESS, 18)
+        register(PotionEffectType.POISON, 19)
+        register(PotionEffectType.WITHER, 20)
+        register(PotionEffectType.HEALTH_BOOST, 21)
+        register(PotionEffectType.ABSORPTION, 22)
+        register(PotionEffectType.SATURATION, 23)
     }
 
 }

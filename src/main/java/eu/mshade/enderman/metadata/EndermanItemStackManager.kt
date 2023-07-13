@@ -1,7 +1,7 @@
 package eu.mshade.enderman.metadata
 
 import eu.mshade.enderframe.attribute.AttributeKey
-import eu.mshade.enderframe.effect.EffectKey
+import eu.mshade.enderframe.effect.PotionEffectKey
 import eu.mshade.enderframe.inventory.EquipmentSlot
 import eu.mshade.enderframe.item.ItemStackMetadataKey
 import eu.mshade.enderframe.item.ItemStackMetadataWrapperManager
@@ -22,7 +22,7 @@ class EndermanItemStackManager(wrapperRepository: WrapperRepository) : ItemStack
             wrapperRepository.get(EndermanContextWrapper.EQUIPMENT_SLOT) as Wrapper<EquipmentSlot, String>?
         val namespacedKeyWrapper =
             wrapperRepository.get(EndermanContextWrapper.NAMESPACED_KEY) as Wrapper<MaterialKey, NamespacedKey>?
-        val effectTypeWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<EffectKey, Int>?
+        val effectTypeWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<PotionEffectKey, Int>?
         val cursorTypeWrapper =
             wrapperRepository.get(EndermanContextWrapper.MAP_CURSOR_TYPE) as Wrapper<MapCursorKey, Int>?
 

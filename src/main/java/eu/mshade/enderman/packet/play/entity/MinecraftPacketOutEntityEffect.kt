@@ -1,6 +1,5 @@
 package eu.mshade.enderman.packet.play.entity
 
-import eu.mshade.enderframe.effect.Effect
 import eu.mshade.enderframe.entity.Entity
 import eu.mshade.enderframe.protocol.MinecraftByteBuf
 import eu.mshade.enderframe.protocol.MinecraftPacketOut

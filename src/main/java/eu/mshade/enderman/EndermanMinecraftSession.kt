@@ -2,8 +2,8 @@ package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
 import eu.mshade.enderframe.attribute.AttributeKey
-import eu.mshade.enderframe.effect.Effect
-import eu.mshade.enderframe.effect.EffectKey
+import eu.mshade.enderframe.effect.PotionEffect
+import eu.mshade.enderframe.effect.PotionEffectKey
 import eu.mshade.enderframe.entity.*
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
@@ -66,7 +66,7 @@ class EndermanMinecraftSession(
     private val inventorySizeWrapper: Wrapper<InventoryKey?, Int?>?
     private val particleKeyWrapper: Wrapper<ParticleKey?, Int?>?
     private val attributeKeyWrapper: Wrapper<AttributeKey?, String?>?
-    private val effectKeyWrapper: Wrapper<EffectKey?, Int?>?
+    private val potionEffectKeyWrapper: Wrapper<PotionEffectKey?, Int?>?
     private val objectTransformerRepository: EndermanObjectTransformerRepository
     private val blockTransformerController: BlockTransformerController
 
@@ -86,7 +86,7 @@ class EndermanMinecraftSession(
 
         attributeKeyWrapper =
             wrapperRepository.get(EndermanContextWrapper.ATTRIBUTE_KEY) as Wrapper<AttributeKey?, String?>?
-        effectKeyWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<EffectKey?, Int?>?
+        potionEffectKeyWrapper = wrapperRepository.get(EndermanContextWrapper.EFFECT_TYPE) as Wrapper<PotionEffectKey?, Int?>?
     }
 
     override fun sendCompression(threshold: Int) {
@@ -364,16 +364,16 @@ class EndermanMinecraftSession(
         sendPacket(MinecraftPacketOutEntityProperties(entity, properties))
     }
 
-    override fun sendEntityEffect(entity: Entity, vararg effects: Effect) {
-        for (effect in effects) {
-            val type = effectKeyWrapper?.map(effect.type) ?: continue
+    override fun sendEntityEffect(entity: Entity, vararg potionEffects: PotionEffect) {
+        for (effect in potionEffects) {
+            val type = potionEffectKeyWrapper?.map(effect.type) ?: continue
             sendPacket(MinecraftPacketOutEntityEffect(entity, EndermanEffect(type, effect.amplifier, effect.duration, effect.particle)))
         }
     }
 
-    override fun sendRemoveEntityEffect(entity: Entity, vararg effectTypes: EffectKey){
+    override fun sendRemoveEntityEffect(entity: Entity, vararg effectTypes: PotionEffectKey){
         for (effectType in effectTypes) {
-            val type = effectKeyWrapper?.map(effectType) ?: continue
+            val type = potionEffectKeyWrapper?.map(effectType) ?: continue
             sendPacket(MinecraftPacketOutRemoveEntityEffect(entity, type))
         }
     }
