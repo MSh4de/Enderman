@@ -568,8 +568,6 @@ class EndermanMinecraftSession(
         if (inventory !is PlayerInventory) {
             id = 1
         }
-
-        println("Sending itemstack $itemStack")
         sendPacket(MinecraftPacketOutSetItemStack(slot, id, itemStack))
     }
 

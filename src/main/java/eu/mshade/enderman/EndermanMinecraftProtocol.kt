@@ -30,6 +30,7 @@ import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreb
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutTeams
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScoreboard
+import eu.mshade.enderman.packet.play.world.MinecraftPacketInBlockBreakAnimation
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutTimeUpdate
 import eu.mshade.enderman.wrapper.*
@@ -128,6 +129,8 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketInClickInventory::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x10, MinecraftPacketInCreativeClickInventory::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x16, MinecraftPacketInClientStatus::class.java)
+        protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketInBlockBreakAnimation::class.java)
+
 
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x00, MinecraftPacketOutKeepAlive::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x01, MinecraftPacketOutJoinGame::class.java)
