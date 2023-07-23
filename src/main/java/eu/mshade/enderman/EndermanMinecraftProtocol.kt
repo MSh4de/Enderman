@@ -17,7 +17,6 @@ import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketInAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
-import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutBlockBreak
 import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerGround
@@ -30,7 +29,7 @@ import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreb
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutTeams
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutUpdateScoreboard
-import eu.mshade.enderman.packet.play.world.MinecraftPacketInBlockBreakAnimation
+import eu.mshade.enderman.packet.play.world.MinecraftPacketOutBlockBreakAnimation
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutServerDifficulty
 import eu.mshade.enderman.packet.play.world.MinecraftPacketOutTimeUpdate
 import eu.mshade.enderman.wrapper.*
@@ -87,7 +86,6 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         getEventBus().subscribe(MinecraftPacketInHeldItemChange::class.java, MinecraftPacketInHeldItemChangeListener())
 
 
-
         //register all material  of minecraft 1.8
         blockTransformerController.register(StairsBlockTransformer())
         blockTransformerController.register(LogBlockTransFormer())
@@ -129,7 +127,6 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketInClickInventory::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x10, MinecraftPacketInCreativeClickInventory::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x16, MinecraftPacketInClientStatus::class.java)
-        protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketInBlockBreakAnimation::class.java)
 
 
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x00, MinecraftPacketOutKeepAlive::class.java)
@@ -157,7 +154,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x20, MinecraftPacketOutEntityProperties::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x21, MinecraftPacketOutChunkData::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x23, MinecraftPacketOutBlockChange::class.java)
-        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketOutBlockBreak::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x25, MinecraftPacketOutBlockBreakAnimation::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x28, MinecraftPacketOutWorldEffect::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x38, MinecraftPacketOutPlayerInfo::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x39, MinecraftPacketOutPlayerAbilities::class.java)
