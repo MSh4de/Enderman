@@ -109,6 +109,10 @@ fun main() {
         return@SplitNameMaterialGenerator "POTTED_${minecraftFormat.substringBefore("_FLOWER_POT")}"
     })
 
+    materialGeneratorRegistry.registerMaterialGenerator("red_sandstone", SplitNameMaterialGenerator {_, name ->
+        val minecraftFormat = minecraftFormat(name)
+        return@SplitNameMaterialGenerator "${minecraftFormat.substringBefore("_SANDSTONE")}_RED_SANDSTONE"
+    })
 
     materialGeneratorRegistry.registerMaterialReplacer("hardened_clay", "terracotta")
     materialGeneratorRegistry.registerMaterialReplacer("stained_hardened_clay", "terracotta")
