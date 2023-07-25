@@ -17,6 +17,7 @@ import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketInAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
+import eu.mshade.enderman.packet.play.chat.MinecraftPacketOutTabComplete
 import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.move.MinecraftPacketInPlayerGround
@@ -177,6 +178,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x44, MinecraftPacketOutWorldBorder::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x33, MinecraftPacketOutUpdateSign::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x2A, MinecraftPacketOutParticle::class.java)
+        protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x3A, MinecraftPacketOutTabComplete::class.java)
         protocolRegistry.registerOut(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketOutSpawnObject::class.java)
     }
 

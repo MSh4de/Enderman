@@ -1,11 +1,14 @@
 package eu.mshade.enderman
 
 import eu.mshade.enderframe.PlayerInfoBuilder
+import eu.mshade.enderframe.animation.AnimationType
 import eu.mshade.enderframe.attribute.AttributeKey
 import eu.mshade.enderframe.effect.PotionEffect
 import eu.mshade.enderframe.effect.PotionEffectKey
-import eu.mshade.enderframe.animation.AnimationType
-import eu.mshade.enderframe.entity.*
+import eu.mshade.enderframe.entity.Entity
+import eu.mshade.enderframe.entity.EntityCategory
+import eu.mshade.enderframe.entity.EntityKey
+import eu.mshade.enderframe.entity.Player
 import eu.mshade.enderframe.inventory.*
 import eu.mshade.enderframe.item.ItemStack
 import eu.mshade.enderframe.item.MaterialKey
@@ -27,7 +30,6 @@ import eu.mshade.enderframe.sound.SoundEffect
 import eu.mshade.enderframe.title.Title
 import eu.mshade.enderframe.title.TitleAction
 import eu.mshade.enderframe.world.*
-import eu.mshade.enderframe.world.Vector
 import eu.mshade.enderframe.world.block.Block
 import eu.mshade.enderframe.world.block.BlockTransformerController
 import eu.mshade.enderframe.world.border.WorldBorder
@@ -43,8 +45,9 @@ import eu.mshade.enderman.`object`.EndermanObjectTransformerRepository
 import eu.mshade.enderman.packet.login.MinecraftPacketOutEncryption
 import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
-import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
+import eu.mshade.enderman.packet.play.chat.MinecraftPacketOutTabComplete
+import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutDisplayScoreboard
 import eu.mshade.enderman.packet.play.scoreboard.MinecraftPacketOutScoreboardObjective
@@ -56,7 +59,6 @@ import eu.mshade.enderman.wrapper.EndermanMaterialKeyWrapper
 import io.netty.channel.Channel
 import java.nio.ByteBuffer
 import java.security.PublicKey
-import java.util.*
 
 
 class EndermanMinecraftSession(
@@ -172,6 +174,10 @@ class EndermanMinecraftSession(
 
     override fun sendMessage(message: String) {
         sendMessage(TextComponent.of(message))
+    }
+
+    override fun sendTabComplete(count: Int, matches: Array<String>) {
+        sendPacket(MinecraftPacketOutTabComplete(count, matches))
     }
 
     override fun disconnect(message: String) {
