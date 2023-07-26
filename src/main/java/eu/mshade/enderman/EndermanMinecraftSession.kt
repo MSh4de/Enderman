@@ -176,8 +176,9 @@ class EndermanMinecraftSession(
         sendMessage(TextComponent.of(message))
     }
 
-    override fun sendTabComplete(count: Int, matches: Array<String>) {
-        sendPacket(MinecraftPacketOutTabComplete(count, matches))
+    override fun sendTabComplete(vararg matches: TextComponent) {
+        // TODO : Future issue with the hex colors
+        sendPacket(MinecraftPacketOutTabComplete(matches.map { it.toLegacyText() }.toTypedArray()))
     }
 
     override fun disconnect(message: String) {

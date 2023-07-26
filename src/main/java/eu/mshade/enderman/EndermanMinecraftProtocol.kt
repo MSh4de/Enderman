@@ -17,6 +17,7 @@ import eu.mshade.enderman.packet.login.MinecraftPacketOutLoginSuccess
 import eu.mshade.enderman.packet.play.*
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketInAnimation
 import eu.mshade.enderman.packet.play.animation.MinecraftPacketOutAnimation
+import eu.mshade.enderman.packet.play.chat.MinecraftPacketInTabComplete
 import eu.mshade.enderman.packet.play.chat.MinecraftPacketOutTabComplete
 import eu.mshade.enderman.packet.play.entity.*
 import eu.mshade.enderman.packet.play.inventory.*
@@ -80,6 +81,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         getEventBus().subscribe(MinecraftPacketInCreativeClickInventory::class.java, MinecraftPacketInCreativeClickInventoryListener())
         getEventBus().subscribe(MinecraftPacketInPlayerAbilities::class.java, MinecraftPacketInPlayerAbilitiesListener())
         getEventBus().subscribe(MinecraftPacketInAnimation::class.java, MinecraftPacketInAnimationListener())
+        getEventBus().subscribe(MinecraftPacketInTabComplete::class.java, MinecraftPacketInTabCompleteListener())
 
 
         getEventBus().subscribe(MinecraftPacketInBlockPlacement::class.java, MinecraftPacketInBlockPlacementListener())
@@ -123,6 +125,7 @@ class EndermanMinecraftProtocol : MinecraftProtocol() {
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0A, MinecraftPacketInAnimation::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0B, MinecraftPacketInEntityAction::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x13, MinecraftPacketInPlayerAbilities::class.java)
+        protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x14, MinecraftPacketInTabComplete::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x15, MinecraftPacketInClientSettings::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0D, MinecraftPacketInCloseInventory::class.java)
         protocolRegistry.registerIn(MinecraftProtocolStatus.PLAY, 0x0E, MinecraftPacketInClickInventory::class.java)
