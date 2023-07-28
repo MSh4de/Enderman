@@ -38,7 +38,7 @@ class CanPlaceOnItemStackMetadataWrapper(private val endermanNamespacedKeyWrappe
         if (canPlaceOn!!.isEmpty()) return
         val canPlaceOnItemStackMetadata = CanPlaceOnItemStackMetadata(mutableSetOf())
         for (binaryTag in canPlaceOn.value) {
-            val namespacedKey = NamespacedKey.fromString(binaryTag.value as String?)
+            val namespacedKey = NamespacedKey.fromString(binaryTag.value as String) ?: continue
             val materialKey = endermanNamespacedKeyWrapper?.reverseMap(namespacedKey)?: continue
             canPlaceOnItemStackMetadata.metadataValue.add(materialKey)
         }

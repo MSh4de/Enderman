@@ -44,7 +44,7 @@ class CanDestroyItemStackMetadataWrapper(private val namespacedKeyWrapper: Wrapp
         if (canDestroy.isEmpty()) return
         val canDestroyItemStackMetadata = CanDestroyItemStackMetadata(mutableSetOf())
         for (binaryTag in canDestroy.value) {
-            val namespacedKey = NamespacedKey.fromString(binaryTag.value as String?)
+            val namespacedKey = NamespacedKey.fromString(binaryTag.value as String) ?: continue
             val materialKey = namespacedKeyWrapper?.reverseMap(namespacedKey)?: continue
             canDestroyItemStackMetadata.metadataValue.add(materialKey)
         }
